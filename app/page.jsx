@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import AddContentButton from './Components/add-content-button';
+import AddressModal from './Components/address-modal';
 
 export default async function Home() {
   return (
@@ -8,6 +9,7 @@ export default async function Home() {
       <div className="flex w-100 p-2 mt-14">
         <AddContentButton />
       </div>
+      <AddressModal></AddressModal>
     </main>
   );
 }
