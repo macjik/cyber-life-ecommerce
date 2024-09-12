@@ -1,32 +1,3 @@
 {
-  "extends": ["next", "next/core-web-vitals", "plugin:prettier/recommended"],
-  "plugins": ["prettier", "react", "unused-imports"],
-  "env": {
-    "es2021": true,
-    "node": true,
-    "browser": true
-  },
-  "rules": {
-    "prettier/prettier": "off",
-    "no-console": "warn",
-    "unused-imports/no-unused-imports": "warn",
-    "no-unused-vars": [
-      "warn",
-      {
-        "vars": "all",
-        "args": "all",
-        "argsIgnorePattern": "^_",
-        "caughtErrors": "all",
-        "caughtErrorsIgnorePattern": "^_",
-        "destructuredArrayIgnorePattern": "^_",
-        "varsIgnorePattern": "^_",
-        "ignoreRestSiblings": true
-      }
-    ],
-    "react/no-unknown-property": ["error", { "ignore": ["className"] }],
-    "prefer-const": "off"
-  },
-  "linterOptions": {
-    "reportUnusedDisableDirectives": true
-  }
+  "extends": "next/core-web-vitals"
 }
