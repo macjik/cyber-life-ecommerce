@@ -18,7 +18,7 @@ export default async function Home() {
       const { payload } = await jwtVerify(token, secret);
       user = payload;
       console.log(payload);
-      console.log(payload.phone);
+      console.log(payload.id);
     } catch (error) {
       console.error('Token verification failed:', error);
     }

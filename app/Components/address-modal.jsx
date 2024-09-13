@@ -5,6 +5,8 @@ import Button from './button';
 import Form from './form';
 import FormInput from './form-input';
 import Select from './select';
+import { useFormState } from 'react-dom';
+import { setAddress } from '../form-actions/address';
 
 export default function AddressModal() {
   const cities = [
@@ -23,23 +25,19 @@ export default function AddressModal() {
     { label: 'Qora Qalpoqston', value: 'qora-qalpoqston' },
   ];
 
-  const [formSubmitted, setFormSubmitted] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormSubmitted(true);
-  };
+  const [addressState, addressAction] = useFormState(setAddress, '');
 
   return (
     <>
-      {!formSubmitted && (
+      {addressState?.status !== 200 && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 w-max-w h-max-h">
           <div className="bg-white w-full h-full md:w-1/2 p-8 rounded-lg shadow-lg overflow-auto">
-            <Form onSubmit={handleSubmit} title="Your Address">
-              <Select id="select" label="Select Your City" placeholder="Select your city">
+            <Form action={addressAction} title="Your Address">
+              <Select id="city" label="Select Your City" placeholder="Select your city">
                 {cities}
               </Select>
               <FormInput id="street" label="Street Name" placeholder="Kal, 19" type="text" />
+              {addressState?.error && <p className="text-red-700">{addressState.error}</p>}
               <Button type="submit">Submit</Button>
             </Form>
           </div>
