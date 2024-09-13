@@ -59,9 +59,9 @@ export async function signup(state, formData) {
 
     cookies().set('token', token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 3600,
-      sameSite: 'strict',
+      sameSite: 'lax',
       path: '/',
     });
 
@@ -114,9 +114,9 @@ export async function login(state, formData) {
 
     cookies().set('token', token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 3600,
-      sameSite: 'strict',
+      sameSite: 'lax',
       path: '/',
     });
 

@@ -13,6 +13,7 @@ export default function Select({
         {label}
       </label>
       <select
+        required
         id={id}
         name={id}
         className={`${className} w-full p-3 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black`}

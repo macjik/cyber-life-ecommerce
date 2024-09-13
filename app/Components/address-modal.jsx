@@ -33,7 +33,7 @@ export default function AddressModal() {
   return (
     <>
       {!formSubmitted && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 w-max-w h-max-h">
           <div className="bg-white w-full h-full md:w-1/2 p-8 rounded-lg shadow-lg overflow-auto">
             <Form onSubmit={handleSubmit} title="Your Address">
               <Select id="select" label="Select Your City" placeholder="Select your city">
