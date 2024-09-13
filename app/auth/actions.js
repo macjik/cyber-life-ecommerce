@@ -7,6 +7,7 @@ import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 import { serialize } from 'cookie';
 import db from '@/models/index';
+import { v4 as uuidv4 } from 'uuid';
 db.sequelize.sync();
 const User = db.User;
 
@@ -48,20 +49,23 @@ export async function signup(state, formData) {
       return { error: `Sorry, a user with phone: ${phone} already exists` };
     }
 
+    const uid = uuidv4();
+
     await User.create({
       // name: name,
       // hash: hashedPassword,
       role: 'user',
       phone: phone,
+      sub: uid,
     });
 
-    let token = jwt.sign({ phone: phone }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    let token = jwt.sign({ id: uid }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     cookies().set('token', token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 3600,
-      sameSite: 'strict',
+      sameSite: 'lax',
       path: '/',
     });
 
@@ -109,14 +113,15 @@ export async function login(state, formData) {
     //   console.error('Incorrect password');
     //   return { error: 'Incorrect password' };
     // }
+    const userId = existingUser.sub;
 
-    let token = jwt.sign({ phone: phone }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    let token = jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     cookies().set('token', token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 3600,
-      sameSite: 'strict',
+      sameSite: 'lax',
       path: '/',
     });
 
