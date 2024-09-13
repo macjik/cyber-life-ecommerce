@@ -30,7 +30,7 @@ export default async function Home() {
       <div className="flex w-100 p-2 mt-14">
         <AddContentButton />
       </div>
-      {user && !user.address ? <AddressModal></AddressModal> : null}
+      {user && !user.address ? <AddressModal></AddressModal> : null} {/*needs change*/}
     </main>
   );
 }
