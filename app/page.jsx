@@ -1,7 +1,7 @@
 'use server';
 
 import AddContentButton from './Components/add-content-button';
-import AddressModal from './Components/address-modal';
+import AskAdress from './Components/address';
 import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
 
@@ -29,7 +29,7 @@ export default async function Home() {
       <div className="flex w-100 p-2 mt-14">
         <AddContentButton />
       </div>
-      {user && !user.address ? <AddressModal></AddressModal> : null} {/*needs change*/}
+      {user && !user.address ? <AskAdress></AskAdress> : null} {/*needs change*/}
     </main>
   );
 }
