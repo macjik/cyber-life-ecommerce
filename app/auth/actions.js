@@ -3,7 +3,6 @@
 import 'dotenv';
 import Joi from 'joi';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 import { serialize } from 'cookie';
 import db from '@/models/index';
