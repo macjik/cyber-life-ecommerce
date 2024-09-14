@@ -1,6 +1,5 @@
 'use server';
 
-import Image from 'next/image';
 import AddContentButton from './Components/add-content-button';
 import AddressModal from './Components/address-modal';
 import { cookies } from 'next/headers';

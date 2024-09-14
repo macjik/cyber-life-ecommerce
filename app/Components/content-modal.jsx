@@ -12,8 +12,7 @@ export default function ContentModal() {
   if (!isVisible) return null;
 
   return (
-    <>
-      <div
+    <div
         id="crud-modal"
         tabindex="-1"
         aria-hidden="true"
@@ -169,6 +168,5 @@ export default function ContentModal() {
           </form>
         </div>
       </div>
-    </>
   );
 }
