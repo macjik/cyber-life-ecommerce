@@ -8,7 +8,7 @@ export default function AddContentButton() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function toggleModal() {
-    setIsModalOpen(prev => !prev);
+    setIsModalOpen((prev) => !prev);
   }
 
   return (
