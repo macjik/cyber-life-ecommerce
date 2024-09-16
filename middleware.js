@@ -25,6 +25,11 @@ export async function middleware(req) {
   try {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const { payload } = await jwtVerify(token, secret);
+
+    if (req.nextUrl.pathname.startsWith('/admin') && payload.role !== 'admin') {
+      return NextResponse.redirect(new URL('/'));
+    }
+
     console.log('Decoded token:', payload);
 
     // await client.set(payload.id, JSON.stringify(payload), "EX", 3600);
