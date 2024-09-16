@@ -58,9 +58,7 @@ export async function signup(state, formData) {
       sub: uid,
     });
 
-    const role = exisitingUser.role;
-
-    let token = jwt.sign({ id: uid, role: role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    let token = jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     cookies().set('token', token, {
       httpOnly: true,
