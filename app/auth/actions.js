@@ -58,7 +58,9 @@ export async function signup(state, formData) {
       sub: uid,
     });
 
-    let token = jwt.sign({ id: uid }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const role = exisitingUser.role;
+
+    let token = jwt.sign({ id: uid, role: role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     cookies().set('token', token, {
       httpOnly: true,
@@ -113,8 +115,9 @@ export async function login(state, formData) {
     //   return { error: 'Incorrect password' };
     // }
     const userId = existingUser.sub;
+    const role = existingUser.role;
 
-    let token = jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    let token = jwt.sign({ id: userId, role: role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     cookies().set('token', token, {
       httpOnly: true,
