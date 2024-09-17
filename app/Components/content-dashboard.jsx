@@ -5,6 +5,9 @@ import Button from './button';
 export default async function Dashboard({ children }) {
   return (
     <div className="mt-20 p-4 w-full bg-white shadow-md">
+      <div className="flex justify-center w-full mb-3">
+        <Button className="max-w-32">Add +</Button>
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full table-auto">
           <thead className="bg-gray-200">
@@ -22,7 +25,9 @@ export default async function Dashboard({ children }) {
               <tr key={item.id} className="hover:bg-gray-100">
                 <td className="p-2 text-center text-sm">{item.title}</td>
                 <td className="p-2 text-center text-sm w-auto whitespace-nowrap">${item.price}</td>
-                <td className="p-2 text-center text-sm">{item.discount ? `${item.discount}%` : 'N/A'}</td>
+                <td className="p-2 text-center text-sm">
+                  {item.discount ? `${item.discount}%` : 'N/A'}
+                </td>
                 <td className="p-2 text-center text-sm truncate max-w-xs">{item.description}</td>
                 <td className="p-2 text-center text-sm">{item.quantity}</td>
                 <td className="p-2 text-center text-sm whitespace-nowrap">
