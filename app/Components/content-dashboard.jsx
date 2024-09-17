@@ -1,32 +1,13 @@
 'use server';
 
-import AddContent from './add-content';
 import Button from './button';
-import Form from './form';
-import FormInput from './form-input';
-import Select from './select';
+import ContentForm from './content-form';
 
 export default async function Dashboard({ children }) {
-  const categories = [
-    { label: 'Electronics', value: 'electronics' },
-    { label: 'Equipment', value: 'equipment' },
-    { label: 'Clothes', value: 'clothes' },
-  ];
   return (
     <div className="mt-20 p-4 w-full bg-white shadow-md">
       <div className="flex justify-center w-full mb-3">
-        <AddContent className="max-w-32">
-          <Form title="Product details">
-            <FormInput label="Title" id="title" type="text" />
-            <FormInput label="Price" id="price" type="number" />
-            <FormInput label="Image" id="image" type="file" />
-            <Select label="Category" value="category" id="category" placeholder="Select category">
-              {categories}
-            </Select>
-            <FormInput label="Discount for each customer" id="discount" type="number" />
-          <Button type="submit">Confirm</Button>
-          </Form>
-        </AddContent>
+        <ContentForm />
       </div>
       <div className="overflow-x-auto">
         <table className="w-full table-auto">
