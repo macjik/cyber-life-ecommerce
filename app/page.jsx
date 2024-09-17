@@ -1,6 +1,6 @@
 'use server';
 
-import AddContentButton from './Components/add-content-button';
+import AddContentButton from './Components/add-content';
 import AskAdress from './Components/address';
 import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
@@ -28,20 +28,14 @@ export default async function Home() {
 
   return (
     <>
-      <header className='fixed right-24 top-4'>
+      <header className="fixed right-24 top-4">
         {user?.role === 'admin' && (
           <Link className="p-3 text-xl" href="/admin">
             Admin
           </Link>
         )}
       </header>
-      <main className="w-full h-full p-6">
-        <h1 className="font-bold text-3xl text-center">Manage Product Content</h1>
-        <div className="flex w-100 p-2 mt-14">
-          <AddContentButton />
-        </div>
-        {user && !user.address ? <AskAdress></AskAdress> : null} {/*needs change*/}
-      </main>
+      {user && !user.address ? <AskAdress></AskAdress> : null} {/*needs change*/}
     </>
   );
 }
