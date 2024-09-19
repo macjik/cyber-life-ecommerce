@@ -15,9 +15,12 @@ export default function ContentForm() {
     { label: 'Equipment', value: 'equipment' },
     { label: 'Clothes', value: 'clothes' },
   ];
+
   console.log(contentState);
+
   return (
     <AddContentButton className="max-w-32">
+      {/* {contentState?.status !== 200} */}
       <Form title="Product details" action={addContentAction}>
         <FormInput label="Title" id="title" type="text" />
         <FormInput label="Price" id="price" type="number" />
@@ -26,6 +29,7 @@ export default function ContentForm() {
           {categories}
         </Select>
         <FormInput label="Discount for each customer" id="discount" type="number" />
+        <FormInput label="Quantity" id="quantity" type="number" />
         <FormInput label="Description" id="description" type="description" />
         <Button type="submit">Confirm</Button>
         {contentState?.error && <p className="text-red-700">{contentState.error}</p>}
