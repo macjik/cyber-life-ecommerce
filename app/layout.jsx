@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import localFont from 'next/font/local';
 import './globals.css';
 import NavBar from './Components/navbar';
@@ -14,16 +15,22 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: 'Admin Panel',
+  title: 'Application',
   description: '',
 };
 
-export default async function RootLayout({ children }) {
+export default function RootLayout({ children }) {
+  const cookieStore = cookies();
+  const currentPath = cookieStore.get('currentPath')?.value || '';
+
+  const isAuthRoute = currentPath.startsWith('/auth');
+  console.log('Is Auth Route:', isAuthRoute);
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-200`}>
-        {children}
-        <NavBar />
+        {!isAuthRoute && <NavBar />}
+        <main>{children}</main>
       </body>
     </html>
   );

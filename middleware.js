@@ -1,11 +1,12 @@
-'use server';
-
 import { parse } from 'cookie';
 import { jwtVerify } from 'jose';
 import { NextResponse } from 'next/server';
 
 export async function middleware(req) {
   console.log('Executing middleware for:', req.nextUrl.pathname);
+
+  const response = NextResponse.next();
+  response.cookies.set('currentPath', req.nextUrl.pathname);
 
   let cookieHeader = req.headers.get('cookie');
   let cookies = parse(cookieHeader || '');
@@ -19,7 +20,7 @@ export async function middleware(req) {
     if (!paths.includes(req.nextUrl.pathname)) {
       return NextResponse.redirect(new URL('/auth', req.url));
     }
-    return NextResponse.next();
+    return response;
   }
 
   try {
@@ -27,25 +28,24 @@ export async function middleware(req) {
     const { payload } = await jwtVerify(token, secret);
 
     if (req.nextUrl.pathname.startsWith('/admin') && payload.role !== 'admin') {
-      return NextResponse.redirect(new URL('/'));
+      return NextResponse.redirect(new URL('/', req.url));
     }
 
     console.log('Decoded token:', payload);
-
-    // await client.set(payload.id, JSON.stringify(payload), "EX", 3600);
-
-    req.user = payload;
-
-    // let response = NextResponse.next();
-    // response.cookies.set("id", payload.id);
-    // console.log(response)
 
     if (paths.includes(req.nextUrl.pathname)) {
       return NextResponse.redirect(new URL('/', req.url));
     }
 
-    return NextResponse.next();
-    // return response;
+    const url = new URL(req.url);
+    let userId = url.searchParams.get('id');
+    console.log(payload.id);
+    if (!userId) {
+      url.searchParams.set('id', payload.id);
+      return NextResponse.redirect(url);
+    }
+
+    return response;
   } catch (error) {
     console.error('Token verification failed:', error);
     return NextResponse.redirect(new URL('/auth', req.url));
