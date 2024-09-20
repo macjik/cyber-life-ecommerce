@@ -14,7 +14,7 @@ export async function signup(state, formData) {
   const schema = Joi.object({
     // name: Joi.string().min(2).trim().required(),
     // password: Joi.string().min(6).trim().required(),
-    phone: Joi.string().length(11).pattern(/^\d+$/).trim().required(),
+    phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
     inviteCode: Joi.string().allow(''),
     sms: Joi.number().min(4).required(),
   });
@@ -39,7 +39,7 @@ export async function signup(state, formData) {
 
     const { name, password, phone, inviteCode, sms } = value;
 
-    // const hashedPassword = await bcrypt.hash(password, 11);
+    // const hashedPassword = await bcrypt.hash(password, 9);
 
     let exisitingUser = await User.findOne({ where: { phone } });
 
@@ -82,7 +82,7 @@ export async function login(state, formData) {
   const schema = Joi.object({
     // name: Joi.string().min(2).trim().required(),
     // password: Joi.string().min(6).trim().required(),
-    phone: Joi.string().length(11).pattern(/^\d+$/).trim().required(),
+    phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
     sms: Joi.number().min(4).required(),
   });
 
@@ -137,7 +137,7 @@ export async function preLogin(state, formData) {
   const schema = Joi.object({
     // name: Joi.string().min(2).trim().required(),
     // password: Joi.string().min(6).trim().required(),
-    phone: Joi.string().length(11).pattern(/^\d+$/).trim().required(),
+    phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
   });
 
   try {
@@ -170,7 +170,7 @@ export async function preSignup(state, formData) {
   const schema = Joi.object({
     // name: Joi.string().min(2).trim().required(),
     // password: Joi.string().min(6).trim().required(),
-    phone: Joi.string().length(11).pattern(/^\d+$/).trim().required(),
+    phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
   });
 
   try {

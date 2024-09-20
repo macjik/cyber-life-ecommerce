@@ -3,14 +3,9 @@
 import Image from 'next/image';
 import Button from './button';
 
-export default async function UserProfile({
-  name = '',
-  phone,
-  avatarUrl = null,
-  address,
-}) {
+export default async function UserProfile({ userId, name = '', phone, avatarUrl = null, address }) {
   return (
-    <div className="mx-auto p-6 bg-white rounded-xl shadow-lg overflow-hidden lg:flex transform transition duration-300 hover:shadow-2xl w-full">
+    <div className="mx-auto p-6 bg-white shadow-lg overflow-hidden lg:flex transform transition duration-300 hover:shadow-2xl w-full">
       <div className="lg:flex lg:flex-shrink-0">
         <div className="flex items-center justify-center lg:items-start lg:justify-start bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full p-1 lg:p-3">
           <Image
