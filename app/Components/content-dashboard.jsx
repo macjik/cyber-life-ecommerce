@@ -1,13 +1,17 @@
 'use server';
 
+import Link from 'next/link';
 import Button from './button';
-import ContentForm from './content-form';
+import { ContentDelete, ContentEdit } from './content-form';
+import { editContent } from '../form-actions/cms';
 
 export default async function Dashboard({ children }) {
   return (
-    <div className="mt-20 p-4 w-full bg-white shadow-md">
+    <div className="p-4 w-full bg-white shadow-md">
       <div className="flex justify-center w-full mb-3">
-        <ContentForm />
+        <Link href="/admin/cms">
+          <Button>Add +</Button>
+        </Link>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full table-auto">
@@ -25,20 +29,30 @@ export default async function Dashboard({ children }) {
           </thead>
           <tbody className="divide-y divide-gray-300">
             {children.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-100">
-                <td className="p-2 text-center text-sm">{item.title}</td>
+              <tr key={item.sku} className="hover:bg-gray-100">
+                <td className="p-2 text-center text-sm">{item.name}</td>
                 <td className="p-2 text-center text-sm">{item.category}</td>
-                <td className="p-2 text-center text-sm w-auto whitespace-nowrap">${item.price}</td>
+                <td className="p-2 text-center text-sm w-auto whitespace-nowrap">
+                  ${`${item.price}`}
+                </td>
                 <td className="p-2 text-center text-sm">
                   {item.discount ? `${item.discount}%` : 'N/A'}
                 </td>
                 <td className="p-2 text-center text-sm truncate max-w-xs">{item.description}</td>
-                <td className="p-2 text-center text-sm">{item.quantity}</td>
+                <td className="p-2 text-center text-sm">{item.quantity.toString()}</td>
                 <td className="p-2 text-center text-sm">{item.status}</td>
                 <td className="p-2 text-center text-sm whitespace-nowrap">
                   <div className="inline-flex space-x-2">
-                    <Button className="bg-red-500 text-white px-4 py-1 rounded">Delete</Button>
-                    <Button className="bg-slate-500 text-white px-4 py-1 rounded">Edit</Button>
+                    <ContentDelete id={item.sku} />
+                    <ContentEdit
+                      id={item.sku}
+                      price={item.price}
+                      quantity={item.quantity}
+                      name={item.name}
+                      discount={item.discount}
+                      image={item.image}
+                      description={item.description}
+                    />
                   </div>
                 </td>
               </tr>
