@@ -5,11 +5,11 @@ import Form from './form';
 import FormInput from './form-input';
 import Select from './select';
 import Button from './button';
-import { addContent } from '../form-actions/cms';
+import { addContent, deleteContent } from '../form-actions/cms';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function ContentForm() {
+export function ContentForm() {
   const [contentState, addContentAction] = useFormState(addContent, '');
   const router = useRouter();
   const categories = [
@@ -33,7 +33,6 @@ export default function ContentForm() {
         className="w-full max-w-2xl rounded-lg"
         action={addContentAction}
       >
-        {/* Grouped Inputs in Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormInput label="Title" id="title" type="text" className="text-sm" />
           <FormInput label="Price" id="price" type="number" className="text-sm" />
@@ -41,7 +40,6 @@ export default function ContentForm() {
           <FormInput label="Discount" id="discount" type="number" className="text-sm" />
         </div>
 
-        {/* Single Row for Select and File Input */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <Select label="Category" id="category" placeholder="Select category" className="text-sm">
             {categories}
@@ -49,10 +47,8 @@ export default function ContentForm() {
           <FormInput label="Image" id="image" type="file" className="text-sm mt-[0.65rem]" />
         </div>
 
-        {/* Description Field */}
         <FormInput label="Description" id="description" type="text" className="mt-4 text-sm" />
 
-        {/* Submit Button */}
         <Button
           type="submit"
           className="w-full mt-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded"
@@ -60,9 +56,23 @@ export default function ContentForm() {
           Confirm
         </Button>
 
-        {/* Error Message */}
         {contentState?.error && <p className="text-red-700 text-sm mt-2">{contentState.error}</p>}
       </Form>
     </main>
   );
 }
+
+export function ContentDelete({ id }) {
+  const [deleteItemState, deleteItemAction] = useFormState(deleteContent, '');
+  console.log(deleteItemState);
+  return (
+    <form action={deleteItemAction}>
+      <input type="hidden" value={id} name="id" />
+      <Button type="submit" className="bg-red-500 text-white px-4 py-1 rounded">
+        Delete
+      </Button>
+    </form>
+  );
+}
+
+export function ContentEdit({ id }) {}

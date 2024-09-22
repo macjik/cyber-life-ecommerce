@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Button from './button';
+import { ContentDelete } from './content-form';
 
 export default async function Dashboard({ children }) {
   return (
@@ -39,7 +40,7 @@ export default async function Dashboard({ children }) {
                 <td className="p-2 text-center text-sm">{item.status}</td>
                 <td className="p-2 text-center text-sm whitespace-nowrap">
                   <div className="inline-flex space-x-2">
-                    <Button className="bg-red-500 text-white px-4 py-1 rounded">Delete</Button>
+                    <ContentDelete id={item.sku}/>
                     <Button className="bg-slate-500 text-white px-4 py-1 rounded">Edit</Button>
                   </div>
                 </td>

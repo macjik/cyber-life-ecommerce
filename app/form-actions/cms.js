@@ -67,3 +67,20 @@ export async function addContent(state, formData) {
     return { error: `${err.message}` };
   }
 }
+
+export async function deleteContent(state, formData) {
+  const contentId = formData.get('id');
+
+  try {
+    let item = await Item.destroy({ where: { sku: contentId } });
+
+    if (!item) {
+      console.error('Item not found');
+      return { error: 'Item not found' };
+    }
+    return { status: 200, contentId };
+  } catch (err) {
+    console.error(err);
+    return { error: `${err}` };
+  }
+}
