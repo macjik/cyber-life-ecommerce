@@ -22,10 +22,21 @@ export default async function AdminPanel() {
     ],
   });
 
-  console.log(items);
+  const formattedItems = items.map((item) => {
+    let base64Image = item.image
+      ? `data:${item.image.mimetype};base64,${item.image.toString('base64')}`
+      : null;
+    return {
+      ...item.dataValues,
+      image: base64Image,
+    };
+  });
+
+  console.log(formattedItems);
+
   return (
     <main className="w-full h-full">
-      <Dashboard>{items}</Dashboard>
+      <Dashboard>{formattedItems}</Dashboard>
     </main>
   );
 }

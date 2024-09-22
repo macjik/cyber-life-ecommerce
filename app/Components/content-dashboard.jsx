@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import Button from './button';
-import { ContentDelete } from './content-form';
+import { ContentDelete, ContentEdit } from './content-form';
+import { editContent } from '../form-actions/cms';
 
 export default async function Dashboard({ children }) {
   return (
@@ -31,7 +32,9 @@ export default async function Dashboard({ children }) {
               <tr key={item.sku} className="hover:bg-gray-100">
                 <td className="p-2 text-center text-sm">{item.name}</td>
                 <td className="p-2 text-center text-sm">{item.category}</td>
-                <td className="p-2 text-center text-sm w-auto whitespace-nowrap">${`${item.price}`}</td>
+                <td className="p-2 text-center text-sm w-auto whitespace-nowrap">
+                  ${`${item.price}`}
+                </td>
                 <td className="p-2 text-center text-sm">
                   {item.discount ? `${item.discount}%` : 'N/A'}
                 </td>
@@ -40,8 +43,16 @@ export default async function Dashboard({ children }) {
                 <td className="p-2 text-center text-sm">{item.status}</td>
                 <td className="p-2 text-center text-sm whitespace-nowrap">
                   <div className="inline-flex space-x-2">
-                    <ContentDelete id={item.sku}/>
-                    <Button className="bg-slate-500 text-white px-4 py-1 rounded">Edit</Button>
+                    <ContentDelete id={item.sku} />
+                    <ContentEdit
+                      id={item.sku}
+                      price={item.price}
+                      quantity={item.quantity}
+                      name={item.name}
+                      discount={item.discount}
+                      image={item.image}
+                      description={item.description}
+                    />
                   </div>
                 </td>
               </tr>

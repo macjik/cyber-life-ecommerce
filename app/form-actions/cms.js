@@ -84,3 +84,55 @@ export async function deleteContent(state, formData) {
     return { error: `${err}` };
   }
 }
+
+export async function editContent(state, formData) {
+  const imageFile = formData.get('image');
+  const imageMimeType = imageFile ? imageFile.type : null;
+
+  const schema = Joi.object({
+    name: Joi.string().min(3).required(),
+    description: Joi.string().min(5).required(),
+    image: Joi.string().valid('image/jpg', 'image/jpeg', 'image/png').required(),
+    price: Joi.number().required(),
+    category: Joi.string().required(),
+    discount: Joi.number().max(100).required(),
+    quantity: Joi.number().required(),
+    id: Joi.string().required(),
+    // status: Joi.string().enum('available', 'out of stock', 'discontinued').required(),
+  });
+
+  const { value, error } = schema.validate({
+    name: formData.get('title'),
+    description: formData.get('description'),
+    image: imageMimeType,
+    price: formData.get('price'),
+    category: formData.get('category'),
+    discount: formData.get('discount'),
+    quantity: formData.get('quantity'),
+    id: formData.get('id'),
+    // status: formData.get('status'),
+  });
+
+  if (error) {
+    console.error(error);
+    return { error: `${error.message}` };
+  }
+
+  try {
+    const { id, name, description, image, price, category, discount, quantity } = value;
+    let updateItem = await Item.update(
+      { name, description, image, price, category, discount, quantity },
+      { where: { sku: id }, limit: 1 },
+    );
+
+    if (!updateItem) {
+      console.errror('Error to update');
+      return { error: 'Error to update item' };
+    }
+
+    return { status: 200, value };
+  } catch (err) {
+    console.error(err);
+    return { error: `${err}` };
+  }
+}
