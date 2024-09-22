@@ -157,9 +157,11 @@ export function ContentEdit({ id, name, price, quantity, discount, image, descri
             {editItemState?.error && (
               <p className="text-red-700 text-sm mt-2">{editItemState.error}</p>
             )}
-            <div className='w-full grid space-y-4'>
-            <Button type="submit">Confirm</Button>
-            <Button className='bg-slate-700' onClick={handleEditItem}>Cancel</Button>
+            <div className="w-full grid space-y-4">
+              <Button type="submit">Confirm</Button>
+              <Button className="bg-slate-700" onClick={handleEditItem}>
+                Cancel
+              </Button>
             </div>
           </Form>
         </div>
