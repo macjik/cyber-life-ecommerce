@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Button from './button';
-import EditProfile from './edit-profile';
+import Link from 'next/link';
 
 export default async function UserProfile({ userId, name = '', phone, avatarUrl = null, address }) {
   return (
@@ -26,8 +26,9 @@ export default async function UserProfile({ userId, name = '', phone, avatarUrl 
           <p className="mt-4 text-gray-600 text-base">Address: {address}</p>
         </div>
         <div className="mt-6 text-center lg:text-left">
-          {/*position fix*/}
-          <EditProfile />
+          <Link href="/profile">
+            <Button className="rounded-2xl max-w-max">Edit Profile</Button>
+          </Link>
         </div>
       </div>
     </div>

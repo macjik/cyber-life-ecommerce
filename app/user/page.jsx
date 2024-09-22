@@ -15,20 +15,20 @@ export default async function UserPage({ searchParams }) {
 
   return (
     <main className="w-full h-full flex-row justify-center items-center">
-      <UserProfile id={userId} phone={phone} address={address} />
-      <SubNav faIcon={<FaShoppingCart size={24} />} link={`/cart?=${userId}`}>
+      <UserProfile userId={userId} phone={phone} address={address} />
+      <SubNav faIcon={<FaShoppingCart size={24} />} link="/cart">
         My orders
       </SubNav>
-      <SubNav faIcon={<FaCommentDots size={24} />} link={`/feedback?=${userId}`}>
+      <SubNav faIcon={<FaCommentDots size={24} />} link="/feedback">
         My feedback
       </SubNav>
-      <SubNav faIcon={<FaHandshake size={24} />} link={`/partner?=${userId}`}>
+      <SubNav faIcon={<FaHandshake size={24} />} link="/partner">
         Partnership
       </SubNav>
-      <SubNav faIcon={<FaLink size={24} />} link={`/invite?=${userId}`}>
+      <SubNav faIcon={<FaLink size={24} />} link="/invite">
         Invite Link
       </SubNav>
-      <SubNav faIcon={<FaLanguage size={24} />} link={`/invite?=${userId}`}>
+      <SubNav faIcon={<FaLanguage size={24} />} link="/lang">
         Language
       </SubNav>
     </main>
