@@ -39,7 +39,7 @@ export async function signup(state, formData) {
 
     const { name, password, phone, inviteCode, sms } = value;
 
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = await bcrypt.hash(password, 9);
 
     let exisitingUser = await User.findOne({ where: { phone } });
 
