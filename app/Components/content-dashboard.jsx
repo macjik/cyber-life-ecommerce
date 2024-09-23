@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Button from './button';
 import { ContentDelete, ContentEdit } from './content-form';
-import { editContent } from '../form-actions/cms';
+import CopyButtonLink from './copy-button-link';
 
 export default async function Dashboard({ children }) {
   return (
@@ -24,6 +24,7 @@ export default async function Dashboard({ children }) {
               <th className="text-center p-2">Description</th>
               <th className="text-center p-2">Quantity</th>
               <th className="text-center p-2">Status</th>
+              <th className="text-center p-2">Link</th>
               <th className="text-center p-2">Actions</th>
             </tr>
           </thead>
@@ -41,6 +42,9 @@ export default async function Dashboard({ children }) {
                 <td className="p-2 text-center text-sm truncate max-w-xs">{item.description}</td>
                 <td className="p-2 text-center text-sm">{item.quantity.toString()}</td>
                 <td className="p-2 text-center text-sm">{item.status}</td>
+                <td className="p-2 text-center text-sm whitespace-nowrap">
+                  <CopyButtonLink item={`/product?=${item.sku}`} />
+                </td>
                 <td className="p-2 text-center text-sm whitespace-nowrap">
                   <div className="inline-flex space-x-2">
                     <ContentDelete id={item.sku} />
