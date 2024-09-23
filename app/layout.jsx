@@ -2,6 +2,8 @@ import { cookies } from 'next/headers';
 import localFont from 'next/font/local';
 import './globals.css';
 import NavBar from './Components/navbar';
+import { jwtVerify } from 'jose';
+import AskAdress from './Components/address';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -19,17 +21,35 @@ export const metadata = {
   description: '',
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
   const cookieStore = cookies();
   const currentPath = cookieStore.get('currentPath')?.value || '';
 
+  console.log('layout' + cookieStore);
   const isAuthRoute = currentPath.startsWith('/auth');
   console.log('Is Auth Route:', isAuthRoute);
+
+  const token = cookieStore.get('token')?.value;
+
+  let user = null;
+
+  if (token) {
+    try {
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+      const { payload } = await jwtVerify(token, secret);
+      user = payload;
+      console.log(payload);
+      console.log(payload.id);
+    } catch (error) {
+      console.error('Token verification failed:', error);
+    }
+  }
 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-200`}>
-        {!isAuthRoute && <NavBar />}
+        {!isAuthRoute && <NavBar userRole={user.role} />}
+        {user && !user.address ? <AskAdress></AskAdress> : null}
         <main>{children}</main>
       </body>
     </html>
