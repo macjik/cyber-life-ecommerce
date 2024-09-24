@@ -25,9 +25,10 @@ export default async function RootLayout({ children }) {
   const cookieStore = cookies();
   const currentPath = cookieStore.get('currentPath')?.value || '';
 
+  const allowedPaths = ['/auth', '/product']
   console.log('layout' + cookieStore);
-  const isAuthRoute = currentPath.startsWith('/auth');
-  console.log('Is Auth Route:', isAuthRoute);
+  const isAllowedRoute = allowedPaths.includes(currentPath);
+  console.log('Is Auth Route:', isAllowedRoute);
 
   const token = cookieStore.get('token')?.value;
 
@@ -48,7 +49,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-200`}>
-        {!isAuthRoute && <NavBar userRole={user.role} />}
+        {!isAllowedRoute && <NavBar userRole={user.role} />}
         {user && !user.address ? <AskAdress></AskAdress> : null}
         <main>{children}</main>
       </body>

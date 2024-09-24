@@ -43,7 +43,7 @@ export default async function Dashboard({ children }) {
                 <td className="p-2 text-center text-sm">{item.quantity.toString()}</td>
                 <td className="p-2 text-center text-sm">{item.status}</td>
                 <td className="p-2 text-center text-sm whitespace-nowrap">
-                  <CopyButtonLink item={`/product/${item.name}/${item.sku}`} />
+                  <CopyButtonLink item={`/${item.category}/${item.name}`} />
                 </td>
                 <td className="p-2 text-center text-sm whitespace-nowrap">
                   <div className="inline-flex space-x-2">
