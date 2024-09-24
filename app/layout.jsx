@@ -48,7 +48,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-200`}>
-        {!isAllowedRoute && <NavBar userRole={user.role} />}
+        {!isAllowedRoute && user?.role ? <NavBar userRole={user.role} /> : null}
         {user && !user.address ? <AskAdress></AskAdress> : null}
         <main>{children}</main>
       </body>

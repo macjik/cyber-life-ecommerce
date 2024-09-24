@@ -8,7 +8,7 @@ const Item = db.item;
 
 export default async function Product({ productName }) {
   let item = null;
-  
+
   try {
     item = await Item.findOne({ where: { name: productName } });
     console.log(item);
@@ -45,7 +45,7 @@ export default async function Product({ productName }) {
           </div>
           <p className="text-gray-500 mt-2">Available Quantity: {item.quantity}</p>
           <div className="mt-4">
-            <p className="text-gray-500 text-sm">SKU: {item.sku}</p>
+            {/* <p className="text-gray-500 text-sm">SKU: {item.sku}</p> */}
             <p className="text-gray-500 text-sm">Category: {item.category}</p>
           </div>
           <div className="mt-4">
