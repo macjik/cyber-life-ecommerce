@@ -48,7 +48,7 @@ export default async function Product({ productName }) {
           <div className="mb-4">
             <p className="text-gray-500 text-sm">Category: {item?.category || 'Category'}</p>
           </div>
-          <div className="mb-4">
+          <div className="mb-4 space-x-11">
             <span
               className={`inline-block px-4 py-2 rounded-full text-white ${
                 item?.status === 'available' ? 'bg-green-500' : 'bg-red-500'
@@ -57,7 +57,9 @@ export default async function Product({ productName }) {
               {item?.status || 'Status'}
             </span>
           </div>
-          <Button className='bg-blue-700'>Add to Cart</Button>
+          <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
+            Add to Cart
+          </Button>
         </div>
       </div>
     </div>
