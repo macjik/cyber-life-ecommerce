@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { FaUser, FaShoppingCart, FaCog, FaHome } from 'react-icons/fa';
-import { AiFillControl } from "react-icons/ai";
+import { AiFillControl } from 'react-icons/ai';
 
 export default async function NavBar({ children = null, icon = null, userRole = null }) {
   return (
@@ -26,7 +26,7 @@ export default async function NavBar({ children = null, icon = null, userRole = 
         <FaCog size={24} />
         <span className="text-xs">Settings</span>
       </Link>
-      {userRole === 'admin' && (
+      {userRole && userRole === 'admin' && (
         <Link
           href="/admin"
           className="flex flex-col items-center text-gray-600 hover:text-blue-500"

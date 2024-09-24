@@ -19,7 +19,7 @@ export default function CopyButtonLink({ item }) {
 
   return (
     <div>
-      <Button className='max-w-max' id={`copy-button-${item.toString()}`} onClick={handleCopy}>
+      <Button className="max-w-max" id={`copy-button-${item.toString()}`} onClick={handleCopy}>
         Copy Product Link
       </Button>
     </div>
