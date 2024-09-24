@@ -1,5 +1,6 @@
-import ProductPath from '@/app/Components/product-path';
+import Product from '@/app/Components/product';
 
-export default async function ItemPage() {
-  return <ProductPath />;
+export default async function ItemPage({ params }) {
+  const { product } = params;
+  return <Product productName={product} />;
 }

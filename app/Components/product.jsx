@@ -1,24 +1,23 @@
 'use server';
 
 import db from '@/models/index';
-import Image from '@/node_modules/next/image';
+import Image from 'next/image';
 
 db.sequelize.sync();
 const Item = db.item;
 
 export default async function Product({ productName }) {
   let item = null;
-
+  
   try {
     item = await Item.findOne({ where: { name: productName } });
     console.log(item);
   } catch (err) {
     console.error(err);
   }
-
-  const imageData = item.image?.data
-    ? `data:image/jpeg;base64,${Buffer.from(item.image.data).toString('base64')}`
-    : null;
+  // const imageData = item.image?.data
+  //   ? `data:image/jpeg;base64,${Buffer.from(item.image.data).toString('base64')}`
+  //   : null;
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

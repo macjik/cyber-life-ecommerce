@@ -16,6 +16,13 @@ export async function middleware(req) {
   console.log('Token from cookie:', token);
   const paths = ['/auth'];
 
+  // const dynamicRouteRegex = /^\/[^/]+\/[^/]+$/;
+
+  // if (dynamicRouteRegex.test(req.nextUrl.pathname)) {
+  //   console.log('Skipping auth check for dynamic route:', req.nextUrl.pathname);
+  //   return response;
+  // }
+
   if (!token) {
     if (!paths.includes(req.nextUrl.pathname)) {
       return NextResponse.redirect(new URL('/auth', req.url));
@@ -54,6 +61,6 @@ export async function middleware(req) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|equipment/[^/]+|clothes/[^/]+|electronics/[^/]+|product/[^/]+).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|equipment(?:/[^/]+)?|clothes(?:/[^/]+)?|electronics(?:/[^/]+)?|product(?:/[^/]+)?).*)',
   ],
 };

@@ -25,9 +25,8 @@ export default async function RootLayout({ children }) {
   const cookieStore = cookies();
   const currentPath = cookieStore.get('currentPath')?.value || '';
 
-  const allowedPaths = ['/auth', '/product']
   console.log('layout' + cookieStore);
-  const isAllowedRoute = allowedPaths.includes(currentPath);
+  const isAllowedRoute = currentPath.startsWith('/auth') || /^\/[^/]+\/[^/]+$/.test(currentPath);
   console.log('Is Auth Route:', isAllowedRoute);
 
   const token = cookieStore.get('token')?.value;
