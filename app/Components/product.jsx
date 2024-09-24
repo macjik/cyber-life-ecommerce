@@ -2,6 +2,7 @@
 
 import db from '@/models/index';
 import Image from 'next/image';
+import Button from './button';
 
 db.sequelize.sync();
 const Item = db.item;
@@ -15,48 +16,48 @@ export default async function Product({ productName }) {
   } catch (err) {
     console.error(err);
   }
-  // const imageData = item.image?.data
-  //   ? `data:image/jpeg;base64,${Buffer.from(item.image.data).toString('base64')}`
-  //   : null;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="relative h-56 w-full">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="max-w-lg w-full bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl">
+        <div className="relative h-72 w-full">
           <Image
-            src="/turtle.jpg"
+            src={'/turtle.jpg'}
             alt={item?.name}
             fill
             priority
             quality={100}
             sizes="80vw"
             style={{ objectFit: 'cover' }}
-            className="object-contain"
+            className="object-contain rounded-t-lg"
           />
         </div>
         <div className="p-6">
-          <h2 className="text-xl font-semibold text-gray-800">{item.name}</h2>
-          <p className="text-gray-600 mt-2">{item.description}</p>
-          <div className="flex items-center justify-between mt-4">
-            <span className="text-gray-700 font-bold text-lg">${item.price}</span>
-            <span className="text-gray-500 line-through text-md">
-              ${(parseFloat(item.price) + parseFloat(item.discount)).toFixed(2)}
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">{item?.name || 'Product Name'}</h2>
+          <p className="text-gray-600 mb-4">
+            {item?.description ||
+              'Product description goes here. It provides details about the product.'}
+          </p>
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-2xl font-bold text-gray-800">${item?.price}</span>
+            <span className="text-gray-500 line-through text-lg">
+              ${(parseFloat(item?.price) + parseFloat(item?.discount || 0)).toFixed(2)}
             </span>
           </div>
-          <p className="text-gray-500 mt-2">Available Quantity: {item.quantity}</p>
-          <div className="mt-4">
-            {/* <p className="text-gray-500 text-sm">SKU: {item.sku}</p> */}
-            <p className="text-gray-500 text-sm">Category: {item.category}</p>
+          <p className="text-gray-500 mb-4">Available Quantity: {item?.quantity}</p>
+          <div className="mb-4">
+            <p className="text-gray-500 text-sm">Category: {item?.category || 'Category'}</p>
           </div>
-          <div className="mt-4">
+          <div className="mb-4">
             <span
               className={`inline-block px-4 py-2 rounded-full text-white ${
-                item.status === 'available' ? 'bg-green-500' : 'bg-red-500'
+                item?.status === 'available' ? 'bg-green-500' : 'bg-red-500'
               }`}
             >
-              {item.status}
+              {item?.status || 'Status'}
             </span>
           </div>
+          <Button className='bg-blue-700'>Add to Cart</Button>
         </div>
       </div>
     </div>
