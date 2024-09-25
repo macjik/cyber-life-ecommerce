@@ -2,12 +2,11 @@
 
 import db from '@/models/index';
 import Image from 'next/image';
-import Button from './button';
 
 db.sequelize.sync();
 const Item = db.item;
 
-export default async function Product({ productName }) {
+export default async function Product({ productName, children }) {
   let item = null;
 
   try {
@@ -19,8 +18,8 @@ export default async function Product({ productName }) {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="max-w-lg w-full bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl">
-        <div className="relative h-72 w-full">
+      <div className="max-w-lg w-full bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl mb-6">
+        <div className="relative h-56 w-full">
           <Image
             src={'/turtle.jpg'}
             alt={item?.name}
@@ -57,9 +56,7 @@ export default async function Product({ productName }) {
               {item?.status || 'Status'}
             </span>
           </div>
-          <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
-            Add to Cart
-          </Button>
+          {children}
         </div>
       </div>
     </div>

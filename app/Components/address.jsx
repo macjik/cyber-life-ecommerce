@@ -6,7 +6,6 @@ import FormInput from './form-input';
 import Select from './select';
 import { useFormState } from 'react-dom';
 import { setAddress } from '../form-actions/address';
-import Modal from './modal';
 
 export default function AskAdress() {
   const cities = [
@@ -30,7 +29,6 @@ export default function AskAdress() {
   return (
     <>
       {addressState?.status !== 200 && (
-        <Modal>
           <Form action={addressAction} title="Your Address">
             <Select id="city" label="Select Your City" placeholder="Select your city">
               {cities}
@@ -39,7 +37,6 @@ export default function AskAdress() {
             {addressState?.error && <p className="text-red-700">{addressState.error}</p>}
             <Button type="submit">Submit</Button>
           </Form>
-        </Modal>
       )}
     </>
   );
