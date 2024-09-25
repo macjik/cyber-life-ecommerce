@@ -6,18 +6,20 @@ import { login, preLogin, preSignup, signup } from '../auth/actions';
 import FormInput from './form-input';
 import Form from './form';
 import Button from './button';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export function PreLoginForm({ children }) {
   const [preLoginState, preLoginAction] = useFormState(preLogin, '');
   const [loginState, loginAction] = useFormState(login, '');
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect') || '/';
 
   console.log(loginState);
 
   useEffect(() => {
     if (loginState.status === 200) {
-      router.push('/');
+      router.push(redirect);
     }
   }, [loginState.status]);
 
@@ -54,12 +56,14 @@ export function PreSigninForm({ children }) {
   const [preSignupState, preSignupAction] = useFormState(preSignup, '');
   const [signupState, signupAction] = useFormState(signup, '');
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect') || '/';
 
   console.log(signupState);
 
   useEffect(() => {
     if (signupState.status === 200) {
-      router.push('/');
+      router.push(redirect);
     }
   }, [signupState.status]);
 

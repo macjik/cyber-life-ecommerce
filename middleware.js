@@ -16,16 +16,11 @@ export async function middleware(req) {
   console.log('Token from cookie:', token);
   const paths = ['/auth'];
 
-  // const dynamicRouteRegex = /^\/[^/]+\/[^/]+$/;
-
-  // if (dynamicRouteRegex.test(req.nextUrl.pathname)) {
-  //   console.log('Skipping auth check for dynamic route:', req.nextUrl.pathname);
-  //   return response;
-  // }
-
   if (!token) {
     if (!paths.includes(req.nextUrl.pathname)) {
-      return NextResponse.redirect(new URL('/auth', req.url));
+      const redirectUrl = new URL('/auth', req.url);
+      redirectUrl.searchParams.set('redirect', req.nextUrl.pathname);
+      return NextResponse.redirect(redirectUrl);
     }
     return response;
   }
@@ -41,7 +36,8 @@ export async function middleware(req) {
     console.log('Decoded token:', payload);
 
     if (paths.includes(req.nextUrl.pathname)) {
-      return NextResponse.redirect(new URL('/', req.url));
+      const redirectUrl = new URL(cookies.redirect || '/', req.url);
+      return NextResponse.redirect(redirectUrl);
     }
 
     const url = new URL(req.url);
@@ -55,7 +51,9 @@ export async function middleware(req) {
     return response;
   } catch (error) {
     console.error('Token verification failed:', error);
-    return NextResponse.redirect(new URL('/auth', req.url));
+    const redirectUrl = new URL('/auth', req.url);
+    redirectUrl.searchParams.set('redirect', req.nextUrl.pathname);
+    return NextResponse.redirect(redirectUrl);
   }
 }
 
