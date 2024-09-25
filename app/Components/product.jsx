@@ -3,6 +3,7 @@
 import db from '@/models/index';
 import Image from 'next/image';
 import Button from './button';
+import Link from '@/node_modules/next/link';
 
 db.sequelize.sync();
 const Item = db.item;
@@ -57,9 +58,11 @@ export default async function Product({ productName }) {
               {item?.status || 'Status'}
             </span>
           </div>
-          <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
-            Add to Cart
-          </Button>
+          <Link href={`/cart?product=${item.name}`}>
+            <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
+              Add to Cart
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
