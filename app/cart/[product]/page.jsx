@@ -4,11 +4,18 @@ import Link from '@/node_modules/next/link';
 import Product from '../../Components/product';
 import Button from '../../Components/button';
 import CopyButtonLink from '@/app/Components/copy-button-link';
+import db from '@/models/index';
+
+db.sequelize.sync();
+const Invite = db.Invite;
 
 export default async function CartPage({ params, searchParams }) {
   const { product } = params;
   const { id } = searchParams;
   //get user id
+  const inviter = id;
+
+  let inviteLink = await Invite.create({ inviter: inviter });
 
   console.log('cart page params' + JSON.stringify(params));
   return (
@@ -18,7 +25,7 @@ export default async function CartPage({ params, searchParams }) {
           Pay
         </Button>
       </Link>
-      <CopyButtonLink item={`/invite?=`} className="mt-2">
+      <CopyButtonLink item={`/?invite=${inviteLink.inviteCode}`} className="mt-2">
         Share the link and buy it cheaper
       </CopyButtonLink>
     </Product>

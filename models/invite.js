@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Invite.init(
     {
-      inviteCode: DataTypes.INTEGER,
+      inviter: DataTypes.STRING,
+      inviteCode: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4 },
       discountPercentage: DataTypes.INTEGER,
       invitee: DataTypes.STRING,
       status: DataTypes.ENUM('pending', 'used', 'expired', 'unused'),
