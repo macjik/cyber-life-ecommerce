@@ -29,14 +29,14 @@ export default function AskAdress() {
   return (
     <>
       {addressState?.status !== 200 && (
-          <Form action={addressAction} title="Your Address">
-            <Select id="city" label="Select Your City" placeholder="Select your city">
-              {cities}
-            </Select>
-            <FormInput id="street" label="Street Name" placeholder="Kal, 19" type="text" />
-            {addressState?.error && <p className="text-red-700">{addressState.error}</p>}
-            <Button type="submit">Submit</Button>
-          </Form>
+        <Form action={addressAction} title="Your Address">
+          <Select id="city" label="Select Your City" placeholder="Select your city">
+            {cities}
+          </Select>
+          <FormInput id="street" label="Street Name" placeholder="Kal, 19" type="text" />
+          {addressState?.error && <p className="text-red-700">{addressState.error}</p>}
+          <Button type="submit">Submit</Button>
+        </Form>
       )}
     </>
   );
