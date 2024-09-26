@@ -5,10 +5,10 @@ import Product from '../../Components/product';
 import Button from '../../Components/button';
 import CopyButtonLink from '@/app/Components/copy-button-link';
 
-export default async function CartPage({ params }) {
+export default async function CartPage({ params, searchParams }) {
   const { product } = params;
+  const { id } = searchParams;
   //get user id
-  let invitee = null;
 
   console.log('cart page params' + JSON.stringify(params));
   return (
@@ -18,7 +18,7 @@ export default async function CartPage({ params }) {
           Pay
         </Button>
       </Link>
-      <CopyButtonLink item={`/invite?=${invitee}`} className="mt-2">
+      <CopyButtonLink item={`/invite?=`} className="mt-2">
         Share the link and buy it cheaper
       </CopyButtonLink>
     </Product>

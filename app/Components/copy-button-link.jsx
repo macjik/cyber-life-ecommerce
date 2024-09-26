@@ -18,11 +18,7 @@ export default function CopyButtonLink({ item, children = 'Copy product Link', c
   }
 
   return (
-    <Button
-      className={`${className}`}
-      id={`copy-button-${item.toString()}`}
-      onClick={handleCopy}
-    >
+    <Button className={`${className}`} id={`copy-button-${item.toString()}`} onClick={handleCopy}>
       {children}
     </Button>
   );
