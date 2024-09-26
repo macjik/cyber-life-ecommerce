@@ -25,7 +25,7 @@ export default async function CartPage({ params, searchParams }) {
           Pay
         </Button>
       </Link>
-      <CopyButtonLink item={`/?invite=${inviteLink.inviteCode}`} className="mt-2">
+      <CopyButtonLink item={`/invite?${inviteLink.inviteCode}=${product}`} className="mt-2">
         Share the link and buy it cheaper
       </CopyButtonLink>
     </Product>
