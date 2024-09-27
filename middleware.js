@@ -44,7 +44,7 @@ export async function middleware(req) {
     let userId = url.searchParams.get('id');
     console.log(payload.id);
 
-    if (!userId && req.nextUrl.pathname !== '/invite') {
+    if (!userId) {
       url.searchParams.set('id', payload.id);
       return NextResponse.redirect(url);
     }
