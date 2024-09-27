@@ -43,6 +43,7 @@ export async function middleware(req) {
     const url = new URL(req.url);
     let userId = url.searchParams.get('id');
     console.log(payload.id);
+
     if (!userId) {
       url.searchParams.set('id', payload.id);
       return NextResponse.redirect(url);

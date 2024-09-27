@@ -2,8 +2,11 @@ import Button from '@/app/Components/button';
 import Product from '@/app/Components/product';
 import Link from '@/node_modules/next/link';
 
-export default async function ItemPage({ params }) {
+export default async function ItemPage({ params, searchParams }) {
   const { product } = params;
+  const { invite } = searchParams;
+  console.log(invite);
+
   return (
     <Product productName={product}>
       <Link href={`/cart/${product}`}>

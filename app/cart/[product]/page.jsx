@@ -8,6 +8,7 @@ import db from '@/models/index';
 
 db.sequelize.sync();
 const Invite = db.Invite;
+const Item = db.item;
 
 export default async function CartPage({ params, searchParams }) {
   const { product } = params;
@@ -16,6 +17,7 @@ export default async function CartPage({ params, searchParams }) {
   const inviter = id;
 
   let inviteLink = await Invite.create({ inviter: inviter });
+  let existingProduct = await Item.findOne({ where: { name: product } });
 
   console.log('cart page params' + JSON.stringify(params));
   return (
@@ -25,9 +27,14 @@ export default async function CartPage({ params, searchParams }) {
           Pay
         </Button>
       </Link>
-      <CopyButtonLink item={`/?invite=${inviteLink.inviteCode}`} className="mt-2">
-        Share the link and buy it cheaper
-      </CopyButtonLink>
+      {existingProduct && (
+        <CopyButtonLink
+          item={`/${existingProduct.category}/${product}/?invite=${inviteLink.inviteCode}`}
+          className="mt-2"
+        >
+          Share the link and buy it cheaper
+        </CopyButtonLink>
+      )}
     </Product>
   );
 }
