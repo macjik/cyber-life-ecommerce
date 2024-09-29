@@ -6,20 +6,37 @@ import Button from '../../Components/button';
 import CopyButtonLink from '@/app/Components/copy-button-link';
 import db from '@/models/index';
 
+// Sync the database models (optional; could be removed in production)
 db.sequelize.sync();
-const Invite = db.Invite;
+
+// Access the models
+const User = db.User;
 const Item = db.item;
+const Invite = db.Invite;
 
 export default async function CartPage({ params, searchParams }) {
   const { product } = params;
   const { id } = searchParams;
-  //get user id
-  const inviter = id;
 
-  let inviteLink = await Invite.create({ inviter: inviter });
+  let user = await User.findOne({ where: { sub: id } });
+
+  if (!user) {
+    return <p>User not found!</p>;
+  }
+
+  // let inviteLink = await Invite.findOne({
+  //   where: { inviter: user.id },
+  //   order: [['createdAt', 'DESC']],
+  // });
+
+  // if (!inviteLink) {
+  let inviteLink = await Invite.create({ inviter: user.id });
+  //}
+
   let existingProduct = await Item.findOne({ where: { name: product } });
 
-  console.log('cart page params' + JSON.stringify(params));
+  console.log('cart page params', JSON.stringify(params));
+
   return (
     <Product productName={product}>
       <Link href={`/`}>

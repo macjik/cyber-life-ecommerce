@@ -8,15 +8,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate({ User }) {
-      Invite.belongsTo(User, { foreignKey: 'inviterId', as: 'Inviter' });
-      Invite.belongsTo(User, { foreignKey: 'inviteeId', as: 'Invitee' });
+      Invite.belongsTo(User, { foreignKey: 'inviter', as: 'Inviter' });
+      Invite.belongsTo(User, { foreignKey: 'invitee', as: 'Invitee' });
     }
   }
   Invite.init(
     {
       inviteCode: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4 },
       discountPercentage: DataTypes.INTEGER,
-      status: DataTypes.ENUM('pending', 'used', 'expired', 'unused'),
+      status: {
+        type: DataTypes.ENUM('pending', 'used', 'expired', 'unused'),
+        defaultValue: 'pending',
+      },
     },
     {
       sequelize,

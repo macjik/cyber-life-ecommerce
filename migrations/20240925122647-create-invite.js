@@ -10,9 +10,9 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       inviter: { type: Sequelize.INTEGER, references: { model: 'Users', key: 'id' } },
+      invitee: { type: Sequelize.INTEGER, references: { model: 'Users', key: 'id' } },
       inviteCode: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4 },
       discountPercentage: Sequelize.INTEGER,
-      invitee: { type: Sequelize.INTEGER, references: { model: 'Users', key: 'id' } },
       status: Sequelize.ENUM('pending', 'used', 'expired', 'unused'),
       createdAt: {
         allowNull: false,
