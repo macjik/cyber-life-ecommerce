@@ -7,16 +7,15 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
+    static associate({ User }) {
+      Invite.belongsTo(User, { foreignKey: 'inviterId', as: 'Inviter' });
+      Invite.belongsTo(User, { foreignKey: 'inviteeId', as: 'Invitee' });
     }
   }
   Invite.init(
     {
-      inviter: DataTypes.STRING,
       inviteCode: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4 },
       discountPercentage: DataTypes.INTEGER,
-      invitee: DataTypes.STRING,
       status: DataTypes.ENUM('pending', 'used', 'expired', 'unused'),
     },
     {
