@@ -1,37 +1,60 @@
-'use server';
-
 import Link from '@/node_modules/next/link';
 import Product from '../../Components/product';
 import Button from '../../Components/button';
 import CopyButtonLink from '@/app/Components/copy-button-link';
 import db from '@/models/index';
 
-// Sync the database models (optional; could be removed in production)
 db.sequelize.sync();
 
-// Access the models
 const User = db.User;
 const Item = db.item;
 const Invite = db.Invite;
 
 export default async function CartPage({ params, searchParams }) {
   const { product } = params;
-  const { id } = searchParams;
+  const { id, invite } = searchParams;
 
-  let user = await User.findOne({ where: { sub: id } });
+  let user = await User.findOne({
+    where: { sub: id },
+    include: [
+      { model: Invite, as: 'InvitationsSent' },
+      { model: Invite, as: 'InvitationsReceived' },
+    ],
+  });
 
   if (!user) {
     return <p>User not found!</p>;
   }
 
-  // let inviteLink = await Invite.findOne({
-  //   where: { inviter: user.id },
-  //   order: [['createdAt', 'DESC']],
-  // });
+  if (invite) {
+    let existingInvite = await Invite.findOne({
+      where: { inviteCode: invite },
+      include: [
+        { model: User, as: 'Inviter' },
+        { model: User, as: 'Invitee' },
+      ],
+    });
 
-  // if (!inviteLink) {
+    if (existingInvite.status === 'expired' && existingInvite.Invitee.id !== user.id) {
+      return (
+        <main className="flex w-full h-full justify-center">
+          <h1>Expired Link</h1>
+        </main>
+      );
+    }
+
+    if (
+      existingInvite &&
+      existingInvite.status !== 'expired' &&
+      existingInvite.inviter !== user.id
+    ) {
+      existingInvite.invitee = user.id;
+      existingInvite.status = 'expired';
+      await existingInvite.save();
+    }
+  }
+
   let inviteLink = await Invite.create({ inviter: user.id });
-  //}
 
   let existingProduct = await Item.findOne({ where: { name: product } });
 
