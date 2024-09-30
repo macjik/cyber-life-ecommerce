@@ -3,12 +3,17 @@ import Product from '../../Components/product';
 import Button from '../../Components/button';
 import CopyButtonLink from '@/app/Components/copy-button-link';
 import db from '@/models/index';
+import calculateDiscount from '@/app/helper/calculate-discount';
 
 db.sequelize.sync();
 
 const User = db.User;
 const Item = db.item;
 const Invite = db.Invite;
+const Order = db.Order;
+
+//apply the discount on an item for both the inviter and invitee
+//can't change the item's price, only shared item should have a discount
 
 export default async function CartPage({ params, searchParams }) {
   const { product } = params;
@@ -25,6 +30,8 @@ export default async function CartPage({ params, searchParams }) {
   if (!user) {
     return <p>User not found!</p>;
   }
+
+    let existingProduct = await Item.findOne({ where: { name: product } });
 
   if (invite) {
     let existingInvite = await Invite.findOne({
@@ -52,11 +59,26 @@ export default async function CartPage({ params, searchParams }) {
       existingInvite.status = 'expired';
       await existingInvite.save();
     }
+
+    let sentInvites = await Invite.count({ where: { inviter: user.id, status: 'expired' } });
+    let receivedInvites = await Invite.count({
+      where: { invitee: existingInvite.invitee, status: 'expired' },
+    });
+
+    console.log('inviter/s sent' + sentInvites);
+    console.log('invite/s received' + receivedInvites);
+
+    const { discount, price } = existingProduct;
+
+    let discountOnInvite = calculateDiscount(discount, price, receivedInvites);
+
+    discountOnInvite = discountOnInvite.toFixed(1);
+
+    return <main>{discountOnInvite}</main>;
+    //create order
   }
 
   let inviteLink = await Invite.create({ inviter: user.id });
-
-  let existingProduct = await Item.findOne({ where: { name: product } });
 
   console.log('cart page params', JSON.stringify(params));
 
