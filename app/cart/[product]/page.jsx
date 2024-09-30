@@ -74,7 +74,7 @@ export default async function CartPage({ params, searchParams }) {
 
     discountOnInvite = discountOnInvite.toFixed(1);
 
-    return <main>{discountOnInvite}</main>;
+    // return <main>{discountOnInvite}</main>;
     //create order
   }
 
