@@ -60,6 +60,27 @@ export default async function CartPage({ params, searchParams }) {
       await existingInvite.save();
     }
 
+    if (existingInvite && existingInvite.inviter === user.id) {
+      return (
+        <Product productName={product}>
+          <Link href={`/`}>
+            <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
+              Pay
+            </Button>
+          </Link>
+          {existingProduct && (
+            <InviteLinkGenerator
+              category={existingProduct.category}
+              product={product}
+              inviterId={user.id}
+            >
+              Share with your friends and get a discount
+            </InviteLinkGenerator>
+          )}
+        </Product>
+      );
+    }
+
     let sentInvites = await Invite.count({ where: { inviter: user.id, status: 'expired' } });
     let receivedInvites = await Invite.count({
       where: { invitee: existingInvite.invitee, status: 'expired' },
@@ -86,6 +107,24 @@ export default async function CartPage({ params, searchParams }) {
       status: 'pending',
     });
 
+    let invitersCount = await Invite.findAndCountAll({
+      where: { inviter: order.userId, status: 'expired' },
+    });
+    let inviteesCount = await Invite.findAndCountAll({
+      where: { invitee: existingInvite.invitee, status: 'expired' },
+    });
+
+    let totalPrice =
+      price - calculateDiscount(discount, price, inviteesCount.count + invitersCount.count);
+
+    return (
+      <>
+        <div>Inviters: {JSON.stringify(invitersCount.count)}</div>
+        <div>Invitees: {JSON.stringify(inviteesCount.count)}</div>
+        <div>Discount: {discount}</div>
+        <div>Price: {JSON.stringify(totalPrice)}</div>
+      </>
+    );
     //set the discount according to inviter and invitee count. same for all.
     //find all order.userId and then set the discount accordingly
     //find all invitees through invite id and set the discount accordingly
