@@ -31,7 +31,7 @@ export default async function CartPage({ params, searchParams }) {
     return <p>User not found!</p>;
   }
 
-    let existingProduct = await Item.findOne({ where: { name: product } });
+  let existingProduct = await Item.findOne({ where: { name: product } });
 
   if (invite) {
     let existingInvite = await Invite.findOne({
@@ -73,9 +73,17 @@ export default async function CartPage({ params, searchParams }) {
     let discountOnInvite = calculateDiscount(discount, price, receivedInvites);
 
     discountOnInvite = discountOnInvite.toFixed(1);
-
+    console.log('discount\n\n\n' + discountOnInvite);
     // return <main>{discountOnInvite}</main>;
-    //create order
+
+    let order = await Order.create({
+      userId: user.id,
+      itemId: existingProduct.id,
+      discount: parseInt(existingProduct.discount, 10),
+      totalAmount: parseInt(discountOnInvite, 10),
+      totalBuyers: receivedInvites + sentInvites,
+      status: 'pending',
+    });
   }
 
   let inviteLink = await Invite.create({ inviter: user.id });

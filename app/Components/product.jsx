@@ -39,9 +39,9 @@ export default async function Product({ productName, children }) {
           </p>
           <div className="flex items-center justify-between mb-4">
             <span className="text-2xl font-bold text-gray-800">${item?.price}</span>
-            <span className="text-gray-500 line-through text-lg">
+            {/* <span className="text-gray-500 line-through text-lg">
               ${(parseFloat(item?.price) + parseFloat(item?.discount || 0)).toFixed(2)}
-            </span>
+            </span> */}
           </div>
           <p className="text-gray-500 mb-4">Available Quantity: {item?.quantity}</p>
           <div className="mb-4">
