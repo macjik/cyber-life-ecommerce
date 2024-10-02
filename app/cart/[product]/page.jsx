@@ -1,9 +1,9 @@
 import Link from '@/node_modules/next/link';
 import Product from '../../Components/product';
 import Button from '../../Components/button';
-import CopyButtonLink from '@/app/Components/copy-button-link';
 import db from '@/models/index';
 import calculateDiscount from '@/app/helper/calculate-discount';
+import InviteLinkGenerator from '@/app/Components/generate-invite';
 
 db.sequelize.sync();
 
@@ -86,7 +86,7 @@ export default async function CartPage({ params, searchParams }) {
     });
   }
 
-  let inviteLink = await Invite.create({ inviter: user.id });
+  // let inviteLink = await Invite.create({ inviter: user.id });
 
   console.log('cart page params', JSON.stringify(params));
 
@@ -98,12 +98,11 @@ export default async function CartPage({ params, searchParams }) {
         </Button>
       </Link>
       {existingProduct && (
-        <CopyButtonLink
-          item={`/${existingProduct.category}/${product}/?invite=${inviteLink.inviteCode}`}
-          className="mt-2"
-        >
-          Share the link and buy it cheaper
-        </CopyButtonLink>
+        <InviteLinkGenerator
+          category={existingProduct.category}
+          product={product}
+          inviterId={user.id}
+        >Share with your friends and get a discount</InviteLinkGenerator>
       )}
     </Product>
   );
