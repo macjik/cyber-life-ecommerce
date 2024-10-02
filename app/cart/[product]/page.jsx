@@ -78,15 +78,18 @@ export default async function CartPage({ params, searchParams }) {
 
     let order = await Order.create({
       userId: user.id,
+      inviteId: existingInvite.id,
       itemId: existingProduct.id,
       discount: parseInt(existingProduct.discount, 10),
       totalAmount: parseInt(discountOnInvite, 10),
       totalBuyers: receivedInvites + sentInvites,
       status: 'pending',
     });
-  }
 
-  // let inviteLink = await Invite.create({ inviter: user.id });
+    //set the discount according to inviter and invitee count. same for all.
+    //find all order.userId and then set the discount accordingly
+    //find all invitees through invite id and set the discount accordingly
+  }
 
   console.log('cart page params', JSON.stringify(params));
 
@@ -102,7 +105,9 @@ export default async function CartPage({ params, searchParams }) {
           category={existingProduct.category}
           product={product}
           inviterId={user.id}
-        >Share with your friends and get a discount</InviteLinkGenerator>
+        >
+          Share with your friends and get a discount
+        </InviteLinkGenerator>
       )}
     </Product>
   );
