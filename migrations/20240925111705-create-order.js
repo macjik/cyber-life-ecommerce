@@ -13,6 +13,8 @@ module.exports = {
         type: Sequelize.ENUM('pending', 'canceled', 'shipped', 'delivered'),
         defaultValue: 'pending',
       },
+      itemId: { type: Sequelize.INTEGER, references: { model: 'items', key: 'id' } },
+      userId: { type: Sequelize.INTEGER, references: { model: 'Users', key: 'id' } },
       discount: Sequelize.INTEGER,
       totalAmount: Sequelize.INTEGER,
       totalBuyers: Sequelize.INTEGER,
