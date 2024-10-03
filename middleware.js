@@ -28,6 +28,7 @@ export async function middleware(req) {
     return response;
   }
 
+  // If there is no token and it's not an auth path, redirect to auth
   if (!token) {
     if (!paths.includes(req.nextUrl.pathname)) {
       const redirectUrl = new URL('/auth', req.url);
@@ -52,6 +53,7 @@ export async function middleware(req) {
 
     console.log('Decoded token:', payload);
 
+    // If the request is for an auth path, redirect based on cookies
     if (paths.includes(req.nextUrl.pathname)) {
       const redirectUrl = new URL(cookies.redirect || '/', req.url);
       return NextResponse.redirect(redirectUrl);
@@ -59,9 +61,10 @@ export async function middleware(req) {
 
     const url = new URL(req.url);
     let userId = url.searchParams.get('id');
-    console.log(payload.id);
+    console.log('Existing userId in URL:', userId);
 
-    if (!userId) {
+    if (!userId || userId !== payload.id) {
+      url.searchParams.delete('id');
       url.searchParams.set('id', payload.id);
       return NextResponse.redirect(url);
     }
@@ -80,6 +83,7 @@ export async function middleware(req) {
     return NextResponse.redirect(redirectUrl);
   }
 }
+
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };
