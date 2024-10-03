@@ -44,10 +44,11 @@ export default async function CartPage({ params, searchParams }) {
       ],
     });
 
-    if (
-      !existingInvite ||
-      (existingInvite.status === 'expired' && existingInvite.Invitee.id !== currentUser.id)
-    ) {
+    const isNotInviterOrInvitee =
+      existingInvite?.Invitee.id !== currentUser.id &&
+      existingInvite?.Inviter.id !== currentUser.id;
+
+    if (!existingInvite || isNotInviterOrInvitee) {
       return (
         <main className="flex w-full h-full justify-center">
           <h1>Expired or Invalid Invite Link</h1>
