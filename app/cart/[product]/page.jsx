@@ -44,7 +44,10 @@ export default async function CartPage({ params, searchParams }) {
       ],
     });
 
-    if (!existingInvite || existingInvite.status === 'expired') {
+    if (
+      !existingInvite ||
+      (existingInvite.status === 'expired' && existingInvite.Invitee.id !== currentUser.id)
+    ) {
       return (
         <main className="flex w-full h-full justify-center">
           <h1>Expired or Invalid Invite Link</h1>
@@ -71,33 +74,58 @@ export default async function CartPage({ params, searchParams }) {
     const discountAmount = calculateDiscount(
       existingProduct.discount,
       existingProduct.price,
-      totalParticipants
+      totalParticipants,
     );
     const totalPrice = existingProduct.price - discountAmount;
 
-    // Create order
-    const order = await Order.create({
-      userId: currentUser.id,
-      inviteId: existingInvite.id,
-      itemId: existingProduct.id,
-      discount: Number(existingProduct.discount),
-      totalAmount: Number(totalPrice),
-      totalBuyers: totalParticipants,
-      status: 'pending',
-    });
+    try {
+      //findOne order if item id and user id matches
+      let order = await Order.findOne({
+        where: { userId: currentUser.id, itemId: existingProduct.id, status: 'pending' },
+      });
 
-    return (
-      <Product productName={product}>
-        <div>Participants: {totalParticipants}</div>
-        <div>Discount: {discountAmount}</div>
-        <div>Total Price: {totalPrice}</div>
-        <Link href={`/pay?orderId=${order.id}`}>
-          <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
-            Pay
-          </Button>
-        </Link>
-      </Product>
-    );
+      // Create order
+      if (!order) {
+        order = await Order.create({
+          userId: currentUser.id,
+          inviteId: existingInvite.id,
+          itemId: existingProduct.id,
+          discount: parseFloat(existingProduct.discount),
+          totalAmount: parseFloat(totalPrice),
+          totalBuyers: totalParticipants,
+          status: 'pending',
+        });
+      } else {
+        // Update the existing order
+        order.discount = parseFloat(existingProduct.discount);
+        order.totalAmount = parseFloat(totalPrice);
+        order.totalBuyers = totalParticipants;
+        await order.save();
+      }
+      return (
+        <Product productName={product}>
+          <div>Participants: {totalParticipants}</div>
+          <div>Discount: {discountAmount}</div>
+          <div>Total Price: {totalPrice}</div>
+          <Link href={`/pay?orderId=${order.id}`}>
+            <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
+              Pay
+            </Button>
+          </Link>
+          {existingProduct && (
+            <InviteLinkGenerator
+              category={existingProduct.category}
+              product={product}
+              inviterId={currentUser.id}
+            >
+              Share with your friends and get a discount
+            </InviteLinkGenerator>
+          )}
+        </Product>
+      );
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   // Handle the inviter's view (no invite code)
@@ -115,7 +143,7 @@ export default async function CartPage({ params, searchParams }) {
     const discountAmount = calculateDiscount(
       existingProduct.discount,
       existingProduct.price,
-      totalParticipants
+      totalParticipants,
     );
     const totalPrice = existingProduct.price - discountAmount;
 
@@ -160,4 +188,3 @@ export default async function CartPage({ params, searchParams }) {
     </Product>
   );
 }
-
