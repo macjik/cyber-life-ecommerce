@@ -15,26 +15,28 @@ const Order = db.Order;
 //apply the discount on an item for both the inviter and invitee
 //can't change the item's price, only shared item should have a discount
 
+// ... [imports and initial setup]
+
 export default async function CartPage({ params, searchParams }) {
   const { product } = params;
   const { id, invite } = searchParams;
 
-  let user = await User.findOne({
-    where: { sub: id },
-    include: [
-      { model: Invite, as: 'InvitationsSent' },
-      { model: Invite, as: 'InvitationsReceived' },
-    ],
-  });
+  const currentUser = await User.findOne({ where: { sub: id } });
 
-  if (!user) {
+  if (!currentUser) {
     return <p>User not found!</p>;
   }
 
-  let existingProduct = await Item.findOne({ where: { name: product } });
+  const existingProduct = await Item.findOne({ where: { name: product } });
+
+  if (!existingProduct) {
+    return <p>Product not found!</p>;
+  }
+
+  let totalParticipants = 1; // Start with the inviter
 
   if (invite) {
-    let existingInvite = await Invite.findOne({
+    const existingInvite = await Invite.findOne({
       where: { inviteCode: invite },
       include: [
         { model: User, as: 'Inviter' },
@@ -42,112 +44,120 @@ export default async function CartPage({ params, searchParams }) {
       ],
     });
 
-    if (existingInvite.status === 'expired' && existingInvite.Invitee.id !== user.id) {
+    if (!existingInvite || existingInvite.status === 'expired') {
       return (
         <main className="flex w-full h-full justify-center">
-          <h1>Expired Link</h1>
+          <h1>Expired or Invalid Invite Link</h1>
         </main>
       );
     }
 
-    if (
-      existingInvite &&
-      existingInvite.status !== 'expired' &&
-      existingInvite.inviter !== user.id
-    ) {
-      existingInvite.invitee = user.id;
+    // If the user is not the inviter and the invite is active
+    if (existingInvite.inviter !== currentUser.id && existingInvite.status !== 'expired') {
+      // Update the invite
+      existingInvite.invitee = currentUser.id;
       existingInvite.status = 'expired';
       await existingInvite.save();
     }
 
-    if (existingInvite && existingInvite.inviter === user.id) {
-      return (
-        <Product productName={product}>
-          <Link href={`/`}>
-            <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
-              Pay
-            </Button>
-          </Link>
-          {existingProduct && (
-            <InviteLinkGenerator
-              category={existingProduct.category}
-              product={product}
-              inviterId={user.id}
-            >
-              Share with your friends and get a discount
-            </InviteLinkGenerator>
-          )}
-        </Product>
-      );
-    }
-
-    let sentInvites = await Invite.count({ where: { inviter: user.id, status: 'expired' } });
-    let receivedInvites = await Invite.count({
-      where: { invitee: existingInvite.invitee, status: 'expired' },
+    // Count total participants
+    const invitersCount = await Invite.count({
+      where: { inviter: existingInvite.inviter, status: 'expired' },
     });
 
-    console.log('inviter/s sent' + sentInvites);
-    console.log('invite/s received' + receivedInvites);
+    totalParticipants += invitersCount; // Add invitees count
 
-    const { discount, price } = existingProduct;
+    // Calculate discount
+    const discountAmount = calculateDiscount(
+      existingProduct.discount,
+      existingProduct.price,
+      totalParticipants
+    );
+    const totalPrice = existingProduct.price - discountAmount;
 
-    let discountOnInvite = calculateDiscount(discount, price, receivedInvites);
-
-    discountOnInvite = discountOnInvite.toFixed(1);
-    console.log('discount\n\n\n' + discountOnInvite);
-    // return <main>{discountOnInvite}</main>;
-
-    let order = await Order.create({
-      userId: user.id,
+    // Create order
+    const order = await Order.create({
+      userId: currentUser.id,
       inviteId: existingInvite.id,
       itemId: existingProduct.id,
-      discount: parseInt(existingProduct.discount, 10),
-      totalAmount: parseInt(discountOnInvite, 10),
-      totalBuyers: receivedInvites + sentInvites,
+      discount: Number(existingProduct.discount),
+      totalAmount: Number(totalPrice),
+      totalBuyers: totalParticipants,
       status: 'pending',
     });
 
-    let invitersCount = await Invite.findAndCountAll({
-      where: { inviter: order.userId, status: 'expired' },
-    });
-    let inviteesCount = await Invite.findAndCountAll({
-      where: { invitee: existingInvite.invitee, status: 'expired' },
-    });
-
-    let totalPrice =
-      price - calculateDiscount(discount, price, inviteesCount.count + invitersCount.count);
-
     return (
-      <>
-        <div>Inviters: {JSON.stringify(invitersCount.count)}</div>
-        <div>Invitees: {JSON.stringify(inviteesCount.count)}</div>
-        <div>Discount: {discount}</div>
-        <div>Price: {JSON.stringify(totalPrice)}</div>
-      </>
+      <Product productName={product}>
+        <div>Participants: {totalParticipants}</div>
+        <div>Discount: {discountAmount}</div>
+        <div>Total Price: {totalPrice}</div>
+        <Link href={`/pay?orderId=${order.id}`}>
+          <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
+            Pay
+          </Button>
+        </Link>
+      </Product>
     );
-    //set the discount according to inviter and invitee count. same for all.
-    //find all order.userId and then set the discount accordingly
-    //find all invitees through invite id and set the discount accordingly
   }
 
-  console.log('cart page params', JSON.stringify(params));
+  // Handle the inviter's view (no invite code)
+  const existingInvite = await Invite.findOne({
+    where: { inviter: currentUser.id, status: 'pending' },
+  });
 
+  if (existingInvite) {
+    const invitersCount = await Invite.count({
+      where: { inviter: currentUser.id, status: 'expired' },
+    });
+
+    totalParticipants += invitersCount;
+
+    const discountAmount = calculateDiscount(
+      existingProduct.discount,
+      existingProduct.price,
+      totalParticipants
+    );
+    const totalPrice = existingProduct.price - discountAmount;
+
+    return (
+      <Product productName={product}>
+        <div>Participants: {totalParticipants}</div>
+        <div>Discount: {discountAmount}</div>
+        <div>Total Price: {totalPrice}</div>
+        <Link href={`/pay?userId=${currentUser.id}&product=${product}`}>
+          <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
+            Pay
+          </Button>
+        </Link>
+        <InviteLinkGenerator
+          category={existingProduct.category}
+          product={product}
+          inviterId={currentUser.id}
+        >
+          Share with your friends and get a discount
+        </InviteLinkGenerator>
+      </Product>
+    );
+  }
+
+  // Default view for a user without an invite
   return (
     <Product productName={product}>
-      <Link href={`/`}>
+      <div>No discount available.</div>
+      <div>Price: {existingProduct.price}</div>
+      <Link href={`/pay?userId=${currentUser.id}&product=${product}`}>
         <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
           Pay
         </Button>
       </Link>
-      {existingProduct && (
-        <InviteLinkGenerator
-          category={existingProduct.category}
-          product={product}
-          inviterId={user.id}
-        >
-          Share with your friends and get a discount
-        </InviteLinkGenerator>
-      )}
+      <InviteLinkGenerator
+        category={existingProduct.category}
+        product={product}
+        inviterId={currentUser.id}
+      >
+        Share with your friends and get a discount
+      </InviteLinkGenerator>
     </Product>
   );
 }
+

@@ -28,7 +28,6 @@ export async function middleware(req) {
     return response;
   }
 
-  // If there is no token and it's not an auth path, redirect to auth
   if (!token) {
     if (!paths.includes(req.nextUrl.pathname)) {
       const redirectUrl = new URL('/auth', req.url);
@@ -53,7 +52,6 @@ export async function middleware(req) {
 
     console.log('Decoded token:', payload);
 
-    // If the request is for an auth path, redirect based on cookies
     if (paths.includes(req.nextUrl.pathname)) {
       const redirectUrl = new URL(cookies.redirect || '/', req.url);
       return NextResponse.redirect(redirectUrl);
