@@ -31,6 +31,7 @@ export default async function CartPage({ params, searchParams }) {
     return await handleInviteProcess(invite, existingProduct, currentUser, product);
   }
 
+  //ui update after price change
   return (
     <Product productName={product}>
       <div>No discount available.</div>
@@ -40,7 +41,11 @@ export default async function CartPage({ params, searchParams }) {
           Pay
         </Button>
       </Link>
-      <InviteLinkGenerator category={existingProduct.category} product={product} inviterId={currentUser.id}>
+      <InviteLinkGenerator
+        category={existingProduct.category}
+        product={product}
+        inviterId={currentUser.id}
+      >
         Share with your friends and get a discount
       </InviteLinkGenerator>
     </Product>
@@ -59,7 +64,7 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
   if (invite) {
     trackInvites = await handleInviteProcessing(invite, currentUser);
   }
-
+  //ui update after price change
   return (
     <Product productName={product}>
       <div>Participants: {currentOrder.totalBuyers}</div>
@@ -71,7 +76,11 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
           Pay
         </Button>
       </Link>
-      <InviteLinkGenerator category={existingProduct.category} product={product} inviterId={currentUser.id}>
+      <InviteLinkGenerator
+        category={existingProduct.category}
+        product={product}
+        inviterId={currentUser.id}
+      >
         Share with your friends and get a discount
       </InviteLinkGenerator>
     </Product>
@@ -87,7 +96,10 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     ],
   });
 
-  if (!existingInvite || existingInvite.status === 'expired' && existingInvite.Invitee?.id !== currentUser.id) {
+  if (
+    !existingInvite ||
+    (existingInvite.status === 'expired' && existingInvite.Invitee?.id !== currentUser.id)
+  ) {
     return (
       <main className="flex w-full h-full justify-center">
         <h1>Expired or Invalid Invite Link</h1>
@@ -101,8 +113,17 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     await existingInvite.save();
   }
 
-  let inviterOrder = await getOrCreateOrder(existingInvite.Inviter.id, existingProduct, existingInvite.id);
-  const currentOrder = await createNewOrder(currentUser.id, existingInvite.id, existingProduct, inviterOrder);
+  let inviterOrder = await getOrCreateOrder(
+    existingInvite.Inviter.id,
+    existingProduct,
+    existingInvite.id,
+  );
+  const currentOrder = await createNewOrder(
+    currentUser.id,
+    existingInvite.id,
+    existingProduct,
+    inviterOrder,
+  );
 
   const discountAmount = calculateDiscount(
     existingProduct.discount,
@@ -112,7 +133,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
   const totalPrice = existingProduct.price - discountAmount;
 
   const trackInvites = await trackInviteChain(existingInvite.inviter);
-
+  //ui update after price change
   return (
     <Product productName={product}>
       <div>Participants: {inviterOrder.totalBuyers}</div>
@@ -124,7 +145,11 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
           Pay
         </Button>
       </Link>
-      <InviteLinkGenerator category={existingProduct.category} product={product} inviterId={currentUser.id}>
+      <InviteLinkGenerator
+        category={existingProduct.category}
+        product={product}
+        inviterId={currentUser.id}
+      >
         Share with your friends and get a discount
       </InviteLinkGenerator>
     </Product>
@@ -167,7 +192,11 @@ async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
 
 async function handleInviteProcessing(invite, currentUser) {
   const existingInvite = await Invite.findOne({ where: { inviteCode: invite } });
-  if (existingInvite && existingInvite.status !== 'expired' && existingInvite.inviter !== currentUser.id) {
+  if (
+    existingInvite &&
+    existingInvite.status !== 'expired' &&
+    existingInvite.inviter !== currentUser.id
+  ) {
     existingInvite.invitee = currentUser.id;
     existingInvite.status = 'expired';
     await existingInvite.save();
