@@ -1,7 +1,5 @@
 function calculateDiscount(discount, price, invitesCount) {
-  //   let totalDiscounts = discount * invitesCount;
-  //   let percentage = (price * totalDiscounts) / 100;
-  //   return price - percentage;
+  if (invitesCount === 0) return price;
   const total = (100 - discount) / invitesCount;
   return (price * total) / 100;
 }
