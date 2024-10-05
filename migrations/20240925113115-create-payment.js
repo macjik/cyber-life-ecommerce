@@ -17,6 +17,7 @@ module.exports = {
         cardType: Sequelize.STRING,
         cardNumbers: Sequelize.STRING,
       },
+      orderId: { type: Sequelize.INTEGER, references: { model: 'Orders', key: 'id' } },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

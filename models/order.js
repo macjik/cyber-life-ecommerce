@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ User, item, Payment, Invite }) {
       Order.belongsTo(User, { foreignKey: 'userId' });
       Order.belongsTo(item, { foreignKey: 'itemId' });
-      Order.hasOne(Payment);
+      Order.hasOne(Payment, {foreignKey: 'orderId', as: 'payment'});
       Order.belongsTo(Invite, { foreignKey: 'inviteId' });
     }
   }
