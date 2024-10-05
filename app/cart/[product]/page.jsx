@@ -31,9 +31,18 @@ export default async function CartPage({ params, searchParams }) {
     return await handleInviteProcess(invite, existingProduct, currentUser, product);
   }
 
+  const { name, description, image, category, price, status, quantity } = existingProduct;
   //ui update after price change
   return (
-    <Product productName={product}>
+    <Product
+      itemName={name}
+      itemDescription={description}
+      itemSrc={null}
+      itemCategory={category}
+      itemPrice={price}
+      itemStatus={status}
+      itemQuantity={quantity}
+    >
       <div>No discount available.</div>
       <div>Price: {existingProduct.price}</div>
       <Link href={`/pay?userId=${currentUser.id}&product=${product}`}>
@@ -65,11 +74,20 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
     trackInvites = await handleInviteProcessing(invite, currentUser);
   }
   //ui update after price change
+  const { name, description, image, category, price, status, quantity } = existingProduct;
+
   return (
-    <Product productName={product}>
+    <Product
+      itemName={name}
+      itemDescription={description}
+      itemSrc={null}
+      itemCategory={category}
+      itemPrice={totalPrice}
+      itemStatus={status}
+      itemQuantity={quantity}
+    >
       <div>Participants: {currentOrder.totalBuyers}</div>
       <div>Discount: {discountAmount}</div>
-      <div>Total Price: {totalPrice}</div>
       <div>Invite Chain: {trackInvites ? JSON.stringify(trackInvites) : <p>No Invites</p>}</div>
       <Link href={`/pay?orderId=${currentOrder.id}`}>
         <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
@@ -133,9 +151,19 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
   const totalPrice = existingProduct.price - discountAmount;
 
   const trackInvites = await trackInviteChain(existingInvite.inviter);
+
+  const { name, description, image, category, price, status, quantity } = existingProduct;
   //ui update after price change
   return (
-    <Product productName={product}>
+    <Product
+      itemName={name}
+      itemDescription={description}
+      itemSrc={null}
+      itemCategory={category}
+      itemPrice={totalPrice}
+      itemStatus={status}
+      itemQuantity={quantity}
+    >
       <div>Participants: {inviterOrder.totalBuyers}</div>
       <div>Discount: {discountAmount}</div>
       <div>Total Price: {totalPrice}</div>
@@ -162,12 +190,15 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
   });
 
   if (!inviterOrder) {
+    const discountAmount = calculateDiscount(existingProduct.discount, existingProduct.price, 1);
+    const totalPrice = existingProduct.price - discountAmount;
+
     inviterOrder = await Order.create({
       userId: inviterId,
       inviteId,
       itemId: existingProduct.id,
-      discount: parseFloat(existingProduct.discount),
-      totalAmount: parseFloat(existingProduct.price),
+      discount: Math.floor(discountAmount),
+      totalAmount: Math.floor(totalPrice),
       totalBuyers: 1,
       status: 'pending',
     });
@@ -179,12 +210,19 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
 }
 
 async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
+  const discountAmount = calculateDiscount(
+    existingProduct.discount,
+    existingProduct.price,
+    inviterOrder.totalBuyers,
+  );
+  const totalPrice = existingProduct.price - discountAmount;
+
   return await Order.create({
     userId,
     inviteId,
     itemId: existingProduct.id,
-    discount: parseFloat(existingProduct.discount),
-    totalAmount: parseFloat(inviterOrder.totalAmount),
+    discount: Math.round(discountAmount),
+    totalAmount: Math.round(totalPrice),
     totalBuyers: inviterOrder.totalBuyers,
     status: 'pending',
   });
