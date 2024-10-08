@@ -3,6 +3,9 @@
 import db from '@/models/index';
 import Joi from 'joi';
 import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
+import path from 'path';
+
 db.sequelize.sync();
 const Item = db.item;
 
@@ -19,7 +22,6 @@ export async function addContent(state, formData) {
       category: Joi.string().required(),
       discount: Joi.number().max(100).required(),
       quantity: Joi.number().required(),
-      // status: Joi.string().enum('available', 'out of stock', 'discontinued').required(),
     });
 
     const { value, error } = schema.validate({
@@ -30,7 +32,6 @@ export async function addContent(state, formData) {
       category: formData.get('category'),
       discount: formData.get('discount'),
       quantity: formData.get('quantity'),
-      // status: formData.get('status'),
     });
 
     if (error) {
@@ -38,28 +39,45 @@ export async function addContent(state, formData) {
       return { error: `${error.message}` };
     }
 
-    const { name, description, image, price, category, discount, quantity } = value;
+    const { name, description, price, image, category, discount, quantity } = value;
 
     let existingItem = await Item.findOne({ where: { name } });
-
     if (existingItem) {
-      console.error(`Item: ${name} exists`);
       return { error: `Item: ${name} exists` };
     }
 
     const uid = uuidv4();
+    const uploadDir = path.join(process.cwd(), 'public/uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
 
-    await Item.create({
-      name: name,
-      description: description,
-      quantity: quantity,
-      price: price,
-      image: image,
-      category: category,
-      sku: uid,
-      // status: status,
-      discount: discount,
-    });
+    if (imageFile) {
+      const imageFileName = `${name}${imageFile.name}`;
+      const imagePath = path.join(uploadDir, imageFileName);
+
+      // Create a stream to save the file
+      const stream = fs.createWriteStream(imagePath);
+      const imageArrayBuffer = await imageFile.arrayBuffer();
+      const imageBuffer = Buffer.from(imageArrayBuffer);
+
+      stream.write(imageBuffer);
+      stream.end();
+
+      await Item.create({
+        name,
+        description,
+        quantity,
+        price,
+        image: `/uploads/${imageFileName}`,
+        category,
+        sku: uid,
+        discount,
+      });
+    } else {
+      console.error('No image file found.');
+      return { error: 'No image file found' };
+    }
 
     return { status: 200, value };
   } catch (err) {
@@ -98,7 +116,6 @@ export async function editContent(state, formData) {
     discount: Joi.number().max(100).required(),
     quantity: Joi.number().required(),
     id: Joi.string().required(),
-    // status: Joi.string().enum('available', 'out of stock', 'discontinued').required(),
   });
 
   const { value, error } = schema.validate({
@@ -110,7 +127,6 @@ export async function editContent(state, formData) {
     discount: formData.get('discount'),
     quantity: formData.get('quantity'),
     id: formData.get('id'),
-    // status: formData.get('status'),
   });
 
   if (error) {
@@ -119,15 +135,51 @@ export async function editContent(state, formData) {
   }
 
   try {
-    const { id, name, description, image, price, category, discount, quantity } = value;
+    const { id, name, description, price, category, discount, quantity } = value;
+
+    const existingItem = await Item.findOne({ where: { sku: id } });
+    if (!existingItem) {
+      console.error('Item not found');
+      return { error: 'Item not found' };
+    }
+
+    let updatedImagePath = existingItem.image;
+
+    if (imageFile) {
+      const uid = uuidv4();
+      const uploadDir = path.join(process.cwd(), 'public/uploads');
+
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      const imageFileName = `${name}${imageFile.name}`;
+      const imagePath = path.join(uploadDir, imageFileName);
+
+      // Write the new image to disk
+      const imageArrayBuffer = await imageFile.arrayBuffer();
+      const imageBuffer = Buffer.from(imageArrayBuffer);
+
+      const stream = fs.createWriteStream(imagePath);
+      stream.write(imageBuffer);
+      stream.end();
+
+      updatedImagePath = `/uploads/${imageFileName}`;
+
+      const oldImagePath = path.join(process.cwd(), 'public', existingItem.image);
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
+    }
+
     let updateItem = await Item.update(
-      { name, description, image, price, category, discount, quantity },
+      { name, description, price, category, discount, quantity, image: updatedImagePath },
       { where: { sku: id }, limit: 1 },
     );
 
     if (!updateItem) {
-      console.errror('Error to update');
-      return { error: 'Error to update item' };
+      console.error('Error updating item');
+      return { error: 'Error updating item' };
     }
 
     return { status: 200, value };

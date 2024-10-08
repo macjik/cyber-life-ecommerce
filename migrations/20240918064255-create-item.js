@@ -26,10 +26,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DECIMAL(10, 2),
       },
-      image: {
-        allowNull: false,
-        type: Sequelize.BLOB,
-      },
+      image: Sequelize.STRING,
       category: {
         allowNull: false,
         type: Sequelize.STRING,
