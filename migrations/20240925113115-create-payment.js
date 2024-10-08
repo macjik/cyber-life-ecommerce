@@ -12,11 +12,11 @@ module.exports = {
       status: {
         type: Sequelize.ENUM('pending', 'successful', 'failed'),
         defaultValue: 'pending',
-        statusCode: Sequelize.INTEGER,
-        region: Sequelize.STRING,
-        cardType: Sequelize.STRING,
-        cardNumbers: Sequelize.STRING,
       },
+      statusCode: Sequelize.INTEGER,
+      region: Sequelize.STRING,
+      cardType: Sequelize.STRING,
+      cardNumbers: Sequelize.STRING,
       orderId: { type: Sequelize.INTEGER, references: { model: 'Orders', key: 'id' } },
       createdAt: {
         allowNull: false,

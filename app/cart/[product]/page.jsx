@@ -5,6 +5,8 @@ import db from '@/models/index';
 import calculateDiscount from '@/app/helper/calculate-discount';
 import InviteLinkGenerator from '@/app/Components/generate-invite';
 import trackInviteChain from '@/app/helper/track-invites';
+import PayButton from '@/app/Components/pay-button';
+import { v4 as uuidv4 } from 'uuid';
 
 const { item: Item, User, Invite, Order } = db;
 db.sequelize.sync();
@@ -21,8 +23,17 @@ export default async function CartPage({ params, searchParams }) {
 
   const currentOrder = await Order.findOne({
     where: { userId: currentUser.id, itemId: existingProduct.id, status: 'pending' },
+    attributes: [
+      'id',
+      'userId',
+      'itemId',
+      'inviteId',
+      'discount',
+      'totalAmount',
+      'totalBuyers',
+      'status',
+    ],
   });
-
   if (currentOrder) {
     return await renderOrderView(currentOrder, existingProduct, currentUser, product, invite);
   }
@@ -45,11 +56,12 @@ export default async function CartPage({ params, searchParams }) {
     >
       <div>No discount available.</div>
       <div>Price: {existingProduct.price}</div>
-      <Link href={`/pay?userId=${currentUser.id}&product=${product}`}>
+      {/* <Link href={`/pay?userId=${currentUser.id}&product=${product}`}>
         <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
           Pay
         </Button>
-      </Link>
+      </Link> */}
+      <PayButton orderId={currentOrder.id} />
       <InviteLinkGenerator
         category={existingProduct.category}
         product={product}
@@ -89,11 +101,12 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
       <div>Participants: {currentOrder.totalBuyers}</div>
       <div>Discount: {discountAmount}</div>
       <div>Invite Chain: {trackInvites ? JSON.stringify(trackInvites) : <p>No Invites</p>}</div>
-      <Link href={`/pay?orderId=${currentOrder.id}`}>
+      {/* <Link href={`/pay?orderId=${currentOrder.id}`}>
         <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
           Pay
         </Button>
-      </Link>
+      </Link> */}
+      <PayButton orderId={currentOrder.id} />
       <InviteLinkGenerator
         category={existingProduct.category}
         product={product}
@@ -164,15 +177,16 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
       itemStatus={status}
       itemQuantity={quantity}
     >
-      <div>Participants: {inviterOrder.totalBuyers}</div>
+      <div>Participants: {currentOrder}</div>
       <div>Discount: {discountAmount}</div>
       <div>Total Price: {totalPrice}</div>
       <div>Invite Chain: {JSON.stringify(trackInvites)}</div>
-      <Link href={`/pay?orderId=${currentOrder.id}`}>
+      {/* <Link href={`/pay?orderId=${currentOrder.id}`}>
         <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
           Pay
         </Button>
-      </Link>
+      </Link> */}
+      <PayButton orderId={currentOrder.id} />
       <InviteLinkGenerator
         category={existingProduct.category}
         product={product}
