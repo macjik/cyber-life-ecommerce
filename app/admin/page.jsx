@@ -12,7 +12,7 @@ export default async function AdminPanel() {
       'name',
       'description',
       'quantity',
-      'image',
+      //'image',
       'category',
       'sku',
       'status',
