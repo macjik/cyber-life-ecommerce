@@ -17,7 +17,7 @@ module.exports = {
       phone: { type: Sequelize.STRING, allowNull: false, unique: true },
       role: { type: Sequelize.ENUM('admin', 'user'), allowNull: false, defaultValue: 'user' },
       address: { type: Sequelize.STRING },
-      // hash: { type: Sequelize.STRING, allowNull: false },
+      hash: { type: Sequelize.STRING, allowNull: false },
       sub: { type: Sequelize.STRING, unique: true },
       createdAt: {
         allowNull: false,

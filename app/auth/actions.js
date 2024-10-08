@@ -7,13 +7,15 @@ import { cookies } from 'next/headers';
 import { serialize } from 'cookie';
 import db from '@/models/index';
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
+
 db.sequelize.sync();
 const User = db.User;
 
 export async function signup(state, formData) {
   const schema = Joi.object({
     // name: Joi.string().min(2).trim().required(),
-    // password: Joi.string().min(6).trim().required(),
+    password: Joi.string().min(6).trim().required(),
     phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
     inviteCode: Joi.string().allow(''),
     sms: Joi.number().min(4).required(),
@@ -22,7 +24,7 @@ export async function signup(state, formData) {
   try {
     const { value, error } = schema.validate({
       // name: formData.get('name'),
-      // password: formData.get('password'),
+      password: formData.get('password'),
       phone: formData.get('phone').toString(),
       sms: formData.get('sms-confirm'),
     });
@@ -39,7 +41,7 @@ export async function signup(state, formData) {
 
     const { name, password, phone, inviteCode, sms } = value;
 
-    // const hashedPassword = await bcrypt.hash(password, 9);
+    const hashedPassword = await bcrypt.hash(password, 9);
 
     let exisitingUser = await User.findOne({ where: { phone } });
 
@@ -52,7 +54,7 @@ export async function signup(state, formData) {
 
     await User.create({
       // name: name,
-      // hash: hashedPassword,
+      hash: hashedPassword,
       role: 'user',
       phone: phone,
       sub: uid,
@@ -169,14 +171,14 @@ export async function preLogin(state, formData) {
 export async function preSignup(state, formData) {
   const schema = Joi.object({
     // name: Joi.string().min(2).trim().required(),
-    // password: Joi.string().min(6).trim().required(),
+    password: Joi.string().min(6).trim().required(),
     phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
   });
 
   try {
     const { value, error } = schema.validate({
       // name: formData.get('name'),
-      // password: formData.get('password'),
+      password: formData.get('password'),
       phone: formData.get('phone').toString(),
     });
 
@@ -185,14 +187,14 @@ export async function preSignup(state, formData) {
       return { error: `${error}` };
     }
 
-    const { name, password, phone } = value;
+    const { phone, password} = value;
 
     let existingUser = await User.findOne({ where: { phone } });
     if (existingUser) {
-      console.error('User not found');
+      console.error('User already exists');
       return { error: 'User already exists' };
     } else {
-      return { phone };
+      return value;
     }
   } catch (err) {
     console.error(err);
