@@ -6,7 +6,7 @@ import { AiFillControl } from 'react-icons/ai';
 
 export default async function NavBar({ children = null, icon = null, userRole = null }) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-16 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-16 z-50 mt-20">
       <Link href="/user" className="flex flex-col items-center text-gray-600 hover:text-blue-500">
         <FaUser size={24} />
         <span className="text-xs">User</span>
