@@ -8,6 +8,10 @@ import { serialize } from 'cookie';
 import db from '@/models/index';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
+import client from '../services/redis';
+import axios from 'axios';
+import FormData from 'form-data';
+import { MINUTE, DAY } from 'time-constants';
 
 db.sequelize.sync();
 const User = db.User;
@@ -187,14 +191,53 @@ export async function preSignup(state, formData) {
       return { error: `${error}` };
     }
 
-    const { phone, password} = value;
+    const { phone } = value;
 
     let existingUser = await User.findOne({ where: { phone } });
     if (existingUser) {
       console.error('User already exists');
       return { error: 'User already exists' };
     } else {
-      return value;
+      try {
+        let form = new FormData();
+        form.append('email', process.env.ESKIZ_EMAIL);
+        form.append('password', process.env.ESKIZ_PASSWORD);
+
+        let { data } = await axios({
+          method: 'post',
+          url: `${process.env.ESKIZ_API}/auth/login`,
+          headers: { ...form.getHeaders() },
+          data: form,
+        });
+
+        let token = data.data.token;
+
+        // if (token) {
+        //   console.log(token);
+        //   return new Response(JSON.stringify(token));
+        // }
+
+        const codeToken = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+        form = new FormData();
+        form.append('mobile_phone', `998${phone}`);
+        form.append('message', process.env.ESKIZ_SMS_TEST_MESSAGE || codeToken);
+        form.append('from', '4546');
+        let { res } = await axios({
+          method: 'post',
+          url: `${process.env.ESKIZ_API}/message/sms/send`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            ...form.getHeaders(),
+          },
+          data: form,
+        });
+
+        await client.set(phone, codeToken, 'EX', (MINUTE * 2) / 100);
+        return value;
+      } catch (err) {
+        console.error(err);
+        new Response(JSON.stringify(err));
+      }
     }
   } catch (err) {
     console.error(err);

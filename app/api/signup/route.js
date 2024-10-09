@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
+import client from '@/app/services/redis';
 
 db.sequelize.sync();
 const { User } = db;
@@ -13,12 +14,10 @@ export async function POST(req) {
     const { userData, sms } = await req.json();
     const { phone, password } = userData;
 
-    // Ensure all the required fields are present.
     if (!phone || !password || !sms) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
     }
 
-    // Check if user already exists
     let existingUser = await User.findOne({ where: { phone } });
     if (existingUser) {
       return new Response(
@@ -27,7 +26,14 @@ export async function POST(req) {
       );
     }
 
-    // Hash password before storing it
+    let smsCode = await client.get(phone.toString());
+
+    if (smsCode !== sms.toString()) {
+      console.log('Invalid Code:', `${phone}`);
+      return new Response(JSON.stringify({ error: 'Invalid Code' }));
+    }
+    await client.del(phone.toString());
+
     const hashedPassword = await bcrypt.hash(password, 9);
     const uid = uuidv4();
 
@@ -38,10 +44,8 @@ export async function POST(req) {
       sub: uid,
     });
 
-    // Generate JWT token
     let token = jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Set cookie with the JWT token
     cookies().set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

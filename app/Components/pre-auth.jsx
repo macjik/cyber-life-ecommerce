@@ -100,17 +100,17 @@ export function PreSigninForm({ children }) {
           {/* <input type="hidden" name="phone" value={preSignupState.phone} />
           <input type="hidden" name="password" value={preSignupState.password} /> */}
           <Button type="submit">Confirm</Button>
-          {signUpError && <p className="text-red-700">{signUpError}</p>}
           {children}
+          {signUpError && <p className="text-red-700">{signUpError}</p>}
         </Form>
       ) : (
         <Form action={preSignupAction} title="Sign Up">
           <FormInput inputMode="tel" id="phone" label="Phone*" type="tel" />
           <FormInput id="password" label="Password*" type="password" />
           <FormInput id="invite-code" required={false} label="Invite Code (Optional)" />
-          {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
           <Button type="submit">Sign up</Button>
           {children}
+          {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
         </Form>
       )}
     </>
