@@ -26,30 +26,31 @@ export function PreLoginForm({ children }) {
 
   console.log(preLoginState);
   return (
-    <>
-      {preLoginState.phone ? (
-        <Form action={loginAction} title="Log in">
-          <FormInput
-            key={preLoginState.phone}
-            type="tel"
-            required
-            id="sms-confirm"
-            label={`Confirm Code Sent as SMS on phone: ${preLoginState.phone}*`}
-          />
-          <input type="hidden" value={preLoginState.phone} name="phone" />
-          <Button type="submit">Confirm</Button>
-          {loginState.error && <p className="text-red-700">{loginState.error}</p>}
-          {children}
-        </Form>
-      ) : (
-        <Form action={preLoginAction} title="Log in">
-          <FormInput inputMode="tel" id="phone" label="Phone" type="number" />
-          {preLoginState.error && <p className="text-red-700">{preLoginState.error}</p>}
-          <Button type="submit">Log in</Button>
-          {children}
-        </Form>
-      )}
-    </>
+    // <>
+    //   {preLoginState.phone ? (
+    //     <Form action={loginAction} title="Log in">
+    //       <FormInput
+    //         key={preLoginState.phone}
+    //         type="tel"
+    //         required
+    //         id="sms-confirm"
+    //         label={`Confirm Code Sent as SMS on phone: ${preLoginState.phone}*`}
+    //       />
+    //       <input type="hidden" value={preLoginState.phone} name="phone" />
+    //       <Button type="submit">Confirm</Button>
+    //       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
+    //       {children}
+    //     </Form>
+    // ) : (
+    <Form action={loginAction} title="Log in">
+      <FormInput inputMode="tel" id="phone" label="Phone" type="number" />
+      <FormInput id="password" label="Password*" type="password" />
+      {loginState.error && <p className="text-red-700">{loginState.error}</p>}
+      <Button type="submit">Log in</Button>
+      {children}
+    </Form>
+    //   )}
+    // </>
   );
 }
 

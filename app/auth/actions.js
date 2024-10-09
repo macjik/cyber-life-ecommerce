@@ -87,17 +87,15 @@ export async function signup(state, formData) {
 export async function login(state, formData) {
   const schema = Joi.object({
     // name: Joi.string().min(2).trim().required(),
-    // password: Joi.string().min(6).trim().required(),
     phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
-    sms: Joi.number().min(4).required(),
+    password: Joi.string().min(6).trim().required(),
   });
 
   try {
     const { value, error } = schema.validate({
       // name: formData.get('name'),
-      // password: formData.get('password'),
       phone: formData.get('phone').toString(),
-      sms: formData.get('sms-confirm'),
+      password: formData.get('password'),
     });
 
     if (error) {
@@ -105,7 +103,7 @@ export async function login(state, formData) {
       return { error: `${error}` };
     }
 
-    const { name, password, phone, sms } = value;
+    const { password, phone } = value;
 
     let existingUser = await User.findOne({ where: { phone } });
     if (!existingUser) {
@@ -113,15 +111,15 @@ export async function login(state, formData) {
       return { error: `User not found` };
     }
 
-    // const isPasswordMatch = await bcrypt.compare(password, existingUser.hash);
-    // if (!isPasswordMatch) {
-    //   console.error('Incorrect password');
-    //   return { error: 'Incorrect password' };
-    // }
-    const userId = existingUser.sub;
-    const role = existingUser.role;
+    const isPasswordMatch = await bcrypt.compare(password, existingUser.hash);
+    if (!isPasswordMatch) {
+      console.error('Incorrect password');
+      return { error: 'Incorrect password' };
+    }
 
-    let token = jwt.sign({ id: userId, role: role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const { role, sub } = existingUser;
+
+    let token = jwt.sign({ id: sub, role: role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     cookies().set('token', token, {
       httpOnly: true,
@@ -131,7 +129,6 @@ export async function login(state, formData) {
       path: '/',
     });
 
-    //TODO: sms confirmations
     console.log('User logged in successfully:', phone);
     return { status: 200, phone: phone };
   } catch (err) {
