@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       role: { type: DataTypes.ENUM('admin', 'user'), allowNull: false, defaultValue: 'user' },
       address: { type: DataTypes.STRING },
       sub: { type: DataTypes.STRING, unique: true },
-      // hash: { type: DataTypes.STRING, allowNull: false },
+      hash: { type: DataTypes.STRING, allowNull: false },
     },
     {
       sequelize,

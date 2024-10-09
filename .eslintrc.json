@@ -10,7 +10,7 @@
         "ignoreRestSiblings": true
       }
     ],
-    "react/jsx-no-useless-fragment": "warn",
+    // "react/jsx-no-useless-fragment": "warn",
     "no-unused-expressions": "warn"
   }
 }
