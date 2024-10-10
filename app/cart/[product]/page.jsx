@@ -1,12 +1,9 @@
-import Link from 'next/link';
 import Product from '../../Components/product';
-import Button from '../../Components/button';
 import db from '@/models/index';
 import calculateDiscount from '@/app/helper/calculate-discount';
 import InviteLinkGenerator from '@/app/Components/generate-invite';
 import trackInviteChain from '@/app/helper/track-invites';
 import PayButton from '@/app/Components/pay-button';
-import { v4 as uuidv4 } from 'uuid';
 import { FaMoneyBill, FaPercent } from 'react-icons/fa';
 
 const { item: Item, User, Invite, Order } = db;
@@ -64,8 +61,6 @@ export default async function CartPage({ params, searchParams }) {
       itemStatus={status}
       itemQuantity={quantity}
     >
-      {' '}
-      FontAw
       <PayButton className="inline-flex justify-center text-center gap-4" orderId={order.id}>
         Pay <FaMoneyBill size={24} />
       </PayButton>
@@ -185,10 +180,10 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
       itemStatus={status}
       itemQuantity={quantity}
     >
-      <div>Participants: {currentOrder}</div>
+      {/* <div>Participants: {JSON.stringify(currentOrder)}</div>
       <div>Discount: {discountAmount}</div>
       <div>Total Price: {totalPrice}</div>
-      <div>Invite Chain: {JSON.stringify(trackInvites)}</div>
+      <div>Invite Chain: {JSON.stringify(trackInvites)}</div> */}
       {/* <Link href={`/pay?orderId=${currentOrder.id}`}>
         <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
           Pay
