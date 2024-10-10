@@ -4,7 +4,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import Button from './button';
 
-export default function InviteLinkGenerator({ category, product, inviterId, children }) {
+export default function InviteLinkGenerator({ category, product, inviterId, children, className = '' }) {
   const [buttonText, setButtonText] = useState(children);
 
   async function handleLinkGenerate(event) {
@@ -26,7 +26,7 @@ export default function InviteLinkGenerator({ category, product, inviterId, chil
   }
 
   return (
-    <Button onClick={handleLinkGenerate} className="mt-2">
+    <Button onClick={handleLinkGenerate} className={`${className} mt-2`}>
       {buttonText}
     </Button>
   );

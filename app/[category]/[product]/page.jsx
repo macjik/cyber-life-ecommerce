@@ -33,7 +33,7 @@ export default async function ItemPage({ params, searchParams }) {
       <Link href={`/cart/${product}${invite ? `?invite=${invite}` : ''}`}>
         <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out inline-flex items-center justify-center gap-4">
           Add to Cart
-          <FaShoppingCart sizes={24} className='text-right'/>
+          <FaShoppingCart size={24} className='text-right'/>
         </Button>
       </Link>
     </Product>
