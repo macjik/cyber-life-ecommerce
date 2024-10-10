@@ -37,7 +37,8 @@ export default async function Product({
         <div className="p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">{itemName || 'Product Name'}</h2>
           <p className="text-gray-600 mb-4">
-            {itemDescription || 'Product description goes here. It provides details about the product.'}
+            {itemDescription ||
+              'Product description goes here. It provides details about the product.'}
           </p>
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -45,9 +46,7 @@ export default async function Product({
                 ${itemPrice}
               </span>
               {itemDiscount && (
-                <span className="text-gray-500 line-through text-lg ml-2">
-                  Original Price
-                </span>
+                <span className="text-gray-500 line-through text-lg ml-2">Original Price</span>
               )}
             </div>
           </div>

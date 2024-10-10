@@ -63,9 +63,9 @@ export default async function Home() {
                   {item.discount > 0 && <span className="text-green-600">(-{item.discount}%)</span>}
                 </p>
                 <Link href={`${item.category}/${item.name}`}>
-                <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full transition-colors duration-300 ease-in-out">
-                  Join Group & Save
-                </button>
+                  <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full transition-colors duration-300 ease-in-out">
+                    Join Group & Save
+                  </button>
                 </Link>
               </div>
             ))
