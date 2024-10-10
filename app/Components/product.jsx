@@ -1,10 +1,6 @@
 'use server';
 
-// import db from '@/models/index';
 import Image from 'next/image';
-
-// db.sequelize.sync();
-// const Item = db.item;
 
 export default async function Product({
   itemName,
@@ -14,21 +10,14 @@ export default async function Product({
   itemPrice,
   itemStatus,
   itemQuantity,
+  itemDiscount,
+  maxQuantity = 100, // Used for progress bar only, no calculations involved
   children,
 }) {
-  // let item = null;
-
-  // try {
-  //   item = await Item.findOne({ where: { name: productName } });
-  //   console.log(item);
-  // } catch (err) {
-  //   console.error(err);
-  // }
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="max-w-lg w-full bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-xl mb-6">
-        <div className="relative h-56 w-full">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-50 p-4">
+      <div className="max-w-lg w-full bg-white shadow-xl rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gray-50 mb-6">
+        <div className="relative h-56 w-full group">
           <Image
             src={itemSrc || '/turtle.jpg'}
             alt={itemName}
@@ -37,26 +26,44 @@ export default async function Product({
             quality={100}
             sizes="80vw"
             style={{ objectFit: 'cover' }}
-            className="object-contain rounded-t-lg"
+            className="object-cover rounded-t-lg transition-transform duration-500 group-hover:scale-110"
           />
+          {itemDiscount && (
+            <span className="absolute top-2 right-2 bg-red-600 text-white text-sm font-bold px-2 py-1 rounded-full shadow-lg">
+              {itemDiscount}% OFF
+            </span>
+          )}
         </div>
         <div className="p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">{itemName || 'Product Name'}</h2>
           <p className="text-gray-600 mb-4">
-            {itemDescription ||
-              'Product description goes here. It provides details about the product.'}
+            {itemDescription || 'Product description goes here. It provides details about the product.'}
           </p>
           <div className="flex items-center justify-between mb-4">
-            <span className="text-2xl font-bold text-gray-800">${itemPrice}</span>
-            {/* <span className="text-gray-500 line-through text-lg">
-              ${(parseFloat(item?.price) + parseFloat(item?.discount || 0)).toFixed(2)}
-            </span> */}
+            <div>
+              <span className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
+                ${itemPrice}
+              </span>
+              {itemDiscount && (
+                <span className="text-gray-500 line-through text-lg ml-2">
+                  Original Price
+                </span>
+              )}
+            </div>
           </div>
-          <p className="text-gray-500 mb-4">Available Quantity: {itemQuantity}</p>
           <div className="mb-4">
-            <p className="text-gray-500 text-sm">Category: {itemCategory || 'Category'}</p>
+            <p className="text-gray-500 text-sm mb-2">Category: {itemCategory || 'Category'}</p>
+            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+              <div
+                className="bg-blue-500 h-2.5 rounded-full"
+                style={{ width: `${(itemQuantity / maxQuantity) * 100}%` }}
+              ></div>
+            </div>
+            <p className="text-gray-500 text-sm">
+              Available Quantity: {itemQuantity}/{maxQuantity}
+            </p>
           </div>
-          <div className="mb-4 space-x-11">
+          <div className="mb-4">
             <span
               className={`inline-block px-4 py-2 rounded-full text-white ${
                 itemStatus === 'available' ? 'bg-green-500' : 'bg-red-500'

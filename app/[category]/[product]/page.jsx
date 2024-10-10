@@ -26,7 +26,7 @@ export default async function ItemPage({ params, searchParams }) {
       itemCategory={category}
       itemPrice={price}
       itemQuantity={quantity}
-      itemSrc={null}
+      itemSrc={image}
       itemStatus={status}
     >
       <Link href={`/cart/${product}${invite ? `?invite=${invite}` : ''}`}>
