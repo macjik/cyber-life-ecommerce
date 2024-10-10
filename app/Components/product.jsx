@@ -11,7 +11,7 @@ export default async function Product({
   itemStatus,
   itemQuantity,
   itemDiscount,
-  maxQuantity = 100, // Used for progress bar only, no calculations involved
+  maxQuantity = 100,
   children,
 }) {
   return (

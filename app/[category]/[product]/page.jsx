@@ -2,6 +2,7 @@ import Button from '@/app/Components/button';
 import Product from '@/app/Components/product';
 import db from '@/models/index';
 import Link from '@/node_modules/next/link';
+import {FaShoppingCart} from 'react-icons/fa'
 
 db.sequelize.sync();
 const { item: Item } = db;
@@ -30,8 +31,9 @@ export default async function ItemPage({ params, searchParams }) {
       itemStatus={status}
     >
       <Link href={`/cart/${product}${invite ? `?invite=${invite}` : ''}`}>
-        <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
+        <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out inline-flex items-center justify-center gap-4">
           Add to Cart
+          <FaShoppingCart sizes={24} className='text-right'/>
         </Button>
       </Link>
     </Product>
