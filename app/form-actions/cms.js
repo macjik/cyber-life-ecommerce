@@ -143,39 +143,39 @@ export async function editContent(state, formData) {
       return { error: 'Item not found' };
     }
 
-    let updatedImagePath = existingItem.image;
-
     if (imageFile) {
-      const uid = uuidv4();
       const uploadDir = path.join(process.cwd(), 'public/uploads');
 
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
       }
 
-      const imageFileName = `${name}${imageFile.name}`;
+      const imageFileName = `${name}${path.extname(imageFile.name)}`;
       const imagePath = path.join(uploadDir, imageFileName);
 
-      // Write the new image to disk
       const imageArrayBuffer = await imageFile.arrayBuffer();
       const imageBuffer = Buffer.from(imageArrayBuffer);
+      await fs.promises.writeFile(imagePath, imageBuffer);
 
-      const stream = fs.createWriteStream(imagePath);
-      stream.write(imageBuffer);
-      stream.end();
-
-      updatedImagePath = `/uploads/${imageFileName}`;
-
-      const oldImagePath = path.join(process.cwd(), 'public', existingItem.image);
-      if (fs.existsSync(oldImagePath)) {
-        fs.unlinkSync(oldImagePath);
+      if (existingItem.image) {
+        const oldImagePath = path.join(process.cwd(), 'public', existingItem.image);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
       }
+
+      existingItem.image = `/uploads/${imageFileName}`;
     }
 
-    let updateItem = await Item.update(
-      { name, description, price, category, discount, quantity, image: updatedImagePath },
-      { where: { sku: id }, limit: 1 },
-    );
+    let updateItem = await existingItem.update({
+      name,
+      description,
+      price,
+      category,
+      discount,
+      quantity,
+      image: existingItem.image,
+    });
 
     if (!updateItem) {
       console.error('Error updating item');

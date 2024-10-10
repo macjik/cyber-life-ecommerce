@@ -1,12 +1,10 @@
-import Link from 'next/link';
 import Product from '../../Components/product';
-import Button from '../../Components/button';
 import db from '@/models/index';
 import calculateDiscount from '@/app/helper/calculate-discount';
 import InviteLinkGenerator from '@/app/Components/generate-invite';
 import trackInviteChain from '@/app/helper/track-invites';
 import PayButton from '@/app/Components/pay-button';
-import { v4 as uuidv4 } from 'uuid';
+import { FaMoneyBill, FaPercent } from 'react-icons/fa';
 
 const { item: Item, User, Invite, Order } = db;
 db.sequelize.sync();
@@ -22,7 +20,7 @@ export default async function CartPage({ params, searchParams }) {
   if (!existingProduct) return <p>Product not found!</p>;
 
   const currentOrder = await Order.findOne({
-    where: { userId: currentUser.id, itemId: existingProduct.id, status: 'pending' },
+    where: { userId: currentUser.id, itemId: existingProduct.id },
     attributes: [
       'id',
       'userId',
@@ -44,30 +42,36 @@ export default async function CartPage({ params, searchParams }) {
 
   const { name, description, image, category, price, status, quantity } = existingProduct;
   //ui update after price change
+  let order = await Order.create({
+    itemId: existingProduct.id,
+    status: 'pending',
+    userId: currentUser.id,
+    discount: 0,
+    totalBuyers: 1,
+    totalAmount: parseInt(price, 10),
+  });
+
   return (
     <Product
       itemName={name}
       itemDescription={description}
-      itemSrc={null}
+      itemSrc={image}
       itemCategory={category}
       itemPrice={price}
       itemStatus={status}
       itemQuantity={quantity}
     >
-      <div>No discount available.</div>
-      <div>Price: {existingProduct.price}</div>
-      {/* <Link href={`/pay?userId=${currentUser.id}&product=${product}`}>
-        <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
-          Pay
-        </Button>
-      </Link> */}
-      <PayButton orderId={currentOrder.id} />
+      <PayButton className="inline-flex justify-center text-center gap-4" orderId={order.id}>
+        Pay <FaMoneyBill size={24} />
+      </PayButton>
       <InviteLinkGenerator
         category={existingProduct.category}
         product={product}
         inviterId={currentUser.id}
+        className="inline-flex justify-center gap-3 text-center bg-green-600"
       >
-        Share with your friends and get a discount
+        <span className="text-lg">Share with your friends and get a discount</span>
+        <FaPercent size={24} />
       </InviteLinkGenerator>
     </Product>
   );
@@ -92,27 +96,26 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
     <Product
       itemName={name}
       itemDescription={description}
-      itemSrc={null}
+      itemSrc={image}
       itemCategory={category}
       itemPrice={totalPrice}
       itemStatus={status}
       itemQuantity={quantity}
     >
-      <div>Participants: {currentOrder.totalBuyers}</div>
-      <div>Discount: {discountAmount}</div>
-      <div>Invite Chain: {trackInvites ? JSON.stringify(trackInvites) : <p>No Invites</p>}</div>
-      {/* <Link href={`/pay?orderId=${currentOrder.id}`}>
-        <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
-          Pay
-        </Button>
-      </Link> */}
-      <PayButton orderId={currentOrder.id} />
+      {/* <div>Participants: {currentOrder.totalBuyers}</div>
+      <div>Discount: {discountAmount}</div> */}
+      {/* <div>{trackInvites ? JSON.stringify(trackInvites) : <p>No Invites</p>}</div> */}
+      <PayButton className="inline-flex justify-center text-center gap-4" orderId={currentOrder.id}>
+        Pay <FaMoneyBill size={24} />
+      </PayButton>
       <InviteLinkGenerator
         category={existingProduct.category}
         product={product}
         inviterId={currentUser.id}
+        className="inline-flex justify-center gap-3 text-center bg-green-600"
       >
-        Share with your friends and get a discount
+        <span className="text-lg">Share with your friends and get a discount</span>
+        <FaPercent size={24} />
       </InviteLinkGenerator>
     </Product>
   );
@@ -171,28 +174,32 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     <Product
       itemName={name}
       itemDescription={description}
-      itemSrc={null}
+      itemSrc={image}
       itemCategory={category}
       itemPrice={totalPrice}
       itemStatus={status}
       itemQuantity={quantity}
     >
-      <div>Participants: {currentOrder}</div>
+      {/* <div>Participants: {JSON.stringify(currentOrder)}</div>
       <div>Discount: {discountAmount}</div>
       <div>Total Price: {totalPrice}</div>
-      <div>Invite Chain: {JSON.stringify(trackInvites)}</div>
+      <div>Invite Chain: {JSON.stringify(trackInvites)}</div> */}
       {/* <Link href={`/pay?orderId=${currentOrder.id}`}>
         <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
           Pay
         </Button>
       </Link> */}
-      <PayButton orderId={currentOrder.id} />
+      <PayButton className="inline-flex justify-center text-center gap-4" orderId={currentOrder.id}>
+        Pay <FaMoneyBill size={24} />
+      </PayButton>
       <InviteLinkGenerator
         category={existingProduct.category}
         product={product}
         inviterId={currentUser.id}
+        className="inline-flex justify-center gap-3 text-center bg-green-600"
       >
-        Share with your friends and get a discount
+        <span className="text-lg">Share with your friends and get a discount</span>
+        <FaPercent size={24} />
       </InviteLinkGenerator>
     </Product>
   );

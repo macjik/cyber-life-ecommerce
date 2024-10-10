@@ -46,6 +46,8 @@ export async function middleware(req) {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const { payload } = await jwtVerify(token, secret);
 
+    response.cookies.set('userRole', payload.role);
+
     if (req.nextUrl.pathname.startsWith('/admin') && payload.role !== 'admin') {
       return NextResponse.redirect(new URL('/', req.url));
     }
