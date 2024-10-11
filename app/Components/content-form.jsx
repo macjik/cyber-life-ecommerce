@@ -42,10 +42,11 @@ export function ContentForm() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <Select label="Category" id="category" placeholder="Select category" className="text-sm">
+          <FormInput label="Category" id="category" type="text" className="text-sm" />
+          {/* <Select label="Category" id="category" placeholder="Select category" className="text-sm">
             {categories}
-          </Select>
-          <FormInput label="Image" id="image" type="file" className="text-sm mt-[0.65rem]" />
+          </Select> */}
+          <FormInput label="Image" id="image" type="file" className="text-sm" />
         </div>
 
         <FormInput label="Description" id="description" type="text" className="mt-4 text-sm" />
@@ -76,7 +77,7 @@ export function ContentDelete({ id }) {
   );
 }
 
-export function ContentEdit({ id, name, price, quantity, discount, image, description }) {
+export function ContentEdit({ id, name, price, quantity, discount, image, description, category }) {
   const [editItemState, editItemAction] = useFormState(editContent, '');
   const [isEdit, setIsEdit] = useState(false);
   const router = useRouter();
@@ -136,15 +137,17 @@ export function ContentEdit({ id, name, price, quantity, discount, image, descri
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <Select
+              {/* <Select
                 label="Category"
                 id="category"
                 placeholder="Select category"
                 className="text-sm"
               >
                 {categories}
-              </Select>
-              <FormInput label="Image" id="image" type="file" className="text-sm mt-[0.65rem]" />
+              </Select> */}
+              <FormInput defaultValue={category} label="Category" id="category" type="text" />
+
+              <FormInput label="Image" id="image" type="file" className="text-sm" />
             </div>
             <FormInput
               defaultValue={description}

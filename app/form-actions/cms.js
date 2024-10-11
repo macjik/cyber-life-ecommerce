@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 
 db.sequelize.sync();
-const Item = db.item;
+const {item:Item, Category} = db;
 
 export async function addContent(state, formData) {
   try {
@@ -64,16 +64,22 @@ export async function addContent(state, formData) {
       stream.write(imageBuffer);
       stream.end();
 
+      let [newCategory, created] = await Category.findOrCreate({
+        where: { name: category }, 
+        defaults: { name: category }, 
+      });
+      
       await Item.create({
         name,
         description,
         quantity,
         price,
         image: `/uploads/${imageFileName}`,
-        category,
+        categoryId: newCategory.id,
         sku: uid,
         discount,
       });
+      
     } else {
       console.error('No image file found.');
       return { error: 'No image file found' };
@@ -91,7 +97,6 @@ export async function deleteContent(state, formData) {
 
   try {
     let item = await Item.destroy({ where: { sku: contentId } });
-
     if (!item) {
       console.error('Item not found');
       return { error: 'Item not found' };
@@ -167,22 +172,46 @@ export async function editContent(state, formData) {
       existingItem.image = `/uploads/${imageFileName}`;
     }
 
-    let updateItem = await existingItem.update({
-      name,
-      description,
-      price,
-      category,
-      discount,
-      quantity,
-      image: existingItem.image,
-    });
+    let categoryRecord = await Category.findOne({ where: { name: category } });
 
-    if (!updateItem) {
-      console.error('Error updating item');
-      return { error: 'Error updating item' };
-    }
-
-    return { status: 200, value };
+    if (categoryRecord) {
+      await Category.update({ name: category }, { where: { id: categoryRecord.id } });    
+      let updateItem = await existingItem.update({
+        name,
+        description,
+        price,
+        categoryId: categoryRecord.id,
+        discount,
+        quantity,
+        image: existingItem.image,
+      });
+    
+      if (!updateItem) {
+        console.error('Error updating item');
+        return { error: 'Error updating item' };
+      }
+    
+      return { status: 200, value };
+    } else {
+      let newCategory = await Category.create({ name: category });
+    
+      let updateItem = await existingItem.update({
+        name,
+        description,
+        price,
+        categoryId: newCategory.id,
+        discount,
+        quantity,
+        image: existingItem.image,
+      });
+    
+      if (!updateItem) {
+        console.error('Error updating item');
+        return { error: 'Error updating item' };
+      }
+    
+      return { status: 200, value };
+    }    
   } catch (err) {
     console.error(err);
     return { error: `${err}` };

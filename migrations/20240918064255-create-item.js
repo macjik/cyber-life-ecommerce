@@ -27,10 +27,6 @@ module.exports = {
         type: Sequelize.DECIMAL(10, 2),
       },
       image: Sequelize.STRING,
-      category: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
       sku: {
         type: Sequelize.STRING,
         allowNull: true,
@@ -43,6 +39,7 @@ module.exports = {
         type: Sequelize.DECIMAL(5, 2),
         defaultValue: 0.0,
       },
+      categoryId: {type: Sequelize.INTEGER, references: {model: 'Categories', key: 'id'}},
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
