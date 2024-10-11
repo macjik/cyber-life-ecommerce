@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 
 db.sequelize.sync();
-const {item:Item, Category} = db;
+const { item: Item, Category } = db;
 
 export async function addContent(state, formData) {
   try {
@@ -65,10 +65,10 @@ export async function addContent(state, formData) {
       stream.end();
 
       let [newCategory, created] = await Category.findOrCreate({
-        where: { name: category }, 
-        defaults: { name: category }, 
+        where: { name: category },
+        defaults: { name: category },
       });
-      
+
       await Item.create({
         name,
         description,
@@ -79,7 +79,6 @@ export async function addContent(state, formData) {
         sku: uid,
         discount,
       });
-      
     } else {
       console.error('No image file found.');
       return { error: 'No image file found' };
@@ -175,7 +174,7 @@ export async function editContent(state, formData) {
     let categoryRecord = await Category.findOne({ where: { name: category } });
 
     if (categoryRecord) {
-      await Category.update({ name: category }, { where: { id: categoryRecord.id } });    
+      await Category.update({ name: category }, { where: { id: categoryRecord.id } });
       let updateItem = await existingItem.update({
         name,
         description,
@@ -185,16 +184,16 @@ export async function editContent(state, formData) {
         quantity,
         image: existingItem.image,
       });
-    
+
       if (!updateItem) {
         console.error('Error updating item');
         return { error: 'Error updating item' };
       }
-    
+
       return { status: 200, value };
     } else {
       let newCategory = await Category.create({ name: category });
-    
+
       let updateItem = await existingItem.update({
         name,
         description,
@@ -204,14 +203,14 @@ export async function editContent(state, formData) {
         quantity,
         image: existingItem.image,
       });
-    
+
       if (!updateItem) {
         console.error('Error updating item');
         return { error: 'Error updating item' };
       }
-    
+
       return { status: 200, value };
-    }    
+    }
   } catch (err) {
     console.error(err);
     return { error: `${err}` };

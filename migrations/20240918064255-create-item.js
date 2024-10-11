@@ -39,7 +39,7 @@ module.exports = {
         type: Sequelize.DECIMAL(5, 2),
         defaultValue: 0.0,
       },
-      categoryId: {type: Sequelize.INTEGER, references: {model: 'Categories', key: 'id'}},
+      categoryId: { type: Sequelize.INTEGER, references: { model: 'Categories', key: 'id' } },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
