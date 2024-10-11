@@ -5,7 +5,7 @@ import Image from '@/node_modules/next/image';
 import Link from '@/node_modules/next/link';
 
 db.sequelize.sync();
-const { item: Item } = db;
+const { item: Item, Category } = db;
 
 export default async function Home() {
   let items;
@@ -17,12 +17,13 @@ export default async function Home() {
         'description',
         'quantity',
         'image',
-        'category',
+        'categoryId',
         'status',
         'discount',
         'createdAt',
         'price',
       ],
+      include: [{ model: Category, as: 'itemCategory', attributes: ['name'] }],
     });
   } catch (err) {
     console.error(err);
@@ -62,7 +63,7 @@ export default async function Home() {
                   ${item.price}{' '}
                   {item.discount > 0 && <span className="text-green-600">(-{item.discount}%)</span>}
                 </p>
-                <Link href={`${item.category}/${item.name}`}>
+                <Link href={`${item.itemCategory.name}/${item.name}`}>
                   <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full transition-colors duration-300 ease-in-out">
                     Join Group & Save
                   </button>
