@@ -4,7 +4,7 @@ import db from '@/models/index';
 import Dashboard from '../Components/content-dashboard';
 
 db.sequelize.sync();
-const Item = db.item;
+const { item: Item, Category } = db;
 
 export default async function AdminPanel() {
   const items = await Item.findAll({
@@ -13,13 +13,14 @@ export default async function AdminPanel() {
       'description',
       'quantity',
       'image',
-      'category',
+      'categoryId',
       'sku',
       'status',
       'discount',
       'createdAt',
       'price',
     ],
+    include: [{ model: Category, as: 'itemCategory', attributes: ['name'] }],
   });
 
   const formattedItems = items.map((item) => {

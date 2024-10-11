@@ -32,7 +32,7 @@ export default async function Dashboard({ children }) {
             {children.map((item) => (
               <tr key={item.sku} className="hover:bg-gray-100">
                 <td className="p-2 text-center text-sm">{item.name}</td>
-                <td className="p-2 text-center text-sm">{item.category}</td>
+                <td className="p-2 text-center text-sm">{item.itemCategory.name}</td>
                 <td className="p-2 text-center text-sm w-auto whitespace-nowrap">
                   ${`${item.price}`}
                 </td>
@@ -43,13 +43,14 @@ export default async function Dashboard({ children }) {
                 <td className="p-2 text-center text-sm">{item.quantity.toString()}</td>
                 <td className="p-2 text-center text-sm">{item.status}</td>
                 <td className="p-2 text-center text-sm whitespace-nowrap">
-                  <CopyButtonLink item={`/${item.category}/${item.name}`} />
+                  <CopyButtonLink item={`/${item.itemCategory.name}/${item.name}`} />
                 </td>
                 <td className="p-2 text-center text-sm whitespace-nowrap">
                   <div className="inline-flex space-x-2">
                     <ContentDelete id={item.sku} />
                     <ContentEdit
                       id={item.sku}
+                      category={item.itemCategory.name}
                       price={item.price}
                       quantity={item.quantity}
                       name={item.name}
