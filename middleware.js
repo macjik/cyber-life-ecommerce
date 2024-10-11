@@ -6,7 +6,9 @@ export async function middleware(req) {
   console.log('Executing middleware for:', req.nextUrl.pathname);
 
   const response = NextResponse.next();
-  response.cookies.set('currentPath', req.nextUrl.pathname);
+
+  // Set the current path in the headers
+  response.headers.set('x-current-path', req.nextUrl.pathname);
 
   let cookieHeader = req.headers.get('cookie');
   let cookies = parse(cookieHeader || '');
@@ -20,6 +22,7 @@ export async function middleware(req) {
   const dynamicCategoryProductPattern = /^\/[^\/]+\/[^\/]+$/;
   const cartPathPattern = /^\/cart\/[^\/]+$/;
 
+  // Skip certain routes
   if (
     dynamicCategoryProductPattern.test(req.nextUrl.pathname) &&
     !cartPathPattern.test(req.nextUrl.pathname)
@@ -28,6 +31,7 @@ export async function middleware(req) {
     return response;
   }
 
+  // If no token is found, redirect to the auth page
   if (!token) {
     if (!paths.includes(req.nextUrl.pathname)) {
       const redirectUrl = new URL('/auth', req.url);
@@ -42,12 +46,15 @@ export async function middleware(req) {
     return response;
   }
 
+  // Verify the token and extract the payload
   try {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const { payload } = await jwtVerify(token, secret);
 
-    response.cookies.set('userRole', payload.role);
+    // Set user role in headers
+    response.headers.set('x-user-role', payload.role || 'guest');
 
+    // Redirect if the user is not an admin on the admin path
     if (req.nextUrl.pathname.startsWith('/admin') && payload.role !== 'admin') {
       return NextResponse.redirect(new URL('/', req.url));
     }
@@ -63,6 +70,7 @@ export async function middleware(req) {
     let userId = url.searchParams.get('id');
     console.log('Existing userId in URL:', userId);
 
+    // Ensure userId in URL matches the payload id
     if (!userId || userId !== payload.id) {
       url.searchParams.delete('id');
       url.searchParams.set('id', payload.id);
@@ -74,6 +82,7 @@ export async function middleware(req) {
     console.error('Token verification failed:', error);
     const redirectUrl = new URL('/auth', req.url);
 
+    // Preserve invite parameter if present
     const inviteParam = req.nextUrl.searchParams.get('invite');
     if (inviteParam) {
       redirectUrl.searchParams.set('invite', inviteParam);

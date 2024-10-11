@@ -1,7 +1,7 @@
 import localFont from 'next/font/local';
 import './globals.css';
 import NavBar from './Components/NavBar';
-import { cookies } from 'next/headers';
+import { headers } from 'next/headers';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -20,12 +20,17 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const cookieStore = cookies();
-  const userRole = cookieStore.get('userRole')?.value || null;
+  const headersList = headers(); // Get headers from the request
+  const currentPath = headersList.get('x-current-path'); // Get current path from headers
+  const userRole = headersList.get('x-user-role') || 'guest'; // Get user role from headers
+
+  // Define allowed routes based on the path
+  const isAllowedRoute = !currentPath.startsWith('/auth') && !/^\/[^/]+\/[^/]+$/.test(currentPath);
+
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-200`}>
-        <NavBar userRole={userRole} />
+        <NavBar userRole={userRole} isAllowedRoute={isAllowedRoute} />
         <main>{children}</main>
       </body>
     </html>
