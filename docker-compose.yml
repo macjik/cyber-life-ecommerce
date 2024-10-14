@@ -4,14 +4,14 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./app/Dockerfile 
-    working_dir: /app 
+      dockerfile: ./app/Dockerfile
+    working_dir: /app
     volumes:
-      - ./app:/app 
+      - .:/app
     ports:
-      - "3000:3000" 
+      - "3000:3000"
     env_file:
-      - .env 
+      - .env
     command: yarn dev
     depends_on:
       - db
@@ -23,8 +23,8 @@ services:
     image: postgres:14-alpine
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: g
+      POSTGRES_PASSWORD: ghy871291
       POSTGRES_DB: cyberlife
     volumes:
       - db-data:/var/lib/postgresql/data
