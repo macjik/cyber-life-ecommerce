@@ -6,7 +6,7 @@ import trackInviteChain from '@/app/helper/track-invites';
 import PayButton from '@/app/Components/pay-button';
 import { FaMoneyBill, FaPercent } from 'react-icons/fa';
 
-const { item: Item, User, Invite, Order } = db;
+const { item: Item, User, Invite, Order, Category } = db;
 db.sequelize.sync();
 
 export default async function CartPage({ params, searchParams }) {
@@ -16,7 +16,10 @@ export default async function CartPage({ params, searchParams }) {
   const currentUser = await User.findOne({ where: { sub: id } });
   if (!currentUser) return <p>User not found!</p>;
 
-  const existingProduct = await Item.findOne({ where: { name: product } });
+  const existingProduct = await Item.findOne({
+    where: { name: product },
+    include: [{ model: Category, as: 'itemCategory', attributes: ['name'] }],
+  });
   if (!existingProduct) return <p>Product not found!</p>;
 
   const currentOrder = await Order.findOne({
@@ -56,7 +59,7 @@ export default async function CartPage({ params, searchParams }) {
       itemName={name}
       itemDescription={description}
       itemSrc={image}
-      itemCategory={category}
+      itemCategory={existingProduct.itemCategory.name}
       itemPrice={price}
       itemStatus={status}
       itemQuantity={quantity}
@@ -65,7 +68,7 @@ export default async function CartPage({ params, searchParams }) {
         Pay <FaMoneyBill size={24} />
       </PayButton>
       <InviteLinkGenerator
-        category={existingProduct.category}
+        category={existingProduct.itemCategory.name}
         product={product}
         inviterId={currentUser.id}
         className="inline-flex justify-center gap-3 text-center bg-green-600"
@@ -97,7 +100,7 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
       itemName={name}
       itemDescription={description}
       itemSrc={image}
-      itemCategory={category}
+      itemCategory={existingProduct.itemCategory.name}
       itemPrice={totalPrice}
       itemStatus={status}
       itemQuantity={quantity}
@@ -109,7 +112,7 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
         Pay <FaMoneyBill size={24} />
       </PayButton>
       <InviteLinkGenerator
-        category={existingProduct.category}
+        category={existingProduct.itemCategory.name}
         product={product}
         inviterId={currentUser.id}
         className="inline-flex justify-center gap-3 text-center bg-green-600"
@@ -175,7 +178,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
       itemName={name}
       itemDescription={description}
       itemSrc={image}
-      itemCategory={category}
+      itemCategory={existingProduct.itemCategory.name}
       itemPrice={totalPrice}
       itemStatus={status}
       itemQuantity={quantity}

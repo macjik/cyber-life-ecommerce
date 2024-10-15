@@ -1,20 +1,33 @@
-require('dotenv').config();
-const pg = require('pg');
+require('dotenv').config({ silent: true });
 
 module.exports = {
   development: {
     url: process.env.DB_URL,
+    logging: false,
+    ssl: true,
     dialect: 'postgres',
-    dialectModule: pg,
+    dialectOptions: {
+      ssl: { require: true, rejectUnauthorized: false, ca: process.env.CA_CERT },
+    },
+    define: {
+      timestamps: true,
+    },
   },
   test: {
-    url: process.env.DB_URL,
+    url: 'postgresql://localhost:5432',
+    database: 'postgres',
     dialect: 'postgres',
-    dialectModule: pg,
+    logging: false,
   },
   production: {
     url: process.env.DB_URL,
+    ssl: true,
     dialect: 'postgres',
-    dialectModule: pg,
+    dialectOptions: {
+      ssl: { require: true, rejectUnauthorized: false, ca: process.env.CA_CERT },
+    },
+    define: {
+      timestamps: true,
+    },
   },
 };
