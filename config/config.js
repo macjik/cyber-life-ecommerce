@@ -1,4 +1,5 @@
 require('dotenv').config({ silent: true });
+import pg from 'pg';
 
 module.exports = {
   development: {
@@ -6,6 +7,7 @@ module.exports = {
     logging: false,
     ssl: true,
     dialect: 'postgres',
+    dialectModule: pg,
     dialectOptions: {
       ssl: { require: true, rejectUnauthorized: false },
       // ca: process.env.CA_CERT },
@@ -24,6 +26,7 @@ module.exports = {
     url: process.env.DB_URL,
     ssl: true,
     dialect: 'postgres',
+    dialectModule: pg,
     dialectOptions: {
       ssl: { require: true, rejectUnauthorized: false }, 
         //ca: process.env.CA_CERT },
