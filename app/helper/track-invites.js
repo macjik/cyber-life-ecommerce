@@ -8,12 +8,12 @@ async function trackInviteChain(inviterId, visited = new Set()) {
     return [];
   }
 
-  visited.add(inviterId); 
+  visited.add(inviterId);
 
   let directInvitees = await Invite.findAll({
-    where: { inviter: inviterId }, 
+    where: { inviter: inviterId },
     include: [
-      { model: User, as: 'Invitee' }, 
+      { model: User, as: 'Invitee' },
       { model: User, as: 'Inviter' },
     ],
   });
@@ -34,7 +34,7 @@ async function trackInviteChain(inviterId, visited = new Set()) {
       status: invite.status,
     });
 
-    const nestedInvitees = await trackInviteChain(invitee.id, visited); 
+    const nestedInvitees = await trackInviteChain(invitee.id, visited);
 
     allInvitees = allInvitees.concat(nestedInvitees);
   }

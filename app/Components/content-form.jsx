@@ -3,17 +3,10 @@
 import { useFormState } from 'react-dom';
 import Form from './form';
 import FormInput from './form-input';
-import Select from './select';
 import Button from './button';
 import { addContent, deleteContent, editContent } from '../form-actions/cms';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-
-const categories = [
-  { label: 'Electronics', value: 'electronics' },
-  { label: 'Equipment', value: 'equipment' },
-  { label: 'Clothes', value: 'clothes' },
-];
 
 export function ContentForm() {
   const [contentState, addContentAction] = useFormState(addContent, '');
