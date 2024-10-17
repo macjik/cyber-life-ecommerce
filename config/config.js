@@ -1,5 +1,5 @@
 require('dotenv').config({ silent: true });
-import pg from 'pg';
+const pg = require('pg');
 
 module.exports = {
   development: {
