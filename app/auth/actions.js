@@ -217,7 +217,7 @@ export async function preSignup(state, formData) {
         const codeToken = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
         form = new FormData();
         form.append('mobile_phone', `998${phone}`);
-        form.append('message', process.env.ESKIZ_SMS_TEST_MESSAGE || codeToken);
+        form.append('message', `Ваш код подтверждения для регистрации на сайте www.mimi.cyberlife.com: ${codeToken}. Не сообщайте этот код другим лицам. Код действителен в течение 10 минут.`);
         form.append('from', '4546');
         let { res } = await axios({
           method: 'post',

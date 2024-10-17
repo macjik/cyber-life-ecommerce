@@ -7,7 +7,8 @@ module.exports = {
     ssl: true,
     dialect: 'postgres',
     dialectOptions: {
-      ssl: { require: true, rejectUnauthorized: false, ca: process.env.CA_CERT },
+      ssl: { require: true, rejectUnauthorized: false,} 
+        //ca: process.env.CA_CERT
     },
     define: {
       timestamps: true,
@@ -24,7 +25,8 @@ module.exports = {
     ssl: true,
     dialect: 'postgres',
     dialectOptions: {
-      ssl: { require: true, rejectUnauthorized: false, ca: process.env.CA_CERT },
+      ssl: { require: true, rejectUnauthorized: false}, 
+      // ca: process.env.CA_CERT },
     },
     define: {
       timestamps: true,
