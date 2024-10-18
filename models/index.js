@@ -31,5 +31,7 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+db.Op = Sequelize.Op;
+db.transaction = sequelize.transaction.bind(sequelize);
 
 module.exports = db;

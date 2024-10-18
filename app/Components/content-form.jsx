@@ -12,11 +12,9 @@ export function ContentForm() {
   const [contentState, addContentAction] = useFormState(addContent, '');
   const router = useRouter();
 
-  useEffect(() => {
-    if (contentState?.status === 200) {
-      router.push('/admin');
-    }
-  }, [contentState?.status]);
+  if (contentState?.status === 200) {
+    router.push('/admin');
+  }
 
   console.log(contentState);
 

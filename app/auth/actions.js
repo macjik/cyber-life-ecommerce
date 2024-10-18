@@ -12,13 +12,15 @@ import client from '../services/redis';
 import axios from 'axios';
 import FormData from 'form-data';
 import { MINUTE, DAY } from 'time-constants';
+import { revalidatePath } from '@/node_modules/next/cache';
 
-db.sequelize.sync();
+if (process.env.NODE_ENV !== 'production') {
+  db.sequelize.sync();
+}
 const User = db.User;
 
 export async function signup(state, formData) {
   const schema = Joi.object({
-    // name: Joi.string().min(2).trim().required(),
     password: Joi.string().min(6).trim().required(),
     phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
     inviteCode: Joi.string().allow(''),
@@ -27,10 +29,9 @@ export async function signup(state, formData) {
 
   try {
     const { value, error } = schema.validate({
-      // name: formData.get('name'),
       password: formData.get('password'),
       phone: formData.get('phone').toString(),
-      sms: formData.get('sms-confirm'),
+      sms: formData.get('sms-confirm').toString(),
     });
 
     if (error) {
@@ -38,35 +39,33 @@ export async function signup(state, formData) {
       return { error: `${error}` };
     }
 
-    // handle and check if the user name exists prior
-    // if joi returns an error state in the frontend should output the validation
+    const { password, phone, inviteCode, sms } = value;
 
-    //TODO: sms confirmation here
-
-    const { name, password, phone, inviteCode, sms } = value;
-
-    const hashedPassword = await bcrypt.hash(password, 9);
-
-    let exisitingUser = await User.findOne({ where: { phone } });
-
-    if (exisitingUser) {
-      console.error(`A user with phone:${phone} already exists`);
-      return { error: `Sorry, a user with phone: ${phone} already exists` };
+    let existingUser = await User.findOne({ where: { phone } });
+    if (existingUser) {
+      return { error: `Invalid phone number or password` };
     }
 
+    let smsCode = await client.get(phone.toString());
+
+    if (smsCode !== sms.toString()) {
+      return { error: 'Invalid Code' }
+    }
+    await client.del(phone);
+
+    const hashedPassword = await bcrypt.hash(password, 9);
     const uid = uuidv4();
 
     await User.create({
-      // name: name,
-      hash: hashedPassword,
       role: 'user',
+      hash: hashedPassword,
       phone: phone,
       sub: uid,
     });
 
     let token = jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    cookies().set('token', token, {
+    await cookies().set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: 3600,
@@ -74,13 +73,12 @@ export async function signup(state, formData) {
       path: '/',
     });
 
-    //TODO: sms confirmations
-    console.log('User logged in successfully:', phone);
-
-    console.log('User created successfully:', value);
+    console.log('User created successfully:', phone);
+    revalidatePath('/');
     return { status: 200, phone: phone };
   } catch (err) {
     console.error('Error occurred:', err);
+    return { error: 'Internal server error' };
   }
 }
 
@@ -105,7 +103,10 @@ export async function login(state, formData) {
 
     const { password, phone } = value;
 
-    let existingUser = await User.findOne({ where: { phone } });
+    let existingUser = await User.findOne({
+      where: { phone },
+      attributes: ['hash', 'role', 'sub'],
+    });
     if (!existingUser) {
       console.error('User not found');
       return { error: `User not found` };
@@ -114,14 +115,14 @@ export async function login(state, formData) {
     const isPasswordMatch = await bcrypt.compare(password, existingUser.hash);
     if (!isPasswordMatch) {
       console.error('Incorrect password');
-      return { error: 'Incorrect password' };
+      return { error: 'Invalid phone number or password' };
     }
 
     const { role, sub } = existingUser;
 
     let token = jwt.sign({ id: sub, role: role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    cookies().set('token', token, {
+    await cookies().set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: 3600,
@@ -130,42 +131,10 @@ export async function login(state, formData) {
     });
 
     console.log('User logged in successfully:', phone);
+    revalidatePath('/')
     return { status: 200, phone: phone };
   } catch (err) {
     console.error('Error occurred:', err);
-  }
-}
-
-export async function preLogin(state, formData) {
-  const schema = Joi.object({
-    // name: Joi.string().min(2).trim().required(),
-    // password: Joi.string().min(6).trim().required(),
-    phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
-  });
-
-  try {
-    const { value, error } = schema.validate({
-      // name: formData.get('name'),
-      // password: formData.get('password'),
-      phone: formData.get('phone').toString(),
-    });
-
-    if (error) {
-      console.error('Validation error:', error);
-      return { error: `${error}` };
-    }
-
-    const { name, password, phone } = value;
-
-    let existingUser = await User.findOne({ where: { phone } });
-    if (!existingUser) {
-      console.error('User not found');
-      return { error: `User not found` };
-    } else {
-      return { phone };
-    }
-  } catch (err) {
-    console.error(err);
   }
 }
 
@@ -193,7 +162,7 @@ export async function preSignup(state, formData) {
     let existingUser = await User.findOne({ where: { phone } });
     if (existingUser) {
       console.error('User already exists');
-      return { error: 'User already exists' };
+      return { error: 'Invalid phone number or password' };
     } else {
       try {
         let form = new FormData();
@@ -232,7 +201,7 @@ export async function preSignup(state, formData) {
           data: form,
         });
 
-        await client.set(phone, codeToken, 'EX', (MINUTE * 2) / 100);
+        await client.set(phone, codeToken, 'EX', 10 * 60);
         return value;
       } catch (err) {
         console.error(err);

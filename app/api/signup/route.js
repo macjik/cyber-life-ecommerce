@@ -6,7 +6,9 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import client from '@/app/services/redis';
 
-db.sequelize.sync();
+if (process.env.NODE_ENV !== 'production') {
+  db.sequelize.sync();
+}
 const { User } = db;
 
 export async function POST(req) {
