@@ -13,7 +13,7 @@ const nextConfig = {
       },
     ],
   },
-  experimental: { serverActions: true },
+  // experimental: { serverActions: true },
 };
 
 export default nextConfig;

@@ -19,68 +19,68 @@ if (process.env.NODE_ENV !== 'production') {
 }
 const User = db.User;
 
-export async function signup(state, formData) {
-  const schema = Joi.object({
-    password: Joi.string().min(6).trim().required(),
-    phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
-    inviteCode: Joi.string().allow(''),
-    sms: Joi.number().min(4).required(),
-  });
+// export async function signup(state, formData) {
+//   const schema = Joi.object({
+//     password: Joi.string().min(6).trim().required(),
+//     phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
+//     inviteCode: Joi.string().allow(''),
+//     sms: Joi.number().min(4).required(),
+//   });
 
-  try {
-    const { value, error } = schema.validate({
-      password: formData.get('password'),
-      phone: formData.get('phone').toString(),
-      sms: formData.get('sms-confirm').toString(),
-    });
+//   try {
+//     const { value, error } = schema.validate({
+//       password: formData.get('password'),
+//       phone: formData.get('phone').toString(),
+//       sms: formData.get('sms-confirm').toString(),
+//     });
 
-    if (error) {
-      console.error('Validation error:', error);
-      return { error: `${error}` };
-    }
+//     if (error) {
+//       console.error('Validation error:', error);
+//       return { error: `${error}` };
+//     }
 
-    const { password, phone, inviteCode, sms } = value;
+//     const { password, phone, inviteCode, sms } = value;
 
-    let existingUser = await User.findOne({ where: { phone } });
-    if (existingUser) {
-      return { error: `Invalid phone number or password` };
-    }
+//     let existingUser = await User.findOne({ where: { phone } });
+//     if (existingUser) {
+//       return { error: `Invalid phone number or password` };
+//     }
 
-    let smsCode = await client.get(phone.toString());
+//     let smsCode = await client.get(phone.toString());
 
-    if (smsCode !== sms.toString()) {
-      return { error: 'Invalid Code' }
-    }
-    await client.del(phone);
+//     if (smsCode !== sms.toString()) {
+//       return { error: 'Invalid Code' }
+//     }
+//     await client.del(phone);
 
-    const hashedPassword = await bcrypt.hash(password, 9);
-    const uid = uuidv4();
+//     const hashedPassword = await bcrypt.hash(password, 9);
+//     const uid = uuidv4();
 
-    await User.create({
-      role: 'user',
-      hash: hashedPassword,
-      phone: phone,
-      sub: uid,
-    });
+//     await User.create({
+//       role: 'user',
+//       hash: hashedPassword,
+//       phone: phone,
+//       sub: uid,
+//     });
 
-    let token = jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+//     let token = jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    await cookies().set('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 3600,
-      sameSite: 'lax',
-      path: '/',
-    });
+//     await cookies().set('token', token, {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === 'production',
+//       maxAge: 3600,
+//       sameSite: 'lax',
+//       path: '/',
+//     });
 
-    console.log('User created successfully:', phone);
-    revalidatePath('/');
-    return { status: 200, phone: phone };
-  } catch (err) {
-    console.error('Error occurred:', err);
-    return { error: 'Internal server error' };
-  }
-}
+//     console.log('User created successfully:', phone);
+//     revalidatePath('/');
+//     return { status: 200 };
+//   } catch (err) {
+//     console.error('Error occurred:', err);
+//     return { error: 'Internal server error' };
+//   }
+// }
 
 export async function login(state, formData) {
   const schema = Joi.object({
@@ -122,7 +122,7 @@ export async function login(state, formData) {
 
     let token = jwt.sign({ id: sub, role: role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    await cookies().set('token', token, {
+    cookies().set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: 3600,
@@ -131,8 +131,7 @@ export async function login(state, formData) {
     });
 
     console.log('User logged in successfully:', phone);
-    revalidatePath('/')
-    return { status: 200, phone: phone };
+    return { status: 200 };
   } catch (err) {
     console.error('Error occurred:', err);
   }
