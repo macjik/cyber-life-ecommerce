@@ -7,12 +7,14 @@ import FormInput from './form-input';
 import Form from './form';
 import Button from './button';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Spinner } from './spinner';
 
-function SubmitButton() {
+function SubmitButton({ children }) {
   const { pending } = useFormStatus();
+  console.log(pending);
   return (
-    <Button type="submit" disabled={pending}>
-      {pending ? 'Logging in...' : 'Log in'}
+    <Button type="submit" disabled={pending} className="text-center">
+      {pending ? <Spinner /> : children}
     </Button>
   );
 }
@@ -23,18 +25,16 @@ export function PreLoginForm({ children }) {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
 
-  useEffect(() => {
-    if (loginState.status === 200) {
-      router.push(redirect);
-    }
-  }, [loginState.status, router, redirect]);
+  if (loginState.status === 200) {
+    router.push(redirect);
+  }
 
   return (
     <Form action={loginAction} title="Log in">
       <FormInput inputMode="tel" id="phone" label="Phone" type="number" />
       <FormInput id="password" label="Password*" type="password" />
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
-      <SubmitButton />
+      <SubmitButton>Log in</SubmitButton>
       {children}
     </Form>
   );
