@@ -4,6 +4,15 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['sequelize'],
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'onrnm2rcmvu0lbwt.public.blob.vercel-storage.com',
+        port: '',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

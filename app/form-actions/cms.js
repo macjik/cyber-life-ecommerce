@@ -1,11 +1,8 @@
 'use server';
-
 import db from '@/models/index';
 import Joi from 'joi';
 import { v4 as uuidv4 } from 'uuid';
-import fs from 'fs';
-import path from 'path';
-
+import { put } from '@vercel/blob';
 db.sequelize.sync();
 const { item: Item, Category } = db;
 
@@ -35,11 +32,10 @@ export async function addContent(state, formData) {
     });
 
     if (error) {
-      console.error(error);
       return { error: `${error.message}` };
     }
 
-    const { name, description, price, image, category, discount, quantity } = value;
+    const { name, description, price, category, discount, quantity } = value;
 
     let existingItem = await Item.findOne({ where: { name } });
     if (existingItem) {
@@ -47,23 +43,19 @@ export async function addContent(state, formData) {
     }
 
     const uid = uuidv4();
-    const uploadDir = path.join(process.cwd(), 'public/uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
 
     if (imageFile) {
-      const imageFileName = `${name}${imageFile.name}`;
-      const imagePath = path.join(uploadDir, imageFileName);
-
-      // Create a stream to save the file
-      const stream = fs.createWriteStream(imagePath);
       const imageArrayBuffer = await imageFile.arrayBuffer();
       const imageBuffer = Buffer.from(imageArrayBuffer);
 
-      stream.write(imageBuffer);
-      stream.end();
+      const imageFileName = `${uid}.${imageMimeType.split('/')[1]}`;
 
+      const blob = await put(imageFileName, imageBuffer, {
+        contentType: imageMimeType,
+        access: 'public',
+      });
+
+      const imageUrl = blob.url;
       let [newCategory, created] = await Category.findOrCreate({
         where: { name: category },
         defaults: { name: category },
@@ -74,19 +66,17 @@ export async function addContent(state, formData) {
         description,
         quantity,
         price,
-        image: `/uploads/${imageFileName}`,
+        image: imageUrl,
         categoryId: newCategory.id,
         sku: uid,
         discount,
       });
+
+      return { status: 200, value };
     } else {
-      console.error('No image file found.');
       return { error: 'No image file found' };
     }
-
-    return { status: 200, value };
   } catch (err) {
-    console.error(err);
     return { error: `${err.message}` };
   }
 }
@@ -147,72 +137,44 @@ export async function editContent(state, formData) {
       return { error: 'Item not found' };
     }
 
+    let imageUrl = existingItem.image;
+
     if (imageFile) {
-      const uploadDir = path.join(process.cwd(), 'public/uploads');
-
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-
-      const imageFileName = `${name}${path.extname(imageFile.name)}`;
-      const imagePath = path.join(uploadDir, imageFileName);
-
       const imageArrayBuffer = await imageFile.arrayBuffer();
       const imageBuffer = Buffer.from(imageArrayBuffer);
-      await fs.promises.writeFile(imagePath, imageBuffer);
+      const imageFileName = `${uuidv4()}.${imageMimeType.split('/')[1]}`;
 
-      if (existingItem.image) {
-        const oldImagePath = path.join(process.cwd(), 'public', existingItem.image);
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
-        }
-      }
+      const blob = await put(imageFileName, imageBuffer, {
+        contentType: imageMimeType,
+        access: 'public',
+      });
 
-      existingItem.image = `/uploads/${imageFileName}`;
+      imageUrl = blob.url;
     }
 
     let categoryRecord = await Category.findOne({ where: { name: category } });
-
-    if (categoryRecord) {
-      await Category.update({ name: category }, { where: { id: categoryRecord.id } });
-      let updateItem = await existingItem.update({
-        name,
-        description,
-        price,
-        categoryId: categoryRecord.id,
-        discount,
-        quantity,
-        image: existingItem.image,
-      });
-
-      if (!updateItem) {
-        console.error('Error updating item');
-        return { error: 'Error updating item' };
-      }
-
-      return { status: 200, value };
-    } else {
-      let newCategory = await Category.create({ name: category });
-
-      let updateItem = await existingItem.update({
-        name,
-        description,
-        price,
-        categoryId: newCategory.id,
-        discount,
-        quantity,
-        image: existingItem.image,
-      });
-
-      if (!updateItem) {
-        console.error('Error updating item');
-        return { error: 'Error updating item' };
-      }
-
-      return { status: 200, value };
+    if (!categoryRecord) {
+      categoryRecord = await Category.create({ name: category });
     }
+
+    const updatedItem = await existingItem.update({
+      name,
+      description,
+      price,
+      categoryId: categoryRecord.id,
+      discount,
+      quantity,
+      image: imageUrl,
+    });
+
+    if (!updatedItem) {
+      console.error('Error updating item');
+      return { error: 'Error updating item' };
+    }
+
+    return { status: 200, value };
   } catch (err) {
     console.error(err);
-    return { error: `${err}` };
+    return { error: `${err.message}` };
   }
 }
