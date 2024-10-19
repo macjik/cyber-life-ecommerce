@@ -6,9 +6,6 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import client from '@/app/services/redis';
 
-if (process.env.NODE_ENV !== 'production') {
-  db.sequelize.sync();
-}
 const { User } = db;
 
 export async function POST(req) {
@@ -36,25 +33,25 @@ export async function POST(req) {
     }
     await client.del(phone.toString());
 
-    const hashedPassword = await bcrypt.hash(password, 9);
+    const hashedPassword = await bcrypt.hash(password, 8);
     const uid = uuidv4();
 
-    await User.create({
-      role: 'user',
-      hash: hashedPassword,
-      phone: phone,
-      sub: uid,
-    });
+    await Promise.all([
+      User.create({
+        role: 'user',
+        hash: hashedPassword,
+        phone: phone,
+        sub: uid,
+      }),
 
-    let token = jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    cookies().set('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 3600,
-      sameSite: 'lax',
-      path: '/',
-    });
+      cookies().set('token', jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' }), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 3600,
+        sameSite: 'lax',
+        path: '/',
+      })
+    ]);
 
     console.log('User created successfully:', phone);
     return new Response(JSON.stringify({ status: 200, phone: phone }), { status: 200 });

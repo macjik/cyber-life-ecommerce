@@ -76,7 +76,7 @@ export function PreSigninForm({ children }) {
   }
 
   return (
-    <>  
+    <>
       {preSignupState.phone ? (
         <Form onSubmit={handleSignUp} title="Confirm Sms">
           <FormInput
