@@ -7,15 +7,20 @@ export async function POST(req) {
   try {
     const { orderId } = await req.json();
 
-    let existingPayment = await Payment.findOne({ where: { orderId: orderId } });
+    const payment = await Payment.upsert(
+      {
+        orderId: orderId,
+        status: 'pending',
+      },
+      { returning: true },
+    );
 
-    if (!existingPayment) {
-      existingPayment = await Payment.create({ orderId: orderId, status: 'pending' });
-    }
-
-    return new Response(JSON.stringify(existingPayment), { status: 200 });
+    return new Response(JSON.stringify(payment), { status: 200 });
   } catch (err) {
-    console.error(err);
-    return new Response('Error processing payment', { status: 500 });
+    console.error('Error processing payment:', err);
+    return new Response(
+      JSON.stringify({ message: 'Error processing payment', error: err.message }),
+      { status: 500 },
+    );
   }
 }
