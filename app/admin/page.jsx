@@ -3,7 +3,6 @@
 import db from '@/models/index';
 import Dashboard from '../Components/content-dashboard';
 
-db.sequelize.sync();
 const { item: Item, Category } = db;
 
 export default async function AdminPanel() {

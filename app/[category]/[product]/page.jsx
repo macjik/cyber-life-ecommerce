@@ -4,7 +4,6 @@ import db from '@/models/index';
 import Link from '@/node_modules/next/link';
 import { FaShoppingCart } from 'react-icons/fa';
 
-db.sequelize.sync();
 const { item: Item } = db;
 
 export default async function ItemPage({ params, searchParams }) {

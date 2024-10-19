@@ -2,7 +2,6 @@
 
 import Joi from 'joi';
 import db from '@/models/index';
-db.sequelize.sync();
 import { jwtVerify, SignJWT } from 'jose';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';

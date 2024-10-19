@@ -1,6 +1,5 @@
 const db = require('../../models/index');
 
-db.sequelize.sync();
 const { User, Invite } = db;
 
 async function trackInviteChain(inviterId, visited = new Set()) {

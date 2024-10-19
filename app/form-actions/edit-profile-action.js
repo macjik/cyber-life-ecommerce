@@ -2,7 +2,7 @@
 
 import db from '@/models/index';
 import Joi from 'joi';
-db.sequelize.sync();
+
 const User = db.User;
 
 export async function editProfile(state, formData) {

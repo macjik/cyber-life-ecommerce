@@ -4,7 +4,7 @@ import db from '@/models/index';
 import UserProfile from '../Components/user-profile';
 import SubNav from '../Components/sub-nav';
 import { FaShoppingCart, FaCommentDots, FaHandshake, FaLink, FaLanguage } from 'react-icons/fa';
-db.sequelize.sync();
+
 const User = db.User;
 
 export default async function UserPage({ searchParams }) {

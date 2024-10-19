@@ -7,7 +7,6 @@ import PayButton from '@/app/Components/pay-button';
 import { FaMoneyBill, FaPercent } from 'react-icons/fa';
 
 const { item: Item, User, Invite, Order, Category } = db;
-db.sequelize.sync();
 
 export default async function CartPage({ params, searchParams }) {
   const { product } = params;

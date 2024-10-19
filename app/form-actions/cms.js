@@ -3,7 +3,7 @@ import db from '@/models/index';
 import Joi from 'joi';
 import { v4 as uuidv4 } from 'uuid';
 import { put } from '@vercel/blob';
-db.sequelize.sync();
+
 const { item: Item, Category } = db;
 
 export async function addContent(state, formData) {

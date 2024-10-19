@@ -1,7 +1,6 @@
 import 'server-only';
 import db from '@/models/index';
 
-db.sequelize.sync();
 const Invite = db.Invite;
 
 export async function POST(req) {

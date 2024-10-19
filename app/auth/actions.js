@@ -12,11 +12,7 @@ import client from '../services/redis';
 import axios from 'axios';
 import FormData from 'form-data';
 import { MINUTE, DAY } from 'time-constants';
-import { revalidatePath } from '@/node_modules/next/cache';
 
-// if (process.env.NODE_ENV !== 'production') {
-//   db.sequelize.sync();
-// }
 const User = db.User;
 
 // export async function signup(state, formData) {

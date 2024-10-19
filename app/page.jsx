@@ -4,7 +4,6 @@ import db from '@/models/index';
 import Image from '@/node_modules/next/image';
 import Link from '@/node_modules/next/link';
 
-db.sequelize.sync();
 const { item: Item, Category } = db;
 
 export default async function Home() {
