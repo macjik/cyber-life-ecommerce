@@ -7,13 +7,11 @@ export async function POST(req) {
   try {
     const { orderId } = await req.json();
 
-    const payment = await Payment.upsert(
-      {
-        orderId: orderId,
-        status: 'pending',
-      },
-      { returning: true },
-    );
+    const [payment, created] = await Payment.findOrCreate({
+      where: { orderId: orderId },
+      defaults: { status: 'pending' },
+      attributes: ['orderId', 'status'],
+    });
 
     return new Response(JSON.stringify(payment), { status: 200 });
   } catch (err) {

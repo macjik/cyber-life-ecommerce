@@ -2,7 +2,10 @@
 
 import { useState } from 'react';
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import Button from './button';
+
+axiosRetry(axios, { retries: 3 });
 
 export default function InviteLinkGenerator({
   category,
@@ -16,18 +19,18 @@ export default function InviteLinkGenerator({
   async function handleLinkGenerate(event) {
     event.preventDefault();
     try {
-      let res = await axios.post('/api/invite', { inviterId: inviterId });
+      let res = await axios.post('/api/invite', { inviterId });
       res = res.data;
+
       const newInviteLink = `${process.env.NEXT_PUBLIC_FRONTEND_HOST}/${category}/${product}/?invite=${res.inviteCode}`;
 
-      navigator.clipboard.writeText(newInviteLink).then(() => {
-        setButtonText('Link Copied!');
-        setTimeout(() => {
-          setButtonText(children);
-        }, 2000);
-      });
+      await navigator.clipboard.writeText(newInviteLink);
+      setButtonText('Link Copied!');
     } catch (err) {
       console.error('Error generating invite link:', err);
+      setButtonText('Error');
+    } finally {
+      setTimeout(() => setButtonText(children), 2000);
     }
   }
 
