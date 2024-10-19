@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useFormStatus, useFormState } from 'react-dom';
-import { login, preSignup, signup } from '../auth/actions';
+import { login, preSignup } from '../auth/actions';
 import FormInput from './form-input';
 import Form from './form';
 import Button from './button';
@@ -30,7 +30,7 @@ export function PreLoginForm({ children }) {
 
   useEffect(() => {
     if (loginState.status === 200) {
-      router.push(redirect);
+      window.location.href = redirect;
     }
   }, [loginState.status]);
 
@@ -67,8 +67,8 @@ export function PreSigninForm({ children }) {
     let res = await axios.post('/api/signup', { userData: preSignupState, sms });
     res = res.data;
 
-    if (res.status === 200) {
-      router.push(redirect);
+    if (loginState.status === 200) {
+      window.location.href = redirect;
     }
     if (res.error) {
       setSignUpError(res.error);

@@ -20,11 +20,10 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const headersList = await headers(); // Get headers from the request
-  const currentPath = await headersList.get('x-current-path'); // Get current path from headers
-  const userRole = await headersList.get('x-user-role') || 'guest'; // Get user role from headers
+  const headersList = headers();
+  const currentPath = headersList.get('x-current-path');
+  const userRole = headersList.get('x-user-role') || 'guest';
 
-  // Define allowed routes based on the path
   const isAllowedRoute = !currentPath.startsWith('/auth') && !/^\/[^/]+\/[^/]+$/.test(currentPath);
 
   return (
