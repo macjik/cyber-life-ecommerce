@@ -101,6 +101,7 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
       itemSrc={image}
       itemCategory={existingProduct.itemCategory.name}
       itemPrice={totalPrice}
+      originalPrice={price}
       itemStatus={status}
       itemQuantity={quantity}
     >
@@ -179,6 +180,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
       itemSrc={image}
       itemCategory={existingProduct.itemCategory.name}
       itemPrice={totalPrice}
+      originalPrice={price}
       itemStatus={status}
       itemQuantity={quantity}
     >
