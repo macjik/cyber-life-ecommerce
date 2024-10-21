@@ -1,8 +1,8 @@
 import { sequelize } from '@/models/index';
-import Product from '../Components/product';
 import InviteLinkGenerator from '../Components/generate-invite';
 import PayButton from '../Components/pay-button';
 import { FaMoneyBill, FaPercent } from 'react-icons/fa';
+import MyProduct from '../Components/my-product';
 
 export default async function MyCart({ searchParams }) {
   const { id } = searchParams;
@@ -45,7 +45,7 @@ export default async function MyCart({ searchParams }) {
     // return <>{JSON.stringify(cart)}</>
 
     return (
-      <div>
+      <div className='w-full p-4'>
         {cart.map(
           ({
             itemName,
@@ -60,7 +60,7 @@ export default async function MyCart({ searchParams }) {
             orderId,
             userId,
           }) => (
-            <Product
+            <MyProduct
               key={itemName}
               originalPrice={itemPrice}
               itemName={itemName}
@@ -84,7 +84,7 @@ export default async function MyCart({ searchParams }) {
                 <span className="text-lg">Share with your friends and get a discount</span>
                 <FaPercent size={24} />
               </InviteLinkGenerator>
-            </Product>
+            </MyProduct>
           ),
         )}
       </div>
