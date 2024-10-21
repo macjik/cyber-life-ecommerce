@@ -67,7 +67,7 @@ export function PreSigninForm({ children }) {
     let res = await axios.post('/api/signup', { userData: preSignupState, sms });
     res = res.data;
 
-    if (loginState.status === 200) {
+    if (res.status === 200) {
       window.location.href = redirect;
     }
     if (res.error) {
