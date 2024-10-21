@@ -65,7 +65,7 @@ export default function InviteLinkGenerator({
   }
 
   return (
-    <Button onClick={handleLinkGenerate} className={`${className} mt-2`} disabled={loading}>
+    <Button onClick={handleLinkGenerate} className={`${className}`} disabled={loading}>
       {loading ? <Spinner/> : buttonText}
     </Button>
   );

@@ -1,7 +1,6 @@
 import { sequelize } from '@/models/index';
 import InviteLinkGenerator from '../Components/generate-invite';
 import PayButton from '../Components/pay-button';
-import { FaMoneyBill, FaPercent } from 'react-icons/fa';
 import MyProduct from '../Components/my-product';
 
 export default async function MyCart({ searchParams }) {
@@ -42,10 +41,8 @@ export default async function MyCart({ searchParams }) {
       return <p>No chosen item</p>;
     }
 
-    // return <>{JSON.stringify(cart)}</>
-
     return (
-      <div className='w-full p-4'>
+      <div className="w-full p-4">
         {cart.map(
           ({
             itemName,
@@ -72,18 +69,22 @@ export default async function MyCart({ searchParams }) {
               itemQuantity={itemQuantity}
               itemDiscount={itemDiscount}
             >
-              <PayButton className="inline-flex justify-center text-center gap-4" orderId={orderId}>
-                Pay <FaMoneyBill size={24} />
-              </PayButton>
-              <InviteLinkGenerator
-                category={categoryName}
-                product={itemName}
-                inviterId={userId}
-                className="inline-flex justify-center gap-3 text-center bg-green-600"
-              >
-                <span className="text-lg">Share with your friends and get a discount</span>
-                <FaPercent size={24} />
-              </InviteLinkGenerator>
+              <div className="flex justify-end mt-4 group">
+                <PayButton
+                  className="bg-orange-600 text-white rounded-none shadow-md hover:bg-blue-700 text-base font-bold w-20"
+                  orderId={orderId}
+                >
+                  Buy {itemName}
+                </PayButton>
+                <InviteLinkGenerator
+                  category={categoryName}
+                  product={itemName}
+                  inviterId={userId}
+                  className="bg-blue-500 text-white rounded-none shadow-md hover:bg-green-600 text-base font-bold w-20"
+                >
+                  Invite
+                </InviteLinkGenerator>
+              </div>
             </MyProduct>
           ),
         )}

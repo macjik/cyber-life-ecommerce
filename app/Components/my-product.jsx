@@ -6,13 +6,24 @@ export default async function MyProduct({
   itemSrc,
   itemCategory,
   itemPrice,
-  itemStatus,
   itemDiscount,
+  itemQuantity,
   children = null,
 }) {
+  let availabilityStatus;
+  if (itemQuantity > 50) {
+    availabilityStatus = 'available';
+  } else if (itemQuantity > 0 && itemQuantity <= 50) {
+    availabilityStatus = 'limited';
+  } else {
+    availabilityStatus = 'out of stock';
+  }
+
+  const statusBarWidth = `${(itemQuantity / 100) * 100}%`;
+
   return (
-    <div className="flex items-center justify-start py-3 px-4 bg-white rounded-lg shadow-md w-full mb-4 hover:shadow-lg transition-shadow">
-      <div className="relative w-32 h-32 mr-4">
+    <div className="flex items-center justify-between py-4 px-6 bg-white rounded-lg shadow-md w-full mb-6 hover:shadow-lg transition-shadow">
+      <div className="relative w-36 h-36 mr-6">
         <Image
           src={itemSrc || '/turtle.jpg'}
           alt={itemName}
@@ -22,28 +33,39 @@ export default async function MyProduct({
           className="object-cover rounded-lg"
         />
         {itemDiscount && (
-          <span className="absolute top-1 right-1 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+          <span className="absolute top-1 left-1 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
             {itemDiscount}% OFF
           </span>
         )}
       </div>
-      <div className="flex flex-1 items-center gap-6">
-        <h2 className="text-xl font-bold text-gray-800">{itemName || 'Product Name'}</h2>
+
+      <div className="flex-1 flex flex-col space-y-2">
+        <h2 className="text-xl font-bold text-gray-900">{itemName || 'Product Name'}</h2>
         <p className="text-gray-600 text-sm">{itemDescription || 'Short product description.'}</p>
         <div className="text-lg font-semibold text-gray-900">
           ${itemPrice}
           {itemDiscount && <span className="text-green-600 ml-2">(-{itemDiscount}%)</span>}
         </div>
         <p className="text-gray-500 text-sm">{itemCategory || 'Category'}</p>
-        <span
-          className={`inline-block px-3 py-1 text-xs font-medium rounded-full text-white ${
-            itemStatus === 'available' ? 'bg-green-500' : 'bg-red-500'
-          }`}
-        >
-          {itemStatus || 'Status'}
+
+        <div className="w-96 bg-gray-200 rounded-full h-2.5 mt-2">
+          <div
+            className={`h-full rounded-full ${
+              availabilityStatus === 'available'
+                ? 'bg-green-500'
+                : availabilityStatus === 'limited'
+                  ? 'bg-yellow-500'
+                  : 'bg-red-500'
+            }`}
+            style={{ width: statusBarWidth }}
+          ></div>
+        </div>
+        <span className="text-sm font-medium text-gray-700 mt-1">
+          {availabilityStatus} ({itemQuantity} units left)
         </span>
       </div>
-      {/* <div className='flex w-30 h-20 gap-2'>{children}</div> */}
+
+      <div className="flex flex-col sm:flex-row gap-4">{children}</div>
     </div>
   );
 }
