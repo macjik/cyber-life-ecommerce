@@ -17,7 +17,7 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon 
         <FaHome size={24} />
         <span className="text-xs">Home</span>
       </Link>
-      <Link href="/cart" className="flex flex-col items-center text-gray-600 hover:text-blue-500">
+      <Link href="/my-cart" className="flex flex-col items-center text-gray-600 hover:text-blue-500">
         <FaShoppingCart size={24} />
         <span className="text-xs">Cart</span>
       </Link>

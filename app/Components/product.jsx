@@ -11,8 +11,9 @@ export default async function Product({
   itemStatus,
   itemQuantity,
   itemDiscount,
+  originalPrice = null,
   maxQuantity = 100,
-  children,
+  children = null,
 }) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-50 p-4">
@@ -45,8 +46,8 @@ export default async function Product({
               <span className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
                 ${itemPrice}
               </span>
-              {itemDiscount && (
-                <span className="text-gray-500 line-through text-lg ml-2">Original Price</span>
+              {originalPrice && (
+                <span className="text-gray-500 line-through text-lg ml-2">{originalPrice}</span>
               )}
             </div>
           </div>
