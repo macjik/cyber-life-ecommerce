@@ -21,13 +21,13 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon 
         <FaShoppingCart size={24} />
         <span className="text-xs">Cart</span>
       </Link>
-      <Link
+      {/* <Link
         href="/settings"
         className="flex flex-col items-center text-gray-600 hover:text-blue-500"
       >
         <FaCog size={24} />
         <span className="text-xs">Settings</span>
-      </Link>
+      </Link> */}
 
       {userRole === 'admin' && (
         <Link
