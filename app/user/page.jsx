@@ -14,23 +14,23 @@ export default async function UserPage({ searchParams }) {
   const { name, phone, address, sub } = user;
 
   return (
-    <main className="w-full h-full flex-row justify-center items-center">
+    <main className="w-full h-full flex-row justify-center items-center overflow-hidden">
       <UserProfile name={name} userId={userId} phone={phone} address={address} />
-      <SubNav faIcon={<FaShoppingCart size={24} />} link="/cart">
+      <SubNav faIcon={<FaShoppingCart size={24} />} link="/my-cart">
         My orders
       </SubNav>
-      <SubNav faIcon={<FaCommentDots size={24} />} link="/feedback">
+      {/* <SubNav faIcon={<FaCommentDots size={24} />} link="/feedback">
         My feedback
-      </SubNav>
-      <SubNav faIcon={<FaHandshake size={24} />} link="/partner">
+      </SubNav> */}
+      <SubNav faIcon={<FaHandshake size={24} />} link="https://t.me/uidas4">
         Partnership
       </SubNav>
-      <SubNav faIcon={<FaLink size={24} />} link="/invite">
+      {/* <SubNav faIcon={<FaLink size={24} />} link="/invite">
         Invite Link
-      </SubNav>
-      <SubNav faIcon={<FaLanguage size={24} />} link="/lang">
+      </SubNav> */}
+      {/* <SubNav faIcon={<FaLanguage size={24} />} link="/lang">
         Language
-      </SubNav>
+      </SubNav> */}
     </main>
   );
 }
