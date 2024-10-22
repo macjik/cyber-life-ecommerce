@@ -69,22 +69,20 @@ export default async function MyCart({ searchParams }) {
               itemQuantity={itemQuantity}
               itemDiscount={itemDiscount}
             >
-              <div className="flex justify-end mt-4 group">
-                <PayButton
-                  className="bg-orange-600 text-white rounded-none shadow-md hover:bg-blue-700 text-base font-bold w-20"
-                  orderId={orderId}
-                >
-                  Buy {itemName}
-                </PayButton>
-                <InviteLinkGenerator
-                  category={categoryName}
-                  product={itemName}
-                  inviterId={userId}
-                  className="bg-blue-500 text-white rounded-none shadow-md hover:bg-green-600 text-base font-bold w-20"
-                >
-                  Invite
-                </InviteLinkGenerator>
-              </div>
+              <PayButton
+                className="bg-orange-600 text-white rounded-sm shadow-md hover:bg-blue-700 text-base font-bold w-20"
+                orderId={orderId}
+              >
+                Buy {itemName}
+              </PayButton>
+              <InviteLinkGenerator
+                category={categoryName}
+                product={itemName}
+                inviterId={userId}
+                className="bg-blue-500 text-white rounded-sm shadow-md hover:bg-green-600 text-base font-bold w-20"
+              >
+                Invite
+              </InviteLinkGenerator>
             </MyProduct>
           ),
         )}
