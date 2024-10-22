@@ -66,7 +66,7 @@ export default async function MyProduct({
           {availabilityStatus} ({itemQuantity} units left)
         </span>
       </div>
-      <div className="flex flex-col sm:flex-row gap-4 mt-4 md:mt-0 w-96">{children}</div>
+      <div className="flex flex-col sm:flex-row gap-4 mt-4 md:mt-0 lg:w-96">{children}</div>
     </div>
   );
 }
