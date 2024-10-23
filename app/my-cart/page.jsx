@@ -37,10 +37,6 @@ export default async function MyCart({ searchParams }) {
       },
     );
 
-    if (cart.length === 0) {
-      return <p>No chosen item</p>;
-    }
-
     return (
       <div className="w-full p-4">
         {cart.map(
@@ -56,35 +52,36 @@ export default async function MyCart({ searchParams }) {
             itemDiscount,
             orderId,
             userId,
-          }) => (
-            <MyProduct
-              key={itemName}
-              originalPrice={itemPrice}
-              itemName={itemName}
-              itemDescription={itemDescription}
-              itemSrc={itemSrc}
-              itemCategory={categoryName}
-              itemPrice={totalAmount}
-              itemStatus={itemStatus}
-              itemQuantity={itemQuantity}
-              itemDiscount={itemDiscount}
-            >
-              <PayButton
-                className="bg-orange-600 text-white rounded-sm shadow-md hover:bg-blue-700 text-base font-bold w-20"
-                orderId={orderId}
+          }) =>
+            itemName && (
+              <MyProduct
+                key={itemName}
+                originalPrice={itemPrice}
+                itemName={itemName}
+                itemDescription={itemDescription}
+                itemSrc={itemSrc}
+                itemCategory={categoryName}
+                itemPrice={totalAmount}
+                itemStatus={itemStatus}
+                itemQuantity={itemQuantity}
+                itemDiscount={itemDiscount}
               >
-                Buy {itemName}
-              </PayButton>
-              <InviteLinkGenerator
-                category={categoryName}
-                product={itemName}
-                inviterId={userId}
-                className="bg-blue-500 text-white rounded-sm shadow-md hover:bg-green-600 text-base font-bold w-20"
-              >
-                Invite
-              </InviteLinkGenerator>
-            </MyProduct>
-          ),
+                <PayButton
+                  className="bg-orange-600 text-white rounded-sm shadow-md hover:bg-blue-700 text-base font-bold w-20"
+                  orderId={orderId}
+                >
+                  Buy {itemName}
+                </PayButton>
+                <InviteLinkGenerator
+                  category={categoryName}
+                  product={itemName}
+                  inviterId={userId}
+                  className="bg-blue-500 text-white rounded-sm shadow-md hover:bg-green-600 text-base font-bold w-20"
+                >
+                  Invite
+                </InviteLinkGenerator>
+              </MyProduct>
+            ),
         )}
       </div>
     );
