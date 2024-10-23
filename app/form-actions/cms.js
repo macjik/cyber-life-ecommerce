@@ -3,6 +3,7 @@ import db from '@/models/index';
 import Joi from 'joi';
 import { v4 as uuidv4 } from 'uuid';
 import { put } from '@vercel/blob';
+import { revalidatePath } from '@/node_modules/next/cache';
 
 const { item: Item, Category } = db;
 
@@ -72,6 +73,7 @@ export async function addContent(state, formData) {
         discount,
       });
 
+      revalidatePath('/admin');
       return { status: 200, value };
     } else {
       return { error: 'No image file found' };
@@ -90,6 +92,8 @@ export async function deleteContent(state, formData) {
       console.error('Item not found');
       return { error: 'Item not found' };
     }
+
+    revalidatePath('/admin')
     return { status: 200, contentId };
   } catch (err) {
     console.error(err);
@@ -172,6 +176,7 @@ export async function editContent(state, formData) {
       return { error: 'Error updating item' };
     }
 
+    revalidatePath('/admin')
     return { status: 200, value };
   } catch (err) {
     console.error(err);
