@@ -23,7 +23,7 @@ export async function setAddress(state, formData) {
     return { error: `${error}` };
   }
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
 
   if (token) {

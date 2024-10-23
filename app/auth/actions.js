@@ -118,7 +118,7 @@ export async function login(state, formData) {
 
     let token = jwt.sign({ id: sub, role: role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    await cookies().set('token', token, {
+    await (await cookies()).set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: 3600,

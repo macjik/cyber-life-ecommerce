@@ -6,7 +6,9 @@ import { FaShoppingCart } from 'react-icons/fa';
 
 const { item: Item } = db;
 
-export default async function ItemPage({ params, searchParams }) {
+export default async function ItemPage(props) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const { product } = params;
   const { invite } = searchParams;
   console.log(invite);

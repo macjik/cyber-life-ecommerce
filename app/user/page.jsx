@@ -7,7 +7,8 @@ import { FaShoppingCart, FaCommentDots, FaHandshake, FaLink, FaLanguage } from '
 
 const User = db.User;
 
-export default async function UserPage({ searchParams }) {
+export default async function UserPage(props) {
+  const searchParams = await props.searchParams;
   const userId = searchParams?.id;
   const user = await User.findOne({ where: { sub: userId } });
 

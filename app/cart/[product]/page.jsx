@@ -8,7 +8,9 @@ import { FaMoneyBill, FaPercent } from 'react-icons/fa';
 
 const { item: Item, User, Invite, Order, Category } = db;
 
-export default async function CartPage({ params, searchParams }) {
+export default async function CartPage(props) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const { product } = params;
   const { id, invite } = searchParams;
 

@@ -3,7 +3,8 @@ import InviteLinkGenerator from '../Components/generate-invite';
 import PayButton from '../Components/pay-button';
 import MyProduct from '../Components/my-product';
 
-export default async function MyCart({ searchParams }) {
+export default async function MyCart(props) {
+  const searchParams = await props.searchParams;
   const { id } = searchParams;
 
   try {

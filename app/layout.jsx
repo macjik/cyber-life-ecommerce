@@ -20,7 +20,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const headersList = headers();
+  const headersList = await headers();
   const currentPath = headersList.get('x-current-path');
   const userRole = headersList.get('x-user-role') || 'guest';
 

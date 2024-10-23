@@ -87,7 +87,7 @@ export function ContentEdit({ id, name, price, quantity, discount, image, descri
 
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
-    <>
+    (<>
       {isEdit ? (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
           <Form
@@ -164,6 +164,6 @@ export function ContentEdit({ id, name, price, quantity, discount, image, descri
           Edit
         </Button>
       )}
-    </>
+    </>)
   );
 }
