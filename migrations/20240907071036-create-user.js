@@ -10,6 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       name: { type: Sequelize.STRING },
+      image: Sequelize.STRING,
       telegramId: { type: Sequelize.BIGINT },
       telegramFirstName: { type: Sequelize.STRING },
       telegramLastName: { type: Sequelize.STRING },

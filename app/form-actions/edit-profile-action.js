@@ -2,30 +2,32 @@
 
 import db from '@/models/index';
 import Joi from 'joi';
+import { put } from '@vercel/blob';
 
 const User = db.User;
 
 export async function editProfile(state, formData) {
   try {
+    const imageFile = formData.get('image');
+    let imageMimeType = null;
+
+    if (imageFile && imageFile.type !== 'application/octet-stream') {
+      imageMimeType = imageFile.type;
+    }
+
     const schema = Joi.object({
-      name: Joi.string().min(2).max(70).required(),
-      address: Joi.string().required(),
-      phone: Joi.string().length(9).pattern(/^\d+$/).trim().required(),
-      //   profileImage: Joi.string()
-      //     .pattern(/^[^<>:"/\\|?*\x00-\x1F]+$/)
-      //     .pattern(/\.(jpg|png)$/i)
-      //     .optional(),
+      name: Joi.string().min(2).max(70).allow(null),
+      imageMimeType: Joi.string()
+        .valid('image/jpg', 'image/jpeg', 'image/png')
+        .allow(null)
+        .optional(),
       id: Joi.string().required(),
-      smsCode: Joi.string().length(4).required(),
     });
 
     const { value, error } = schema.validate({
       name: formData.get('name'),
-      address: formData.get('address'),
-      phone: formData.get('phone'),
-      //   profileImage: formData.get('profile-image'),
+      imageMimeType: imageMimeType || null,
       id: formData.get('user-id'),
-      smsCode: formData.get('sms-code'),
     });
 
     if (error) {
@@ -33,40 +35,33 @@ export async function editProfile(state, formData) {
       return { error: `${error}` };
     }
 
-    const {
-      name,
-      address,
-      phone,
-      // profileImage,
-      id,
-    } = value;
-    // console.log(id);
+    const { name, id } = value;
 
-    console.log('Types of inputs:', {
-      name: typeof name,
-      address: typeof address,
-      phone: typeof phone,
-      id: typeof id,
-      smsCode: typeof smsCode,
-    });
+    let imageUrl = null;
+    if (imageFile && imageMimeType) {
+      const imageArrayBuffer = await imageFile.arrayBuffer();
+      const imageBuffer = Buffer.from(imageArrayBuffer);
 
-    let user = await User.findOne({ where: { sub: id } });
-    console.log(user);
+      const imageFileName = `${id}.${imageMimeType.split('/')[1]}`;
 
-    if (!user) {
-      console.error('User not found');
-      return { error: 'User not found' };
+      const blob = await put(imageFileName, imageBuffer, {
+        contentType: imageMimeType,
+        access: 'public',
+      });
+
+      imageUrl = blob.url;
     }
 
-    await user.update({
-      name,
-      address,
-      phone,
-      //   profileImage,
-    });
+    const updateData = { name };
+    if (imageUrl !== null) {
+      updateData.image = imageUrl;
+    }
 
-    return { status: 200, value };
+    await User.update(updateData, { where: { id } });
+
+    return { status: 200, imageUrl };
   } catch (err) {
     console.error(err);
+    return { error: 'An unexpected error occurred.' };
   }
 }

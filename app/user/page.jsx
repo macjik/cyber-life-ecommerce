@@ -11,26 +11,26 @@ export default async function UserPage({ searchParams }) {
   const userId = searchParams?.id;
   const user = await User.findOne({ where: { sub: userId } });
 
-  const { name, phone, address, sub } = user;
+  const { name, phone, address, sub, id, image } = user;
 
   return (
-    <main className="w-full h-full flex-row justify-center items-center">
-      <UserProfile name={name} userId={userId} phone={phone} address={address} />
-      <SubNav faIcon={<FaShoppingCart size={24} />} link="/cart">
+    <main className="w-full h-full flex-row justify-center items-center overflow-hidden">
+      <UserProfile name={name} userId={id} phone={phone} address={address} image={image}/>
+      <SubNav faIcon={<FaShoppingCart size={24} />} link="/my-cart">
         My orders
       </SubNav>
-      <SubNav faIcon={<FaCommentDots size={24} />} link="/feedback">
+      {/* <SubNav faIcon={<FaCommentDots size={24} />} link="/feedback">
         My feedback
-      </SubNav>
-      <SubNav faIcon={<FaHandshake size={24} />} link="/partner">
+      </SubNav> */}
+      <SubNav faIcon={<FaHandshake size={24} />} link="https://t.me/uidas4">
         Partnership
       </SubNav>
-      <SubNav faIcon={<FaLink size={24} />} link="/invite">
+      {/* <SubNav faIcon={<FaLink size={24} />} link="/invite">
         Invite Link
-      </SubNav>
-      <SubNav faIcon={<FaLanguage size={24} />} link="/lang">
+      </SubNav> */}
+      {/* <SubNav faIcon={<FaLanguage size={24} />} link="/lang">
         Language
-      </SubNav>
+      </SubNav> */}
     </main>
   );
 }
