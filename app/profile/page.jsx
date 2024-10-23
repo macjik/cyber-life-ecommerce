@@ -10,5 +10,5 @@ export default async function ProfilePage({ searchParams }) {
 
   let user = await User.findOne({where: {sub:id}}) 
 
-  return <EditProfile id={user.id} name={user?.name && user.name} image={user?.image && user.image}/>;
+  return <EditProfile id={user.id} name={user?.name && user.name}/>;
 }

@@ -11,11 +11,11 @@ export default async function UserPage({ searchParams }) {
   const userId = searchParams?.id;
   const user = await User.findOne({ where: { sub: userId } });
 
-  const { name, phone, address, sub } = user;
+  const { name, phone, address, sub, id, image } = user;
 
   return (
     <main className="w-full h-full flex-row justify-center items-center overflow-hidden">
-      <UserProfile name={name} userId={userId} phone={phone} address={address} />
+      <UserProfile name={name} userId={id} phone={phone} address={address} image={image}/>
       <SubNav faIcon={<FaShoppingCart size={24} />} link="/my-cart">
         My orders
       </SubNav>

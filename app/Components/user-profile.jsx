@@ -4,17 +4,26 @@ import Image from 'next/image';
 import Button from './button';
 import Link from 'next/link';
 
-export default async function UserProfile({ userId, name = '', phone, avatarUrl = null, address }) {
+export default async function UserProfile({
+  userId,
+  name = '',
+  phone,
+  avatarUrl = null,
+  address,
+  image,
+}) {
   return (
-    <div className="mx-auto p-6 bg-white shadow-lg overflow-hidden lg:flex transform transition duration-300 hover:shadow-2xl w-full">
+    <div className="mx-auto p-6 bg-white shadow-lg overflow-hidden lg:flex transform transition duration-300 hover:shadow-2xl w-full max-h-max">
       <div className="lg:flex lg:flex-shrink-0">
-        <div className="flex items-center justify-center lg:items-start lg:justify-start bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full p-1 lg:p-3">
+        <div className="flex items-center justify-center lg:items-start lg:justify-start rounded-full p-1 lg:p-3">
           <Image
-            className="rounded-full w-32 h-32"
-            src={avatarUrl || '/image.png'}
+            src={image || '/blank-image.png'}
             alt="profile image"
-            height={128}
+            priority
+            quality={100}
             width={128}
+            height={128}
+            className="object-cover w-32 h-32 rounded-full"
             style={{ objectFit: 'cover' }}
           />
         </div>
@@ -23,7 +32,7 @@ export default async function UserProfile({ userId, name = '', phone, avatarUrl 
         <div className="text-center lg:text-left">
           <h1 className="text-3xl font-semibold text-gray-900">{name || 'What is your name?'}</h1>
           <p className="mt-2 text-lg text-gray-600">Phone: +998 {phone}</p>
-          <p className="mt-4 text-gray-600 text-base">Address: {address}</p>
+          {/* <p className="mt-4 text-gray-600 text-base">Address: {address}</p> */}
         </div>
         <div className="mt-6 text-center lg:text-left">
           <Link href="/profile">
