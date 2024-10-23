@@ -48,6 +48,7 @@ export function PreLoginForm({ children }) {
 export function PreSigninForm({ children }) {
   const [preSignupState, preSignupAction] = useFormState(preSignup, '');
   const [signUpError, setSignUpError] = useState('');
+  const [isPending, setIsPending] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
@@ -64,14 +65,16 @@ export function PreSigninForm({ children }) {
     const formData = new FormData(event.target);
     const sms = formData.get('sms-confirm');
 
+    setIsPending(true);
     let res = await axios.post('/api/signup', { userData: preSignupState, sms });
     res = res.data;
-
+    
     if (res.status === 200) {
       window.location.href = redirect;
     }
     if (res.error) {
       setSignUpError(res.error);
+      setIsPending(false);
     }
   }
 
@@ -87,7 +90,7 @@ export function PreSigninForm({ children }) {
             label={`Confirm Code Sent as SMS on ${preSignupState.phone}`}
           />
           {signUpError && <p className="text-red-700">{signUpError}</p>}
-          <SubmitButton>Confirm</SubmitButton>
+          <Button type='submit' disabled={isPending}>{isPending ? <Spinner/> : 'Confirm'}</Button>
           {children}
         </Form>
       ) : (

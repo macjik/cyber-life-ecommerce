@@ -1,12 +1,22 @@
 'use client';
 
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import Form from './form';
 import FormInput from './form-input';
 import Button from './button';
 import { addContent, deleteContent, editContent } from '../form-actions/cms';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Spinner } from './spinner';
+
+function SubmitButton({ children, className = '' }) {
+  const { pending } = useFormStatus();
+  return (
+    <Button className={`${className}`} type="submit" disabled={pending}>
+      {pending ? <Spinner /> : children}
+    </Button>
+  );
+}
 
 export function ContentForm() {
   const [contentState, addContentAction] = useFormState(addContent, '');
@@ -42,12 +52,7 @@ export function ContentForm() {
 
         <FormInput label="Description" id="description" type="text" className="mt-4 text-sm" />
 
-        <Button
-          type="submit"
-          className="w-full mt-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded"
-        >
-          Confirm
-        </Button>
+        <SubmitButton>Confirm</SubmitButton>
 
         {contentState?.error && <p className="text-red-700 text-sm mt-2">{contentState.error}</p>}
       </Form>
@@ -61,9 +66,7 @@ export function ContentDelete({ id }) {
   return (
     <form action={deleteItemAction}>
       <input type="hidden" value={id} name="id" />
-      <Button type="submit" className="bg-red-500 text-white px-4 py-1 rounded">
-        Delete
-      </Button>
+      <SubmitButton className="bg-red-600">Delete</SubmitButton>
     </form>
   );
 }
@@ -152,7 +155,7 @@ export function ContentEdit({ id, name, price, quantity, discount, image, descri
               <p className="text-red-700 text-sm mt-2">{editItemState.error}</p>
             )}
             <div className="w-full grid space-y-4">
-              <Button type="submit">Confirm</Button>
+              <SubmitButton>Confirm</SubmitButton>
               <Button className="bg-slate-700" onClick={handleEditItem}>
                 Cancel
               </Button>
