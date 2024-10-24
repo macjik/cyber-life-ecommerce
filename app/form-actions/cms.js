@@ -93,7 +93,7 @@ export async function deleteContent(state, formData) {
       return { error: 'Item not found' };
     }
 
-    revalidatePath('/admin')
+    revalidatePath('/admin');
     return { status: 200, contentId };
   } catch (err) {
     console.error(err);
@@ -176,7 +176,7 @@ export async function editContent(state, formData) {
       return { error: 'Error updating item' };
     }
 
-    revalidatePath('/admin')
+    revalidatePath('/admin');
     return { status: 200, value };
   } catch (err) {
     console.error(err);

@@ -15,7 +15,7 @@ export default async function UserPage({ searchParams }) {
 
   return (
     <main className="w-full h-full flex-row justify-center items-center overflow-hidden">
-      <UserProfile name={name} userId={id} phone={phone} address={address} image={image}/>
+      <UserProfile name={name} userId={id} phone={phone} address={address} image={image} />
       <SubNav faIcon={<FaShoppingCart size={24} />} link="/my-cart">
         My orders
       </SubNav>

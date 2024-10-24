@@ -66,7 +66,7 @@ export default function InviteLinkGenerator({
 
   return (
     <Button onClick={handleLinkGenerate} className={`${className}`} disabled={loading}>
-      {loading ? <Spinner/> : buttonText}
+      {loading ? <Spinner /> : buttonText}
     </Button>
   );
 }

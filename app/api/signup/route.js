@@ -44,13 +44,17 @@ export async function POST(req) {
         sub: uid,
       }),
 
-      cookies().set('token', jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' }), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 3600,
-        sameSite: 'lax',
-        path: '/',
-      })
+      cookies().set(
+        'token',
+        jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' }),
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 3600,
+          sameSite: 'lax',
+          path: '/',
+        },
+      ),
     ]);
 
     console.log('User created successfully:', phone);

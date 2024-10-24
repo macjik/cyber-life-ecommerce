@@ -49,7 +49,7 @@ export default function EditProfile({ id, name, image }) {
   return (
     <Form title="Edit your Profile" action={editProfileAction}>
       <input name="user-id" value={id} type="hidden" />
-      <FormInput label="Name" id="name" type="text" defaultValue={name} required={false}/>
+      <FormInput label="Name" id="name" type="text" defaultValue={name} required={false} />
       <FormInput label="Profile Image" id="image" type="file" required={false} />
       <SubmitButton>Confirm</SubmitButton>
       <Link href="/user">

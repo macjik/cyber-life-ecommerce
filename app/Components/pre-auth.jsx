@@ -68,7 +68,7 @@ export function PreSigninForm({ children }) {
     setIsPending(true);
     let res = await axios.post('/api/signup', { userData: preSignupState, sms });
     res = res.data;
-    
+
     if (res.status === 200) {
       window.location.href = redirect;
     }
@@ -90,7 +90,9 @@ export function PreSigninForm({ children }) {
             label={`Confirm Code Sent as SMS on ${preSignupState.phone}`}
           />
           {signUpError && <p className="text-red-700">{signUpError}</p>}
-          <Button type='submit' disabled={isPending}>{isPending ? <Spinner/> : 'Confirm'}</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? <Spinner /> : 'Confirm'}
+          </Button>
           {children}
         </Form>
       ) : (

@@ -28,8 +28,8 @@ module.exports = {
     dialect: 'postgres',
     dialectModule: pg,
     dialectOptions: {
-      ssl: { require: true, rejectUnauthorized: false }, 
-        //ca: process.env.CA_CERT },
+      ssl: { require: true, rejectUnauthorized: false },
+      //ca: process.env.CA_CERT },
     },
     define: {
       timestamps: true,

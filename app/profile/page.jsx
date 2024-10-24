@@ -3,12 +3,12 @@
 import db from '@/models/index';
 import EditProfile from '../Components/edit-profile';
 
-const {User} = db;
+const { User } = db;
 
 export default async function ProfilePage({ searchParams }) {
-  const {id} = searchParams;
+  const { id } = searchParams;
 
-  let user = await User.findOne({where: {sub:id}}) 
+  let user = await User.findOne({ where: { sub: id } });
 
-  return <EditProfile id={user.id} name={user?.name && user.name}/>;
+  return <EditProfile id={user.id} name={user?.name && user.name} />;
 }

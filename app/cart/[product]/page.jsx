@@ -63,18 +63,20 @@ export default async function CartPage({ params, searchParams }) {
       itemStatus={status}
       itemQuantity={quantity}
     >
-      <PayButton className="inline-flex justify-center text-center gap-4" orderId={order.id}>
-        Pay <FaMoneyBill size={24} />
-      </PayButton>
-      <InviteLinkGenerator
-        category={existingProduct.itemCategory.name}
-        product={product}
-        inviterId={currentUser.id}
-        className="inline-flex justify-center gap-3 text-center bg-green-600"
-      >
-        <span className="text-lg">Share with your friends and get a discount</span>
-        <FaPercent size={24} />
-      </InviteLinkGenerator>
+      <div className="space-y-3">
+        <PayButton className="inline-flex justify-center text-center gap-4" orderId={order.id}>
+          Pay <FaMoneyBill size={24} />
+        </PayButton>
+        <InviteLinkGenerator
+          category={existingProduct.itemCategory.name}
+          product={product}
+          inviterId={currentUser.id}
+          className="inline-flex justify-center gap-3 text-center bg-green-600"
+        >
+          <span className="text-lg">Share with your friends and get a discount</span>
+          <FaPercent size={24} />
+        </InviteLinkGenerator>
+      </div>
     </Product>
   );
 }
@@ -108,18 +110,23 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
       {/* <div>Participants: {currentOrder.totalBuyers}</div>
       <div>Discount: {discountAmount}</div> */}
       {/* <div>{trackInvites ? JSON.stringify(trackInvites) : <p>No Invites</p>}</div> */}
-      <PayButton className="inline-flex justify-center text-center gap-4" orderId={currentOrder.id}>
-        Pay <FaMoneyBill size={24} />
-      </PayButton>
-      <InviteLinkGenerator
-        category={existingProduct.itemCategory.name}
-        product={product}
-        inviterId={currentUser.id}
-        className="inline-flex justify-center gap-3 text-center bg-green-600"
-      >
-        <span className="text-lg">Share with your friends and get a discount</span>
-        <FaPercent size={24} />
-      </InviteLinkGenerator>
+      <div className="space-y-3">
+        <PayButton
+          className="inline-flex justify-center text-center gap-4"
+          orderId={currentOrder.id}
+        >
+          Pay <FaMoneyBill size={24} />
+        </PayButton>
+        <InviteLinkGenerator
+          category={existingProduct.itemCategory.name}
+          product={product}
+          inviterId={currentUser.id}
+          className="inline-flex justify-center gap-3 text-center bg-green-600"
+        >
+          <span className="text-lg">Share with your friends and get a discount</span>
+          <FaPercent size={24} />
+        </InviteLinkGenerator>
+      </div>
     </Product>
   );
 }
@@ -193,18 +200,23 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
           Pay
         </Button>
       </Link> */}
-      <PayButton className="inline-flex justify-center text-center gap-4" orderId={currentOrder.id}>
-        Pay <FaMoneyBill size={24} />
-      </PayButton>
-      <InviteLinkGenerator
-        category={existingProduct.category}
-        product={product}
-        inviterId={currentUser.id}
-        className="inline-flex justify-center gap-3 text-center bg-green-600"
-      >
-        <span className="text-lg">Share with your friends and get a discount</span>
-        <FaPercent size={24} />
-      </InviteLinkGenerator>
+      <div className="space-y-3">
+        <PayButton
+          className="inline-flex justify-center text-center gap-4"
+          orderId={currentOrder.id}
+        >
+          Pay <FaMoneyBill size={24} />
+        </PayButton>
+        <InviteLinkGenerator
+          category={existingProduct.category}
+          product={product}
+          inviterId={currentUser.id}
+          className="inline-flex justify-center gap-3 text-center bg-green-600"
+        >
+          <span className="text-lg">Share with your friends and get a discount</span>
+          <FaPercent size={24} />
+        </InviteLinkGenerator>
+      </div>
     </Product>
   );
 }
