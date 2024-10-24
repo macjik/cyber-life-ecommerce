@@ -1,6 +1,8 @@
 import db from '@/models/index';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
+import Loading from './Components/loading';
 
 const { item: Item, Category } = db;
 
@@ -27,6 +29,7 @@ export default async function Home() {
   }
 
   return (
+    <Suspense fallback={<Loading/>}>
     <main className="w-full flex flex-col items-center pt-4 pb-20 space-y-12">
       <section className="w-full max-w-4xl h-1/3 flex flex-col justify-center items-center text-center space-y-4">
         <h1 className="text-5xl font-extrabold text-gray-900">Mimi: Buy Together, Save More</h1>
@@ -81,5 +84,6 @@ export default async function Home() {
         </ol>
       </section>
     </main>
+    </Suspense>
   );
 }

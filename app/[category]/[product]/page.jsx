@@ -1,7 +1,9 @@
 import Button from '@/app/Components/button';
+import Loading from '@/app/Components/loading';
 import Product from '@/app/Components/product';
 import db from '@/models/index';
 import Link from '@/node_modules/next/link';
+import { Suspense } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 
 const { item: Item } = db;
@@ -20,6 +22,7 @@ export default async function ItemPage({ params, searchParams }) {
   const { name, description, image, quantity, category, price, status } = existingItem;
 
   return (
+    <Suspense fallback={<Loading/>}>
     <Product
       itemName={name}
       itemDescription={description}
@@ -36,5 +39,6 @@ export default async function ItemPage({ params, searchParams }) {
         </Button>
       </Link>
     </Product>
+    </Suspense>
   );
 }
