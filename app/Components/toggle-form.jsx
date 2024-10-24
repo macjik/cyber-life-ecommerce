@@ -16,11 +16,21 @@ export default function AuthForm() {
     <>
       {!isSignup ? (
         <PreLoginForm>
-          <Button onClick={toggleSwitch}>I do not have an account</Button>
+          <Button
+            className="bg-white border-blue-600 border-2 rounded-l-none rounded-r text-blue-600 hover:bg-blue-600 hover:text-white"
+            onClick={toggleSwitch}
+          >
+            Create account
+          </Button>
         </PreLoginForm>
       ) : (
         <PreSigninForm>
-          <Button onClick={toggleSwitch}>I already have an account</Button>
+          <Button
+            className="bg-white border-blue-600 border-2 rounded-l-none rounded-r text-blue-600 hover:bg-blue-600 hover:text-white"
+            onClick={toggleSwitch}
+          >
+            I have an account
+          </Button>
         </PreSigninForm>
       )}
     </>

@@ -16,7 +16,7 @@ function SubmitButton({ children }) {
   console.log(status);
   console.log(pending);
   return (
-    <Button type="submit" disabled={pending} className="text-center">
+    <Button type="submit" disabled={pending} className="text-center bg-blue-600 rounded-r-none rounded-l focus:outline-none">
       {pending ? <Spinner /> : children}
     </Button>
   );
@@ -36,11 +36,13 @@ export function PreLoginForm({ children }) {
 
   return (
     <Form action={loginAction} title="Log in">
-      <FormInput inputMode="tel" id="phone" label="Phone" type="number" />
+      <FormInput inputMode="tel" id="phone" label="Phone*" type="number" />
       <FormInput id="password" label="Password*" type="password" />
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
+      <div className='inline-flex justify-center w-full group'>
       <SubmitButton>Log in</SubmitButton>
       {children}
+      </div>
     </Form>
   );
 }
@@ -90,7 +92,7 @@ export function PreSigninForm({ children }) {
             label={`Confirm Code Sent as SMS on ${preSignupState.phone}`}
           />
           {signUpError && <p className="text-red-700">{signUpError}</p>}
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" disabled={isPending} className='bg-green-600'>
             {isPending ? <Spinner /> : 'Confirm'}
           </Button>
           {children}
@@ -100,8 +102,10 @@ export function PreSigninForm({ children }) {
           <FormInput inputMode="tel" id="phone" label="Phone*" type="tel" />
           <FormInput id="password" label="Password*" type="password" />
           {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
+          <div className='inline-flex w-full justify-center group'>
           <SubmitButton>Register</SubmitButton>
           {children}
+          </div>
         </Form>
       )}
     </>
