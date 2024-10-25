@@ -2,6 +2,8 @@ import localFont from 'next/font/local';
 import './globals.css';
 import NavBar from './Components/navbar';
 import { headers } from 'next/headers';
+import { getLocale, getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -26,11 +28,15 @@ export default async function RootLayout({ children }) {
 
   const isAllowedRoute = !currentPath.startsWith('/auth') && !/^\/[^/]+\/[^/]+$/.test(currentPath);
 
+  const locale = await getLocale();
+  const messages = await getMessages();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-200`}>
         <NavBar userRole={userRole} isAllowedRoute={isAllowedRoute} />
-        <main>{children}</main>
+        <NextIntlClientProvider messages={messages}>
+          <main>{children}</main>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
