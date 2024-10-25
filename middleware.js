@@ -3,23 +3,31 @@ import { jwtVerify } from 'jose';
 import { NextResponse } from 'next/server';
 
 export async function middleware(req) {
+  console.log('Executing middleware for:', req.nextUrl.pathname);
+
   const response = NextResponse.next();
 
+  // Set the current path in the headers
   response.headers.set('x-current-path', req.nextUrl.pathname);
 
   let cookieHeader = req.headers.get('cookie');
   let cookies = parse(cookieHeader || '');
+  console.log(cookies);
   let token = cookies.token;
+
+  console.log('Token from cookie:', token);
 
   const paths = ['/auth'];
 
   const dynamicCategoryProductPattern = /^\/[^\/]+\/[^\/]+$/;
   const cartPathPattern = /^\/cart\/[^\/]+$/;
 
+  // Skip certain routes
   if (
     dynamicCategoryProductPattern.test(req.nextUrl.pathname) &&
     !cartPathPattern.test(req.nextUrl.pathname)
   ) {
+    console.log('Skipping middleware for dynamic category/product path:', req.nextUrl.pathname);
     return response;
   }
 
@@ -51,6 +59,8 @@ export async function middleware(req) {
       return NextResponse.redirect(new URL('/', req.url));
     }
 
+    console.log('Decoded token:', payload);
+
     if (paths.includes(req.nextUrl.pathname)) {
       const redirectUrl = new URL(cookies.redirect || '/', req.url);
       return NextResponse.redirect(redirectUrl);
@@ -58,6 +68,7 @@ export async function middleware(req) {
 
     const url = new URL(req.url);
     let userId = url.searchParams.get('id');
+    console.log('Existing userId in URL:', userId);
 
     // Ensure userId in URL matches the payload id
     if (!userId || userId !== payload.id) {

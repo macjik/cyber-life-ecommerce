@@ -29,6 +29,7 @@ export async function POST(req) {
     let smsCode = await client.get(phone.toString());
 
     if (smsCode !== sms.toString()) {
+      console.log('Invalid Code:', `${phone}`);
       return new Response(JSON.stringify({ error: 'Invalid Code' }));
     }
     await client.del(phone.toString());
@@ -53,6 +54,7 @@ export async function POST(req) {
       path: '/',
     });
 
+    console.log('User created successfully:', phone);
     return new Response(JSON.stringify({ status: 200, phone: phone }), { status: 200 });
   } catch (err) {
     console.error('Error occurred:', err);

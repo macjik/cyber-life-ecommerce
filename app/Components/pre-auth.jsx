@@ -16,6 +16,8 @@ export function PreLoginForm({ children }) {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
 
+  console.log(loginState);
+
   useEffect(() => {
     if (loginState.status === 200) {
       router.push(redirect);

@@ -10,6 +10,7 @@ const { item: Item } = db;
 export default async function ItemPage({ params, searchParams }) {
   const { product } = params;
   const { invite } = searchParams;
+  console.log(invite);
 
   let existingItem = await Item.findOne({ where: { name: product } });
 

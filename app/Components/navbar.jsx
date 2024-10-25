@@ -21,29 +21,20 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon 
         <FaShoppingCart size={24} />
         <span className="text-xs">Cart</span>
       </Link>
-      <Link
-        href="/settings"
-        className="flex flex-col items-center text-gray-600 hover:text-blue-500"
-      >
+      <Link href="/settings" className="flex flex-col items-center text-gray-600 hover:text-blue-500">
         <FaCog size={24} />
         <span className="text-xs">Settings</span>
       </Link>
 
       {userRole === 'admin' && (
-        <Link
-          href="/admin"
-          className="flex flex-col items-center text-gray-600 hover:text-blue-500"
-        >
+        <Link href="/admin" className="flex flex-col items-center text-gray-600 hover:text-blue-500">
           <AiFillControl size={24} />
           <span className="text-xs">CMS</span>
         </Link>
       )}
 
       {children && (
-        <Link
-          href={`/${children.toLowerCase()}`}
-          className="flex flex-col items-center text-gray-600 hover:text-blue-500"
-        >
+        <Link href={`/${children.toLowerCase()}`} className="flex flex-col items-center text-gray-600 hover:text-blue-500">
           {icon}
           <span className="text-xs">{children}</span>
         </Link>

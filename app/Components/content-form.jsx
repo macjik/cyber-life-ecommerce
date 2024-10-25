@@ -25,6 +25,8 @@ export function ContentForm() {
     }
   }, [contentState?.status]);
 
+  console.log(contentState);
+
   return (
     <main className="w-full h-full flex items-center justify-center p-4">
       <Form
@@ -64,6 +66,7 @@ export function ContentForm() {
 
 export function ContentDelete({ id }) {
   const [deleteItemState, deleteItemAction] = useFormState(deleteContent, '');
+  console.log(deleteItemState);
   return (
     <form action={deleteItemAction}>
       <input type="hidden" value={id} name="id" />
@@ -78,6 +81,7 @@ export function ContentEdit({ id, name, price, quantity, discount, image, descri
   const [editItemState, editItemAction] = useFormState(editContent, '');
   const [isEdit, setIsEdit] = useState(false);
   const router = useRouter();
+  console.log(editItemState);
 
   function handleEditItem(event) {
     event.preventDefault();

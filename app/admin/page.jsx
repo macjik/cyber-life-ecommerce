@@ -33,6 +33,8 @@ export default async function AdminPanel() {
     };
   });
 
+  console.log(formattedItems);
+
   return (
     <main className="w-full h-full">
       <Dashboard>{formattedItems}</Dashboard>
