@@ -92,10 +92,11 @@ export function PreSigninForm({ children }) {
             label={`Confirm Code Sent as SMS on ${preSignupState.phone}`}
           />
           {signUpError && <p className="text-red-700">{signUpError}</p>}
+          <div className='inline-flex w-full'>
           <Button type="submit" disabled={isPending}>
             {isPending ? <Spinner /> : 'Confirm'}
           </Button>
-          {children}
+          </div>
         </Form>
       ) : (
         <Form action={preSignupAction} title="Sign up">
