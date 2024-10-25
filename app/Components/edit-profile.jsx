@@ -14,7 +14,7 @@ function SubmitButton({ children }) {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending}>
+    <Button type="submit" disabled={pending} className="bg-blue-600 rounded-l text-white max-w-max">
       {pending ? <Spinner /> : children}
     </Button>
   );
@@ -51,10 +51,12 @@ export default function EditProfile({ id, name, image }) {
       <input name="user-id" value={id} type="hidden" />
       <FormInput label="Name" id="name" type="text" defaultValue={name} required={false} />
       <FormInput label="Profile Image" id="image" type="file" required={false} />
-      <SubmitButton>Confirm</SubmitButton>
-      <Link href="/user">
-        <Button className="mt-3">Back</Button>
-      </Link>
+      <div className="inline-flex w-full justify-center">
+        <SubmitButton>Confirm</SubmitButton>
+        <Link href="/user">
+          <Button className="bg-white border-2 border-blue-600 text-blue-600 rounded-r w-50">Back</Button>
+        </Link>
+      </div>
       {editProfileState?.error && <p className="text-red-700">{editProfileState.error}</p>}
     </Form>
   );

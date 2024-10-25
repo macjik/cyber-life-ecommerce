@@ -12,7 +12,7 @@ import { Spinner } from './spinner';
 function SubmitButton({ children, className = '' }) {
   const { pending } = useFormStatus();
   return (
-    <Button className={`${className}`} type="submit" disabled={pending}>
+    <Button className={`${className} bg-blue-600 text-white rounded-lg`} type="submit" disabled={pending}>
       {pending ? <Spinner /> : children}
     </Button>
   );
@@ -156,7 +156,7 @@ export function ContentEdit({ id, name, price, quantity, discount, image, descri
             )}
             <div className="w-full grid space-y-4">
               <SubmitButton>Confirm</SubmitButton>
-              <Button className="bg-slate-700" onClick={handleEditItem}>
+              <Button className="bg-slate-700 text-white rounded-lg" onClick={handleEditItem}>
                 Cancel
               </Button>
             </div>

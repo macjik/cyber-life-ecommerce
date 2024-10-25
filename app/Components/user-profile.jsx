@@ -36,7 +36,7 @@ export default async function UserProfile({
         </div>
         <div className="mt-6 text-center lg:text-left">
           <Link href="/profile">
-            <Button className="rounded-2xl max-w-max">Edit Profile</Button>
+            <Button className="rounded-lg max-w-max bg-indigo-600 text-white">Edit Profile</Button>
           </Link>
         </div>
       </div>
