@@ -126,7 +126,6 @@ export async function login(state, formData) {
       path: '/',
     });
 
-    console.log('User logged in successfully:', phone);
     return { status: 200 };
   } catch (err) {
     console.error('Error occurred:', err);

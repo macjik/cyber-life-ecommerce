@@ -12,7 +12,11 @@ import { Spinner } from './spinner';
 function SubmitButton({ children, className = '' }) {
   const { pending } = useFormStatus();
   return (
-    <Button className={`${className} bg-blue-600 text-white rounded-lg`} type="submit" disabled={pending}>
+    <Button
+      className={`${className} bg-blue-600 text-white rounded-lg`}
+      type="submit"
+      disabled={pending}
+    >
       {pending ? <Spinner /> : children}
     </Button>
   );
@@ -25,8 +29,6 @@ export function ContentForm() {
   if (contentState?.status === 200) {
     router.push('/admin');
   }
-
-  console.log(contentState);
 
   return (
     <main className="w-full h-full flex items-center justify-center p-4">
@@ -62,7 +64,6 @@ export function ContentForm() {
 
 export function ContentDelete({ id }) {
   const [deleteItemState, deleteItemAction] = useFormState(deleteContent, '');
-  console.log(deleteItemState);
   return (
     <form action={deleteItemAction}>
       <input type="hidden" value={id} name="id" />
@@ -75,7 +76,6 @@ export function ContentEdit({ id, name, price, quantity, discount, image, descri
   const [editItemState, editItemAction] = useFormState(editContent, '');
   const [isEdit, setIsEdit] = useState(false);
   const router = useRouter();
-  console.log(editItemState);
 
   function handleEditItem(event) {
     event.preventDefault();
