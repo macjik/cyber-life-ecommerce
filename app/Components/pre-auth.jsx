@@ -17,7 +17,7 @@ function SubmitButton({ children }) {
     <Button
       type="submit"
       disabled={pending}
-      className="text-center text-white bg-blue-600 rounded-r-none rounded-l focus:outline-none"
+      className="text-center text-white bg-blue-600 rounded-r-none rounded-l focus:outline-none p-0"
     >
       {pending ? <Spinner /> : children}
     </Button>
@@ -95,7 +95,7 @@ export function PreSigninForm({ children }) {
           />
           {signUpError && <p className="text-red-700">{signUpError}</p>}
           <div className="inline-flex w-full">
-            <Button type="submit" disabled={isPending}>
+            <Button type="submit" className='text-white rounded-lg bg-blue-600' disabled={isPending}>
               {isPending ? <Spinner /> : 'Confirm'}
             </Button>
           </div>
@@ -106,7 +106,7 @@ export function PreSigninForm({ children }) {
           <FormInput id="password" label="Password*" type="password" />
           {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
           <div className="inline-flex w-full">
-            <SubmitButton>Register</SubmitButton>
+            <SubmitButton>Sign up</SubmitButton>
             {children}
           </div>
         </Form>
