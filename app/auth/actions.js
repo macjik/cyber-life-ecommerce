@@ -88,7 +88,7 @@ export async function login(state, formData) {
   try {
     const { value, error } = schema.validate({
       // name: formData.get('name'),
-      phone: formData.get('phone').toString(),
+      phone: formData.get('phone').toString().replace(/\D/g, ''),
       password: formData.get('password'),
     });
 
@@ -141,7 +141,7 @@ export async function preSignup(state, formData) {
   try {
     const { value, error } = schema.validate({
       password: formData.get('password'),
-      phone: formData.get('phone').toString(),
+      phone: formData.get('phone').toString().replace(/\D/g, ''),
     });
 
     if (error) {
@@ -154,7 +154,7 @@ export async function preSignup(state, formData) {
     const existingUser = await User.findOne({ where: { phone } });
     if (existingUser) {
       console.error('User already exists');
-      return { error: 'Invalid phone number or password' };
+      return { error: 'User already exists' };
     }
 
     try {

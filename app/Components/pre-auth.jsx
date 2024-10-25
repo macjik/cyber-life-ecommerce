@@ -26,7 +26,8 @@ function SubmitButton({ children }) {
 
 export function PreLoginForm({ children }) {
   const [loginState, loginAction] = useFormState(login, '');
-  const router = useRouter();
+  const [phone, setPhone] = useState('');
+  // const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
 
@@ -36,10 +37,43 @@ export function PreLoginForm({ children }) {
     }
   }, [loginState.status]);
 
+  const handlePhoneChange = (event) => {
+    let input = event.target.value.replace(/\D/g, '');
+    if (input.length > 2) {
+      input = `(${input.slice(0, 2)}) ${input.slice(2)}`;
+    }
+    if (input.length > 8) {
+      input = `${input.slice(0, 8)}-${input.slice(8)}`;
+    }
+    if (input.length > 11) {
+      input = `${input.slice(0, 11)}-${input.slice(11, 13)}`;
+    }
+    setPhone(input);
+  };
+
   return (
     <Form action={loginAction} title="Log in">
-      <FormInput inputMode="tel" id="phone" label="Phone*" type="number" />
-      <FormInput id="password" label="Password*" type="password" />
+      <div className="inline-flex w-full">
+        <div
+          className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300
+          h-9 font-medium text-center p-1 text-sm mt-6"
+        >
+          +998
+        </div>
+        <div className="flex-grow">
+          <FormInput
+            className="border-l-0 h-9 w-full flex-grow rounded-l-none mt-6 font-medium text-gray-700"
+            inputMode="tel"
+            id="phone"
+            placeholder="(xx) xxx-xx-xx"
+            type="tel"
+            value={phone}
+            onChange={handlePhoneChange}
+            maxLength="14"
+          />
+        </div>
+      </div>
+      <FormInput id="password" label="Password*" type="password" minLength="6" />
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
       <div className="inline-flex w-full">
         <SubmitButton>Log in</SubmitButton>
@@ -53,6 +87,7 @@ export function PreSigninForm({ children }) {
   const [preSignupState, preSignupAction] = useFormState(preSignup, '');
   const [signUpError, setSignUpError] = useState('');
   const [isPending, setIsPending] = useState(false);
+  const [phone, setPhone] = useState('');
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
@@ -62,6 +97,20 @@ export function PreSigninForm({ children }) {
   //     router.push(redirect);
   //   }
   // }, [signupState.status]);
+
+  const handlePhoneChange = (event) => {
+    let input = event.target.value.replace(/\D/g, '');
+    if (input.length > 2) {
+      input = `(${input.slice(0, 2)}) ${input.slice(2)}`;
+    }
+    if (input.length > 8) {
+      input = `${input.slice(0, 8)}-${input.slice(8)}`;
+    }
+    if (input.length > 11) {
+      input = `${input.slice(0, 11)}-${input.slice(11, 13)}`;
+    }
+    setPhone(input);
+  };
 
   async function handleSignUp(event) {
     event.preventDefault();
@@ -85,25 +134,53 @@ export function PreSigninForm({ children }) {
   return (
     <>
       {preSignupState.phone ? (
-        <Form onSubmit={handleSignUp} title="Confirm Sms">
-          <FormInput
-            key={preSignupState.phone}
-            type="number"
-            required
-            id="sms-confirm"
-            label={`Confirm Code Sent as SMS on ${preSignupState.phone}`}
-          />
+        <Form onSubmit={handleSignUp} title="Confirm sms code">
+          <div className="mt-6">
+            <FormInput
+              key={preSignupState.phone}
+              type="tel"
+              required
+              placeholder="xxxx"
+              id="sms-confirm"
+              label={`Confirm code sent as sms on +998 ${preSignupState.phone}`}
+              maxLength="4"
+              minLength="4"
+            />
+          </div>
           {signUpError && <p className="text-red-700">{signUpError}</p>}
           <div className="inline-flex w-full">
-            <Button type="submit" className='text-white rounded-lg bg-blue-600' disabled={isPending}>
+            <Button
+              type="submit"
+              className="text-white rounded-lg bg-blue-600 text-xl"
+              disabled={isPending}
+            >
               {isPending ? <Spinner /> : 'Confirm'}
             </Button>
           </div>
         </Form>
       ) : (
         <Form action={preSignupAction} title="Sign up">
-          <FormInput inputMode="tel" id="phone" label="Phone*" type="tel" />
-          <FormInput id="password" label="Password*" type="password" />
+          <div className="inline-flex w-full">
+            <div
+              className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300
+          h-9 font-medium text-center p-1 text-sm mt-6"
+            >
+              +998
+            </div>
+            <div className="flex-grow">
+              <FormInput
+                className="border-l-0 h-9 w-full flex-grow rounded-l-none mt-6 font-medium text-gray-700"
+                inputMode="tel"
+                id="phone"
+                placeholder="(xx) xxx-xx-xx"
+                type="tel"
+                value={phone}
+                onChange={handlePhoneChange}
+                maxLength="14"
+              />
+            </div>
+          </div>{' '}
+          <FormInput id="password" label="Password*" type="password" minLength="6" />
           {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
           <div className="inline-flex w-full">
             <SubmitButton>Sign up</SubmitButton>
