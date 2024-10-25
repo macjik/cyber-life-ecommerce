@@ -66,18 +66,20 @@ export default async function CartPage({ params, searchParams }) {
         itemStatus={status}
         itemQuantity={quantity}
       >
-        <div className="space-y-3">
-          <PayButton className="inline-flex justify-center text-center gap-4" orderId={order.id}>
-            Pay <FaMoneyBill size={24} />
+        <div className="inline-flex w-full">
+          <PayButton
+            className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
+            orderId={order.id}
+          >
+            Pay <FaMoneyBill size={22} />
           </PayButton>
           <InviteLinkGenerator
             category={existingProduct.itemCategory.name}
             product={product}
             inviterId={currentUser.id}
-            className="inline-flex justify-center gap-3 text-center bg-green-600"
+            className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white py-0"
           >
-            <span className="text-lg">Share with your friends and get a discount</span>
-            <FaPercent size={24} />
+            Link
           </InviteLinkGenerator>
         </div>
       </Product>
@@ -115,21 +117,20 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
         {/* <div>Participants: {currentOrder.totalBuyers}</div>
       <div>Discount: {discountAmount}</div> */}
         {/* <div>{trackInvites ? JSON.stringify(trackInvites) : <p>No Invites</p>}</div> */}
-        <div className="space-y-3">
+        <div className="inline-flex w-full">
           <PayButton
-            className="inline-flex justify-center text-center gap-4"
+            className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
             orderId={currentOrder.id}
           >
-            Pay <FaMoneyBill size={24} />
+            Pay <FaMoneyBill size={22} />
           </PayButton>
           <InviteLinkGenerator
             category={existingProduct.itemCategory.name}
             product={product}
             inviterId={currentUser.id}
-            className="inline-flex justify-center gap-3 text-center bg-green-600"
+            className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white py-0"
           >
-            <span className="text-lg">Share with your friends and get a discount</span>
-            <FaPercent size={24} />
+            Link
           </InviteLinkGenerator>
         </div>
       </Product>
@@ -207,21 +208,20 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
           Pay
         </Button>
       </Link> */}
-        <div className="space-y-3">
+        <div className="inline-flex w-full">
           <PayButton
-            className="inline-flex justify-center text-center gap-4"
+            className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
             orderId={currentOrder.id}
           >
-            Pay <FaMoneyBill size={24} />
+            Pay <FaMoneyBill size={22} />
           </PayButton>
           <InviteLinkGenerator
             category={existingProduct.category}
             product={product}
             inviterId={currentUser.id}
-            className="inline-flex justify-center gap-3 text-center bg-green-600"
+            className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white py-0"
           >
-            <span className="text-lg">Share with your friends and get a discount</span>
-            <FaPercent size={24} />
+            Link
           </InviteLinkGenerator>
         </div>
       </Product>
