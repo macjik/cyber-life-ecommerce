@@ -17,7 +17,7 @@ export default function PayButton({ orderId, className = '', children = 'Pay', .
   }
 
   return (
-    <Button className={`${className}`} onClick={handleClick}>
+    <Button className={`${className} text-white bg-orange-500`} onClick={handleClick}>
       {children}
     </Button>
   );
