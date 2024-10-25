@@ -10,7 +10,7 @@ export default async function Dashboard({ children }) {
     <div className="p-4 w-full bg-white shadow-md">
       <div className="flex justify-center w-full mb-3">
         <Link href="/admin/cms">
-          <Button className='bg-indigo-600 text-white rounded-lg'>Add +</Button>
+          <Button className="bg-indigo-600 text-white rounded-lg">Add +</Button>
         </Link>
       </div>
       <div className="overflow-x-auto">

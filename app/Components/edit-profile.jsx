@@ -54,7 +54,9 @@ export default function EditProfile({ id, name, image }) {
       <div className="inline-flex w-full justify-center">
         <SubmitButton>Confirm</SubmitButton>
         <Link href="/user">
-          <Button className="bg-white border-2 border-blue-600 text-blue-600 rounded-r w-50">Back</Button>
+          <Button className="bg-white border-2 border-blue-600 text-blue-600 rounded-r w-50">
+            Back
+          </Button>
         </Link>
       </div>
       {editProfileState?.error && <p className="text-red-700">{editProfileState.error}</p>}
