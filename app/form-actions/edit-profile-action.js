@@ -42,16 +42,7 @@ export async function editProfile(state, formData) {
     } = value;
     // console.log(id);
 
-    console.log('Types of inputs:', {
-      name: typeof name,
-      address: typeof address,
-      phone: typeof phone,
-      id: typeof id,
-      smsCode: typeof smsCode,
-    });
-
     let user = await User.findOne({ where: { sub: id } });
-    console.log(user);
 
     if (!user) {
       console.error('User not found');

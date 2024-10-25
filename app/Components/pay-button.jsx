@@ -1,4 +1,4 @@
-'use client'; // This tells Next.js this component should be rendered client-side
+'use client';
 
 import axios from 'axios';
 import Button from './button';
@@ -9,10 +9,8 @@ export default function PayButton({ orderId, className = '', children = 'Pay', .
     try {
       let res = await axios.post('/api/pay', { orderId: orderId });
       res = res.data;
-      console.log(res);
-      // You can handle redirection to Telegram bot here
 
-      window.location.href = `https://t.me/mimi_uz_bot?start=${orderId}`;
+      window.location.href = `https://t.me/mimi_uz_bot?start=${res.orderId}`;
     } catch (err) {
       console.error(err);
     }
