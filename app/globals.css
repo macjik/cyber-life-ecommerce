@@ -12,3 +12,7 @@ body {
 header {
   width: max-content;
 }
+
+.p-0 {
+  padding: 0;
+}

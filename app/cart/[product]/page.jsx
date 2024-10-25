@@ -77,7 +77,7 @@ export default async function CartPage({ params, searchParams }) {
             category={existingProduct.itemCategory.name}
             product={product}
             inviterId={currentUser.id}
-            className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white py-0"
+            className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
           >
             Link
           </InviteLinkGenerator>
@@ -128,7 +128,7 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
             category={existingProduct.itemCategory.name}
             product={product}
             inviterId={currentUser.id}
-            className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white py-0"
+            className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
           >
             Link
           </InviteLinkGenerator>
@@ -219,7 +219,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
             category={existingProduct.category}
             product={product}
             inviterId={currentUser.id}
-            className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white py-0"
+            className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
           >
             Link
           </InviteLinkGenerator>
