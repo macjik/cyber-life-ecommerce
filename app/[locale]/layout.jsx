@@ -1,7 +1,12 @@
 import localFont from 'next/font/local';
 import './globals.css';
-import NavBar from './Components/navbar';
+import NavBar from '../Components/navbar';
 import { headers } from 'next/headers';
+import { i18n, Locale } from '../../i18n-config';
+
+export async function generateStaticParams() {
+  return i18n.locales.map((locale) => ({ lang: locale }));
+}
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -19,7 +24,7 @@ export const metadata = {
   description: '',
 };
 
-export default async function RootLayout({ children }) {
+export default async function RootLayout({ children, params }) {
   const headersList = headers();
   const currentPath = headersList.get('x-current-path');
   const userRole = headersList.get('x-user-role') || 'guest';
@@ -27,7 +32,7 @@ export default async function RootLayout({ children }) {
   const isAllowedRoute = !currentPath.startsWith('/auth') && !/^\/[^/]+\/[^/]+$/.test(currentPath);
 
   return (
-    <html lang="en">
+    <html lang={params.lang}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-200`}>
         <NavBar userRole={userRole} isAllowedRoute={isAllowedRoute} />
         <main>{children}</main>

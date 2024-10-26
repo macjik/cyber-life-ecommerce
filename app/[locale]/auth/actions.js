@@ -8,7 +8,7 @@ import { serialize } from 'cookie';
 import db from '@/models/index';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
-import client from '../services/redis';
+import client from '../../services/redis';
 import axios from 'axios';
 import FormData from 'form-data';
 import { MINUTE, DAY } from 'time-constants';

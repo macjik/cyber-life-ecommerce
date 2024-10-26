@@ -1,7 +1,7 @@
 'use server';
 
 import db from '@/models/index';
-import Dashboard from '../Components/content-dashboard';
+import Dashboard from '../../Components/content-dashboard';
 
 const { item: Item, Category } = db;
 

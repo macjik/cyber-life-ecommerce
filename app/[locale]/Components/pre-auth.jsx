@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useFormStatus, useFormState } from 'react-dom';
-import { login, preSignup } from '../auth/actions';
+import { login, preSignup } from '../[locale]/auth/actions';
 import FormInput from './form-input';
 import Form from './form';
 import Button from './button';
