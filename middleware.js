@@ -11,11 +11,6 @@ export async function middleware(req) {
   let cookieHeader = req.headers.get('cookie');
   let cookies = parse(cookieHeader || '');
   let token = cookies.token;
-  let locale = url.searchParams.get('lang');
-
-  if (!locale) {
-    locale = 'en';
-  }
 
   const paths = ['/auth'];
 
