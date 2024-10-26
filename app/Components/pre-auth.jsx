@@ -9,6 +9,7 @@ import Button from './button';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner } from './spinner';
 import axios from '@/node_modules/axios/index';
+import { useTranslations } from 'next-intl';
 
 function SubmitButton({ children }) {
   const { pending } = useFormStatus();
@@ -51,8 +52,9 @@ export function PreLoginForm({ children }) {
     setPhone(input);
   };
 
+  const t = useTranslations('Auth');
   return (
-    <Form action={loginAction} title="Log in">
+    <Form action={loginAction} title={t('login')}>
       <div className="inline-flex w-full">
         <div
           className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300
@@ -73,10 +75,10 @@ export function PreLoginForm({ children }) {
           />
         </div>
       </div>
-      <FormInput id="password" label="Password*" type="password" minLength="6" />
+      <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
       <div className="inline-flex w-full">
-        <SubmitButton>Log in</SubmitButton>
+        <SubmitButton>{t('login')}</SubmitButton>
         {children}
       </div>
     </Form>
@@ -131,10 +133,11 @@ export function PreSigninForm({ children }) {
     }
   }
 
+  const t = useTranslations('Auth');
   return (
     <>
       {preSignupState.phone ? (
-        <Form onSubmit={handleSignUp} title="Confirm sms code">
+        <Form onSubmit={handleSignUp} title={t('sms-confirm')}>
           <div className="mt-6">
             <FormInput
               key={preSignupState.phone}
@@ -142,7 +145,7 @@ export function PreSigninForm({ children }) {
               required
               placeholder="xxxx"
               id="sms-confirm"
-              label={`Confirm code sent as sms on +998 ${preSignupState.phone}`}
+              label={`${t('sms-confirm')} +998 ${preSignupState.phone}`}
               maxLength="4"
               minLength="4"
             />
@@ -154,12 +157,12 @@ export function PreSigninForm({ children }) {
               className="text-white rounded-lg bg-blue-600 text-xl"
               disabled={isPending}
             >
-              {isPending ? <Spinner /> : 'Confirm'}
+              {isPending ? <Spinner /> : t('confirm')}
             </Button>
           </div>
         </Form>
       ) : (
-        <Form action={preSignupAction} title="Sign up">
+        <Form action={preSignupAction} title={t('signup')}>
           <div className="inline-flex w-full">
             <div
               className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300
@@ -180,10 +183,10 @@ export function PreSigninForm({ children }) {
               />
             </div>
           </div>{' '}
-          <FormInput id="password" label="Password*" type="password" minLength="6" />
+          <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
           {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
           <div className="inline-flex w-full">
-            <SubmitButton>Sign up</SubmitButton>
+            <SubmitButton>{t('signup')}</SubmitButton>
             {children}
           </div>
         </Form>

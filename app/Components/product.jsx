@@ -1,6 +1,7 @@
 'use server';
 
 import Image from 'next/image';
+import {getTranslations} from 'next-intl/server';
 
 export default async function Product({
   itemName,
@@ -14,7 +15,9 @@ export default async function Product({
   originalPrice = null,
   maxQuantity = 100,
   children = null,
-}) {
+})
+{
+  const t = await getTranslations('');
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-50 p-4">
       <div className="max-w-lg w-full bg-white shadow-xl rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gray-50 mb-6">
@@ -31,7 +34,7 @@ export default async function Product({
           />
           {itemDiscount && (
             <span className="absolute top-2 right-2 bg-red-600 text-white text-sm font-bold px-2 py-1 rounded-full shadow-lg">
-              {itemDiscount}% OFF
+              {itemDiscount}% {t('discount')}
             </span>
           )}
         </div>
@@ -52,7 +55,7 @@ export default async function Product({
             </div>
           </div>
           <div className="mb-4">
-            <p className="text-gray-500 text-sm mb-2">Category: {itemCategory || 'Category'}</p>
+            {/* <p className="text-gray-500 text-sm mb-2">{t('category')}: {itemCategory || 'Category'}</p> */}
             <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
               <div
                 className="bg-blue-500 h-2.5 rounded-full"
@@ -60,7 +63,7 @@ export default async function Product({
               ></div>
             </div>
             <p className="text-gray-500 text-sm">
-              Available Quantity: {itemQuantity}/{maxQuantity}
+              {t('available')}: {itemQuantity}/{maxQuantity}
             </p>
           </div>
           <div className="mb-4">
@@ -69,7 +72,7 @@ export default async function Product({
                 itemStatus === 'available' ? 'bg-green-500' : 'bg-red-500'
               }`}
             >
-              {itemStatus || 'Status'}
+              {itemStatus = t('available') || 'Status'}
             </span>
           </div>
           {children}

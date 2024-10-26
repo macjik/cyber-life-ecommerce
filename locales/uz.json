@@ -1,0 +1,51 @@
+{
+  "user": "Foydalanuvchi",
+  "cart": "Savat",
+  "home": "Bosh sahifa",
+  "add-cart": "Savatga qo'shish",
+  "discount": "Chegirma",
+  "category": "Kategoriya",
+  "available": "Mavjud",
+  "pay": "To'lash",
+  "link": "Havola",
+  "invite": "Taklif qilish",
+  "buy": "Sotib olish",
+  "sms": "Sizning www.mimi.cyberlife.com saytida ro'yxatdan o'tish uchun tasdiqlash kodingiz: {codeToken}. Ushbu kodni boshqa shaxslarga bermang. Kod 10 daqiqa davomida amal qiladi.",
+  "error": {
+    "user": "Foydalanuvchi topilmadi!",
+    "product": "Mahsulot topilmadi!",
+    "link": "Havolaning muddati tugagan!"
+  },
+  "Auth": {
+    "login": "Kirish",
+    "password": "Parol",
+    "register": "Ro'yxatdan o'tish",
+    "signup": "A'zo bo'lish",
+    "already-registered": "Allaqachon ro'yxatdan o'tganmisiz?",
+    "confirm-sms": "SMS kodni tasdiqlang",
+    "confirm": "Tashidqlash"
+  },
+  "homePage": {
+    "title": "Birga Xarid Qiling, Ko'proq Tejang",
+    "slogan": "Do'stlaringiz va jamoangiz bilan xarid qilganingizda tengsiz chegirmalardan bahramand bo'ling.",
+    "featured-deals": "Maxsus Takliflar",
+    "instruction-header": "Qanday Ishlaydi?",
+    "instruction-1": "Kerakli mahsulotni tanlang.",
+    "instruction-2": "Do'stlaringizni taklif qiling yoki mavjud guruhga qo'shiling.",
+    "instruction-3": "Guruh buyurtmani yakunlaganida katta tejang!",
+    "no-featured-deals": "Hozirda maxsus takliflar mavjud emas.",
+    "join": "Guruhga Qo'shiling va Tejang"
+  },
+  "profile": {
+    "header": "Profilingizni tahrirlang",
+    "name?": "Ismingiz nima?",
+    "phone": "Telefon",
+    "edit": "Profilni tahrirlash",
+    "orders": "Mening buyurtmalarim",
+    "partnership": "Hamkorlik",
+    "name": "Ism",
+    "image": "profil rasmi",
+    "back": "Orqaga qaytish",
+    "confirm": "Tasdiqlash"
+  }
+}

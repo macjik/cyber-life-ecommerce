@@ -5,7 +5,6 @@ import { NextResponse } from 'next/server';
 export async function middleware(req) {
   const response = NextResponse.next();
 
-  // Set the current path in the headers
   response.headers.set('x-current-path', req.nextUrl.pathname);
 
   let cookieHeader = req.headers.get('cookie');
@@ -13,11 +12,23 @@ export async function middleware(req) {
   let token = cookies.token;
 
   const paths = ['/auth'];
-
   const dynamicCategoryProductPattern = /^\/[^\/]+\/[^\/]+$/;
   const cartPathPattern = /^\/cart\/[^\/]+$/;
 
-  // Skip certain routes
+  const getLocale = (language) => {
+    if (language === 'ru') return 'ru';
+    if (language === 'uz') return 'uz';
+    if (language === 'en') return 'en';
+    return 'ru';
+  };
+
+  if (!cookies.locale) {
+    const acceptLanguage = req.headers.get('accept-language') || '';
+    const primaryLanguage = acceptLanguage.replace(/^([a-z]{2}).*$/i, '$1');
+    const preferredLocale = getLocale(primaryLanguage);
+    response.cookies.set('locale', preferredLocale, { path: '/' });
+  }
+
   if (
     dynamicCategoryProductPattern.test(req.nextUrl.pathname) &&
     !cartPathPattern.test(req.nextUrl.pathname)
@@ -25,7 +36,6 @@ export async function middleware(req) {
     return response;
   }
 
-  // If no token is found, redirect to the auth page
   if (!token) {
     if (!paths.includes(req.nextUrl.pathname)) {
       const redirectUrl = new URL('/auth', req.url);
@@ -40,15 +50,12 @@ export async function middleware(req) {
     return response;
   }
 
-  // Verify the token and extract the payload
   try {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const { payload } = await jwtVerify(token, secret);
 
-    // Set user role in headers
     response.headers.set('x-user-role', payload.role || 'guest');
 
-    // Redirect if the user is not an admin on the admin path
     if (req.nextUrl.pathname.startsWith('/admin') && payload.role !== 'admin') {
       return NextResponse.redirect(new URL('/', req.url));
     }
@@ -61,7 +68,6 @@ export async function middleware(req) {
     const url = new URL(req.url);
     let userId = url.searchParams.get('id');
 
-    // Ensure userId in URL matches the payload id
     if (!userId || userId !== payload.id) {
       url.searchParams.delete('id');
       url.searchParams.set('id', payload.id);
@@ -73,7 +79,6 @@ export async function middleware(req) {
     console.error('Token verification failed:', error);
     const redirectUrl = new URL('/auth', req.url);
 
-    // Preserve invite parameter if present
     const inviteParam = req.nextUrl.searchParams.get('invite');
     if (inviteParam) {
       redirectUrl.searchParams.set('invite', inviteParam);

@@ -1,0 +1,51 @@
+{
+  "user": "User",
+  "cart": "Cart",
+  "home": "Home",
+  "add-cart": "Add to Cart",
+  "discount": "OFF",
+  "category": "Category",
+  "available": "Available",
+  "pay": "Pay",
+  "link": "Link",
+  "invite": "Invite",
+  "buy": "Buy",
+  "sms": "Your verification code for registration on www.mimi.cyberlife.com is: {codeToken}. Do not share this code with others. The code is valid for 10 minutes.",
+  "error": {
+    "user": "User not found!",
+    "product": "Product not found!",
+    "link": "The link has expired!"
+  },
+  "Auth": {
+    "login": "Log in",
+    "password": "Password",
+    "register": "Create an Account",
+    "signup": "Sign up",
+    "already-registered": "Already Registered?",
+    "confirm-sms": "Confirm sms code",
+    "confirm": "Confirm"
+  },
+  "homePage": {
+    "title": "Buy Together, Save More",
+    "slogan": "Enjoy unbeatable discounts when you purchase with your friends and community.",
+    "featured-deals": "Featured Deals",
+    "instruction-header": "How It Works?",
+    "instruction-1": "Select your desired product.",
+    "instruction-2": "Invite friends or join an existing group.",
+    "instruction-3": "Save big when the group completes the order!",
+    "no-featured-deals": "No featured deals available at the moment.",
+    "join": "Join Group & Save"
+  },
+  "profile": {
+    "header": "Edit Your Profile",
+    "name?": "What is your name?",
+    "phone": "Phone",
+    "edit": "Edit Profile",
+    "orders": "My orders",
+    "partnership": "Partnership",
+    "name": "Name",
+    "image": "profile-image",
+    "back": "Go Back",
+    "confirm": "Confirm"
+  }
+}

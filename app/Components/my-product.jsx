@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import {getTranslations} from 'next-intl/server';
 
 export default async function MyProduct({
   itemName,
@@ -21,6 +22,7 @@ export default async function MyProduct({
 
   const statusBarWidth = `${(itemQuantity / 100) * 100}%`;
 
+  const t = await getTranslations();
   return (
     <div className="flex flex-col md:flex-row items-center justify-between py-4 px-4 sm:px-6 bg-white rounded-lg shadow-md w-full mb-6 hover:shadow-lg transition-shadow">
       <div className="relative w-28 h-28 sm:w-36 sm:h-36 mb-4 md:mb-0 md:mr-6">
@@ -34,7 +36,7 @@ export default async function MyProduct({
         />
         {itemDiscount && (
           <span className="absolute top-1 left-1 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-            {itemDiscount}% OFF
+            {itemDiscount}% {t('discount')}
           </span>
         )}
       </div>
