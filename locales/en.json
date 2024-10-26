@@ -10,6 +10,7 @@
   "link": "Link",
   "invite": "Invite",
   "buy": "Buy",
+  "sms": "Your verification code for registration on www.mimi.cyberlife.com is: {codeToken}. Do not share this code with others. The code is valid for 10 minutes.",
   "error": {
     "user": "User not found!",
     "product": "Product not found!",

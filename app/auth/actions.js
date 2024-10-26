@@ -12,6 +12,7 @@ import client from '../services/redis';
 import axios from 'axios';
 import FormData from 'form-data';
 import { MINUTE, DAY } from 'time-constants';
+import { getTranslations } from 'next-intl/server';
 
 const User = db.User;
 
@@ -157,6 +158,8 @@ export async function preSignup(state, formData) {
       return { error: 'User already exists' };
     }
 
+    const t = await getTranslations();
+
     try {
       let form = new FormData();
       form.append('email', process.env.ESKIZ_EMAIL);
@@ -174,15 +177,14 @@ export async function preSignup(state, formData) {
 
       const token = eskizLoginResponse.data.data.token;
 
+      const message = t('sms', { codeToken });
+
       form = new FormData();
       form.append('mobile_phone', `998${phone}`);
-      form.append(
-        'message',
-        `Ваш код подтверждения для регистрации на сайте www.mimi.cyberlife.com: [${codeToken}]. Не сообщайте этот код другим лицам. Код действителен в течение 10 минут.`,
-      );
+      form.append('message', message);
       form.append('from', '4546');
 
-      const smsResponse = axios({
+      const smsResponse = await axios({
         method: 'post',
         url: `${process.env.ESKIZ_API}/message/sms/send`,
         headers: {
