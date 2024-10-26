@@ -19,7 +19,7 @@ export async function middleware(req) {
     if (language === 'ru') return 'ru';
     if (language === 'uz') return 'uz';
     if (language === 'en') return 'en';
-    return 'en';
+    return 'ru';
   };
 
   if (!cookies.locale) {

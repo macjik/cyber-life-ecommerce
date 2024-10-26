@@ -1,1 +1,11 @@
-{}
+{
+  "Auth": {
+    "login": "Kirish",
+    "password": "Parol",
+    "register": "Ro'yxatdan o'tish",
+    "signup": "A'zo bo'lish",
+    "already-registered": "Allaqachon ro'yxatdan o'tganmisiz?",
+    "confirm-sms": "SMS kodni tasdiqlang",
+    "confirm": "Tashidqlash"
+  }
+}

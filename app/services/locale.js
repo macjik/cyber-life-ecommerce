@@ -7,7 +7,7 @@ export default async function useLocale() {
   let locale = cookieStore.get('locale')?.value;
 
   if (!locale) {
-    locale = 'en';
+    locale = 'ru';
   }
 
   return locale;
