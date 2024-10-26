@@ -2,6 +2,17 @@
   "user": "User",
   "cart": "Cart",
   "home": "Home",
+  "add-cart": "Add to Cart",
+  "discount": "OFF",
+  "category": "Category",
+  "available": "Available",
+  "pay": "Pay",
+  "link": "Link",
+  "error": {
+    "user": "User not found!",
+    "product": "Product not found!",
+    "link": "The link has expired!"
+  },
   "Auth": {
     "login": "Log in",
     "password": "Password",

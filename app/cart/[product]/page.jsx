@@ -7,21 +7,23 @@ import PayButton from '@/app/Components/pay-button';
 import { FaMoneyBill, FaPercent } from 'react-icons/fa';
 import { Suspense } from 'react';
 import Loading from '@/app/Components/loading';
+import { getTranslations } from 'next-intl/server';
 
 const { item: Item, User, Invite, Order, Category } = db;
 
 export default async function CartPage({ params, searchParams }) {
   const { product } = params;
   const { id, invite } = searchParams;
+  const t = await getTranslations();
 
   const currentUser = await User.findOne({ where: { sub: id } });
-  if (!currentUser) return <p>User not found!</p>;
+  if (!currentUser) return <p>{t('user')}</p>;
 
   const existingProduct = await Item.findOne({
     where: { name: product },
     include: [{ model: Category, as: 'itemCategory', attributes: ['name'] }],
   });
-  if (!existingProduct) return <p>Product not found!</p>;
+  if (!existingProduct) return <p>{t('product')}</p>;
 
   const currentOrder = await Order.findOne({
     where: { userId: currentUser.id, itemId: existingProduct.id },
@@ -71,7 +73,7 @@ export default async function CartPage({ params, searchParams }) {
             className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
             orderId={order.id}
           >
-            Pay <FaMoneyBill size={22} />
+            {t('pay')} <FaMoneyBill size={22} />
           </PayButton>
           <InviteLinkGenerator
             category={existingProduct.itemCategory.name}
@@ -79,7 +81,7 @@ export default async function CartPage({ params, searchParams }) {
             inviterId={currentUser.id}
             className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
           >
-            Link
+            {t('link')}
           </InviteLinkGenerator>
         </div>
       </Product>
@@ -102,6 +104,7 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
   //ui update after price change
   const { name, description, image, category, price, status, quantity } = existingProduct;
 
+  const t = await getTranslations();
   return (
     <Suspense fallback={<Loading />}>
       <Product
@@ -122,7 +125,8 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
             className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
             orderId={currentOrder.id}
           >
-            Pay <FaMoneyBill size={22} />
+            {t('pay')}
+            <FaMoneyBill size={22} />
           </PayButton>
           <InviteLinkGenerator
             category={existingProduct.itemCategory.name}
@@ -130,7 +134,7 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
             inviterId={currentUser.id}
             className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
           >
-            Link
+            {t('link')}
           </InviteLinkGenerator>
         </div>
       </Product>
@@ -147,13 +151,15 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     ],
   });
 
+  const t = await getTranslations();
+  
   if (
     !existingInvite ||
     (existingInvite.status === 'expired' && existingInvite.Invitee?.id !== currentUser.id)
   ) {
     return (
       <main className="flex w-full h-full justify-center">
-        <h1>Expired or Invalid Invite Link</h1>
+        <h1>{t('error.link')}</h1>
       </main>
     );
   }
@@ -186,7 +192,6 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
   const trackInvites = await trackInviteChain(existingInvite.inviter);
 
   const { name, description, image, category, price, status, quantity } = existingProduct;
-  //ui update after price change
   return (
     <Suspense fallback={<Loading />}>
       <Product
@@ -203,17 +208,18 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
       <div>Discount: {discountAmount}</div>
       <div>Total Price: {totalPrice}</div>
       <div>Invite Chain: {JSON.stringify(trackInvites)}</div> */}
-        {/* <Link href={`/pay?orderId=${currentOrder.id}`}>
+        {/* <{t('link')} href={`/pay?orderId=${currentOrder.id}`}>
         <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
           Pay
         </Button>
-      </Link> */}
+      </{t('link')}> */}
         <div className="inline-flex w-full">
           <PayButton
             className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
             orderId={currentOrder.id}
           >
-            Pay <FaMoneyBill size={22} />
+            {t('pay')}
+            <FaMoneyBill size={22} />
           </PayButton>
           <InviteLinkGenerator
             category={existingProduct.category}
@@ -221,7 +227,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
             inviterId={currentUser.id}
             className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
           >
-            Link
+            {t('link')}
           </InviteLinkGenerator>
         </div>
       </Product>

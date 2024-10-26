@@ -2,6 +2,17 @@
   "user": "Foydalanuvchi",
   "cart": "Savat",
   "home": "Bosh sahifa",
+  "add-cart": "Savatga qo'shish",
+  "discount": "Chegirma",
+  "category": "Kategoriya",
+  "available": "Mavjud",
+  "pay": "To'lash",
+  "link": "Havola",
+  "error": {
+    "user": "Foydalanuvchi topilmadi!",
+    "product": "Mahsulot topilmadi!",
+    "link": "Havolaning muddati tugagan!"
+  },
   "Auth": {
     "login": "Kirish",
     "password": "Parol",
