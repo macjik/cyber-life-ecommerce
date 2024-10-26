@@ -1,4 +1,7 @@
 {
+  "user": "Foydalanuvchi",
+  "cart": "Savat",
+  "home": "Bosh sahifa",
   "Auth": {
     "login": "Kirish",
     "password": "Parol",
@@ -7,5 +10,16 @@
     "already-registered": "Allaqachon ro'yxatdan o'tganmisiz?",
     "confirm-sms": "SMS kodni tasdiqlang",
     "confirm": "Tashidqlash"
+  },
+  "homePage": {
+    "title": "Birga Xarid Qiling, Ko'proq Tejang",
+    "slogan": "Do'stlaringiz va jamoangiz bilan xarid qilganingizda tengsiz chegirmalardan bahramand bo'ling.",
+    "featured-deals": "Maxsus Takliflar",
+    "instruction-header": "Qanday Ishlaydi?",
+    "instruction-1": "Kerakli mahsulotni tanlang.",
+    "instruction-2": "Do'stlaringizni taklif qiling yoki mavjud guruhga qo'shiling.",
+    "instruction-3": "Guruh buyurtmani yakunlaganida katta tejang!",
+    "no-featured-deals": "Hozirda maxsus takliflar mavjud emas.",
+    "join": "Guruhga Qo'shiling va Tejang"
   }
 }

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import Loading from './Components/loading';
+import { getTranslations } from 'next-intl/server';
 
 const { item: Item, Category } = db;
 
@@ -28,18 +29,17 @@ export default async function Home() {
     console.error(err);
   }
 
+  const t = await getTranslations('homePage');
   return (
     <Suspense fallback={<Loading />}>
       <main className="w-full flex flex-col items-center pt-4 pb-20 space-y-12">
         <section className="w-full max-w-4xl h-1/3 flex flex-col justify-center items-center text-center space-y-4">
-          <h1 className="text-5xl font-extrabold text-gray-900">Mimi: Buy Together, Save More</h1>
-          <p className="text-lg text-gray-700">
-            Enjoy unbeatable discounts when you purchase with your friends and community.
-          </p>
+          <h1 className="text-5xl font-extrabold text-gray-900">Mimi: {t('title')}</h1>
+          <p className="text-lg text-gray-700">{t('slogan')}</p>
         </section>
 
         <section className="w-full max-w-4xl flex flex-col justify-center items-center space-y-8">
-          <h2 className="text-3xl font-semibold text-gray-800">Featured Deals</h2>
+          <h2 className="text-3xl font-semibold text-gray-800">{t('featured-deals')}</h2>
           <div className="flex justify-center flex-wrap gap-6">
             {items && items.length > 0 ? (
               items.map((item, index) => (
@@ -65,22 +65,22 @@ export default async function Home() {
                       )}
                     </p>
                     <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full transition-colors duration-300 ease-in-out">
-                      Join Group & Save
+                      {t('join')}
                     </button>
                   </div>
                 </Link>
               ))
             ) : (
-              <p className="text-lg text-gray-700">No featured deals available at the moment.</p>
+              <p className="text-lg text-gray-700">{t('no-featured-deals')}</p>
             )}
           </div>
         </section>
         <section className="w-full max-w-4xl h-max-h flex flex-col justify-center items-center text-center space-y-4">
-          <h2 className="text-3xl font-semibold text-gray-800">How It Works</h2>
+          <h2 className="text-3xl font-semibold text-gray-800">{t('instruction-header')}</h2>
           <ol className="no-markers text-left ms-24 list-decimal space-y-2 text-lg text-gray-700">
-            <li>Select your desired product.</li>
-            <li>Invite friends or join an existing group.</li>
-            <li>Save big when the group completes the order!</li>
+            <li>{t('instruction-1')}</li>
+            <li>{t('instruction-2')}</li>
+            <li>{t('instruction-3')}</li>
           </ol>
         </section>
       </main>

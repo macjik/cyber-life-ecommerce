@@ -1,4 +1,7 @@
 {
+  "user": "User",
+  "cart": "Cart",
+  "home": "Home",
   "Auth": {
     "login": "Log in",
     "password": "Password",
@@ -7,5 +10,16 @@
     "already-registered": "Already Registered?",
     "confirm-sms": "Confirm sms code",
     "confirm": "Confirm"
+  },
+  "homePage": {
+    "title": "Buy Together, Save More",
+    "slogan": "Enjoy unbeatable discounts when you purchase with your friends and community.",
+    "featured-deals": "Featured Deals",
+    "instruction-header": "How It Works?",
+    "instruction-1": "Select your desired product.",
+    "instruction-2": "Invite friends or join an existing group.",
+    "instruction-3": "Save big when the group completes the order!",
+    "no-featured-deals": "No featured deals available at the moment.",
+    "join": "Join Group & Save"
   }
 }
