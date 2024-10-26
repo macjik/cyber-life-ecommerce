@@ -9,6 +9,7 @@ import { editProfile } from '../form-actions/edit-profile-action';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Spinner } from './spinner';
+import { useTranslations } from 'next-intl';
 
 function SubmitButton({ children }) {
   const { pending } = useFormStatus();
@@ -46,16 +47,17 @@ export default function EditProfile({ id, name, image }) {
     }
   });
 
+  const t = useTranslations('profile');
   return (
-    <Form title="Edit your Profile" action={editProfileAction}>
+    <Form title={t('edit')} action={editProfileAction}>
       <input name="user-id" value={id} type="hidden" />
-      <FormInput label="Name" id="name" type="text" defaultValue={name} required={false} />
-      <FormInput label="Profile Image" id="image" type="file" required={false} />
+      <FormInput label={t('name')} id="name" type="text" defaultValue={name} required={false} />
+      <FormInput label={t('image')} id="image" type="file" required={false} />
       <div className="inline-flex w-full justify-center">
-        <SubmitButton>Confirm</SubmitButton>
+        <SubmitButton>{t('confirm')}</SubmitButton>
         <Link href="/user">
           <Button className="bg-white border-2 border-blue-600 text-blue-600 rounded-r w-50">
-            Back
+            {t('back')}
           </Button>
         </Link>
       </div>

@@ -34,5 +34,17 @@
     "instruction-3": "Save big when the group completes the order!",
     "no-featured-deals": "No featured deals available at the moment.",
     "join": "Join Group & Save"
+  },
+  "profile": {
+    "header": "Edit Your Profile",
+    "name?": "What is your name?",
+    "phone": "Phone",
+    "edit": "Edit Profile",
+    "orders": "My orders",
+    "partnership": "Partnership",
+    "name": "Name",
+    "image": "profile-image",
+    "back": "Go Back",
+    "confirm": "Confirm"
   }
 }

@@ -9,7 +9,7 @@
   "pay": "To'lash",
   "link": "Havola",
   "invite": "Taklif qilish",
-"buy": "Sotib olish",
+  "buy": "Sotib olish",
   "error": {
     "user": "Foydalanuvchi topilmadi!",
     "product": "Mahsulot topilmadi!",
@@ -34,5 +34,17 @@
     "instruction-3": "Guruh buyurtmani yakunlaganida katta tejang!",
     "no-featured-deals": "Hozirda maxsus takliflar mavjud emas.",
     "join": "Guruhga Qo'shiling va Tejang"
+  },
+  "profile": {
+    "header": "Profilingizni tahrirlang",
+    "name?": "Ismingiz nima?",
+    "phone": "Telefon",
+    "edit": "Profilni tahrirlash",
+    "orders": "Mening buyurtmalarim",
+    "partnership": "Hamkorlik",
+    "name": "Ism",
+    "image": "profil rasmi",
+    "back": "Orqaga qaytish",
+    "confirm": "Tasdiqlash"
   }
 }

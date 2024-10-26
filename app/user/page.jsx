@@ -4,6 +4,7 @@ import db from '@/models/index';
 import UserProfile from '../Components/user-profile';
 import SubNav from '../Components/sub-nav';
 import { FaShoppingCart, FaCommentDots, FaHandshake, FaLink, FaLanguage } from 'react-icons/fa';
+import { getTranslations } from 'next-intl/server';
 
 const User = db.User;
 
@@ -13,17 +14,18 @@ export default async function UserPage({ searchParams }) {
 
   const { name, phone, address, sub, id, image } = user;
 
+  const t = await getTranslations('profile');
   return (
     <main className="w-full h-full flex-row justify-center items-center overflow-hidden">
       <UserProfile name={name} userId={id} phone={phone} address={address} image={image} />
       <SubNav faIcon={<FaShoppingCart size={24} />} link="/my-cart">
-        My orders
+        {t('orders')}
       </SubNav>
       {/* <SubNav faIcon={<FaCommentDots size={24} />} link="/feedback">
         My feedback
       </SubNav> */}
       <SubNav faIcon={<FaHandshake size={24} />} link="https://t.me/uidas4">
-        Partnership
+        {t('partnership')}
       </SubNav>
       {/* <SubNav faIcon={<FaLink size={24} />} link="/invite">
         Invite Link
