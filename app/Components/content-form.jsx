@@ -25,9 +25,21 @@ function SubmitButton({ children, className = '' }) {
 export function ContentForm() {
   const [contentState, addContentAction] = useFormState(addContent, '');
   const router = useRouter();
+  const [attributes, setAttributes] = useState([{ name: '', value: '' }]);
 
   if (contentState?.status === 200) {
     router.push('/admin');
+  }
+
+  function handleAddAttribute(event) {
+    event.preventDefault();
+    setAttributes((prevAttributes) => [...prevAttributes, { name: '', value: '' }]);
+  }
+
+  function handleAttributeChange(index, field, value) {
+    setAttributes((prevAttributes) =>
+      prevAttributes.map((attr, i) => (i === index ? { ...attr, [field]: value } : attr)),
+    );
   }
 
   return (
@@ -46,10 +58,34 @@ export function ContentForm() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <FormInput label="Category" id="category" type="text" className="text-sm" />
-          {/* <Select label="Category" id="category" placeholder="Select category" className="text-sm">
-            {categories}
-          </Select> */}
           <FormInput label="Image" id="image" type="file" className="text-sm" />
+        </div>
+
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold mb-4">Attributes</h3>
+          <FormInput
+            label={`Attribute Name`}
+            type="text"
+            id="attribute-name"
+            onChange={(e) => handleAttributeChange(index, 'name', e.target.value)}
+            className="text-sm"
+            required={false}
+          />
+          {attributes.map((attribute, index) => (
+            <div key={index} className="grid grid-cols-2 gap-4 mt-2">
+              <FormInput
+                label={`Attribute Value ${index + 1}`}
+                type="text"
+                value={attribute.value}
+                onChange={(e) => handleAttributeChange(index, 'value', e.target.value)}
+                className="text-sm"
+                required={false}
+              />
+            </div>
+          ))}
+          <Button className="bg-gray-300 p-3 mt-4 rounded-md" onClick={handleAddAttribute}>
+            Add Attribute +
+          </Button>
         </div>
 
         <FormInput label="Description" id="description" type="text" className="mt-4 text-sm" />
