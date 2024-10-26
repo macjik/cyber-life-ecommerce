@@ -2,6 +2,7 @@ import { sequelize } from '@/models/index';
 import InviteLinkGenerator from '../Components/generate-invite';
 import PayButton from '../Components/pay-button';
 import MyProduct from '../Components/my-product';
+import { getTranslations } from 'next-intl/server';
 
 export default async function MyCart({ searchParams }) {
   const { id } = searchParams;
@@ -37,6 +38,7 @@ export default async function MyCart({ searchParams }) {
       },
     );
 
+    const t = await getTranslations();
     return (
       <div className="w-full p-4">
         {cart.map(
@@ -70,7 +72,7 @@ export default async function MyCart({ searchParams }) {
                   className="bg-orange-600 text-white rounded-sm shadow-md hover:bg-blue-700 text-base font-bold w-20"
                   orderId={orderId}
                 >
-                  Buy {itemName}
+                  {t('buy')} {itemName}
                 </PayButton>
                 <InviteLinkGenerator
                   category={categoryName}
@@ -78,7 +80,7 @@ export default async function MyCart({ searchParams }) {
                   inviterId={userId}
                   className="bg-blue-500 text-white rounded-sm shadow-md hover:bg-green-600 text-base font-bold w-20"
                 >
-                  Invite
+                  {t('invite')}
                 </InviteLinkGenerator>
               </MyProduct>
             ),
@@ -87,6 +89,5 @@ export default async function MyCart({ searchParams }) {
     );
   } catch (error) {
     console.error('Error fetching user data:', error);
-    return <p>Error fetching user details</p>;
   }
 }

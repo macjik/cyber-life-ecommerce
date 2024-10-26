@@ -8,6 +8,8 @@
   "available": "Available",
   "pay": "Pay",
   "link": "Link",
+  "invite": "Invite",
+  "buy": "Buy",
   "error": {
     "user": "User not found!",
     "product": "Product not found!",

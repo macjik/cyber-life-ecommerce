@@ -8,6 +8,8 @@
   "available": "Mavjud",
   "pay": "To'lash",
   "link": "Havola",
+  "invite": "Taklif qilish",
+"buy": "Sotib olish",
   "error": {
     "user": "Foydalanuvchi topilmadi!",
     "product": "Mahsulot topilmadi!",
