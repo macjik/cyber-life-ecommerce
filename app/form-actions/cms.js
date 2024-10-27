@@ -111,11 +111,14 @@ export async function deleteContent(state, formData) {
   const contentId = formData.get('id');
 
   try {
-    let item = await Item.destroy({ where: { sku: contentId } });
+    let item = await Item.findOne({ where: { sku: contentId } });
     if (!item) {
       console.error('Item not found');
       return { error: 'Item not found' };
     }
+
+    await Item_Attribute.destroy({ where: { itemId: item.id } });
+    await Item.destroy({ where: { sku: contentId } });
 
     revalidatePath('/admin');
     return { status: 200, contentId };
@@ -138,6 +141,8 @@ export async function editContent(state, formData) {
     discount: Joi.number().max(100).required(),
     quantity: Joi.number().required(),
     id: Joi.string().required(),
+    attributeName: Joi.string().allow(null, ''),
+    attributeValue: Joi.array().items(Joi.string().allow(null, '')),
   });
 
   const { value, error } = schema.validate({
@@ -149,6 +154,8 @@ export async function editContent(state, formData) {
     discount: formData.get('discount'),
     quantity: formData.get('quantity'),
     id: formData.get('id'),
+    attributeName: formData.get('attribute-name'),
+    attributeValue: formData.getAll('attribute-value'),
   });
 
   if (error) {
@@ -157,7 +164,17 @@ export async function editContent(state, formData) {
   }
 
   try {
-    const { id, name, description, price, category, discount, quantity } = value;
+    const {
+      id,
+      name,
+      description,
+      price,
+      category,
+      discount,
+      quantity,
+      attributeValue,
+      attributeName,
+    } = value;
 
     const existingItem = await Item.findOne({ where: { sku: id } });
     if (!existingItem) {
@@ -198,6 +215,21 @@ export async function editContent(state, formData) {
     if (!updatedItem) {
       console.error('Error updating item');
       return { error: 'Error updating item' };
+    }
+
+    if (attributeValue) {
+      for (let i = 0; i < attributeValue.length; i++) {
+        await Item_Attribute.findOrCreate({
+          where: {
+            name: attributeName,
+            value: attributeValue[i],
+            itemId: updatedItem.id,
+          },
+          defaults: {
+            type: 'select',
+          },
+        });
+      }
     }
 
     revalidatePath('/admin');

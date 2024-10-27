@@ -3,7 +3,7 @@
 import db from '@/models/index';
 import Dashboard from '../Components/content-dashboard';
 
-const { item: Item, Category } = db;
+const { item: Item, Category, Item_Attribute } = db;
 
 export default async function AdminPanel() {
   const items = await Item.findAll({
@@ -19,7 +19,10 @@ export default async function AdminPanel() {
       'createdAt',
       'price',
     ],
-    include: [{ model: Category, as: 'itemCategory', attributes: ['name'] }],
+    include: [
+      { model: Category, as: 'itemCategory', attributes: ['name'] },
+      { model: Item_Attribute, as: 'itemAttributes', attributes: ['name', 'value', 'type'] },
+    ],
   });
 
   const formattedItems = items.map((item) => {
@@ -31,8 +34,6 @@ export default async function AdminPanel() {
       image: base64Image,
     };
   });
-
-  console.log(formattedItems);
 
   return (
     <main className="w-full h-full">

@@ -109,10 +109,26 @@ export function ContentDelete({ id }) {
   );
 }
 
-export function ContentEdit({ id, name, price, quantity, discount, image, description, category }) {
+export function ContentEdit({
+  id,
+  name,
+  price,
+  quantity,
+  discount,
+  image,
+  description,
+  category,
+  attributeName,
+  attributes,
+}) {
   const [editItemState, editItemAction] = useFormState(editContent, '');
   const [isEdit, setIsEdit] = useState(false);
   const router = useRouter();
+  const [attributeList, setAttributeList] = useState(
+    attributes
+      ? attributes.map((value) => ({ name: attributeName, value }))
+      : [{ name: '', value: '' }],
+  );
 
   function handleEditItem(event) {
     event.preventDefault();
@@ -123,10 +139,20 @@ export function ContentEdit({ id, name, price, quantity, discount, image, descri
     if (editItemState.status === 200) {
       setIsEdit(false);
     }
-  }, [editItemState?.status, isEdit]);
+  }, [editItemState?.status]);
+
+  function handleAddAttribute(event) {
+    event.preventDefault();
+    setAttributeList((prevAttributes) => [...prevAttributes, { name: '', value: '' }]);
+  }
+
+  function handleAttributeChange(index, field, value) {
+    setAttributeList((prevAttributes) =>
+      prevAttributes.map((attr, i) => (i === index ? { ...attr, [field]: value } : attr)),
+    );
+  }
 
   return (
-    // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
       {isEdit ? (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -168,18 +194,34 @@ export function ContentEdit({ id, name, price, quantity, discount, image, descri
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              {/* <Select
-                label="Category"
-                id="category"
-                placeholder="Select category"
-                className="text-sm"
-              >
-                {categories}
-              </Select> */}
               <FormInput defaultValue={category} label="Category" id="category" type="text" />
-
-              <FormInput label="Image" id="image" type="file" className="text-sm" />
+              <FormInput
+                defaultValue={attributeName[0]}
+                label="Product Attribute Name"
+                id="attribute-name"
+                type="text"
+                required={false}
+                onChange={(e) => handleAttributeChange(0, 'name', e.target.value)}
+              />
+              {attributeList.map((attr, index) => (
+                <div key={index} className="flex mt-2 w-full">
+                  <FormInput
+                    label={`Attribute Value ${index + 1}`}
+                    type="text"
+                    id={`attribute-value-${index}`}
+                    value={attr.value}
+                    onChange={(e) => handleAttributeChange(index, 'value', e.target.value)}
+                    className="text-sm"
+                    required={false}
+                  />
+                </div>
+              ))}
+              <Button className="bg-gray-300 p-3 mt-4 rounded-md" onClick={handleAddAttribute}>
+                Add Attribute +
+              </Button>
             </div>
+
+            <FormInput label="Image" id="image" type="file" className="text-sm" />
             <FormInput
               defaultValue={description}
               label="Description"

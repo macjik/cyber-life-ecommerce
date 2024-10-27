@@ -57,6 +57,8 @@ export default async function Dashboard({ children }) {
                       discount={item.discount}
                       image={item.image}
                       description={item.description}
+                      attributeName={item.itemAttributes.map((attr) => attr.name)}
+                      attributes={item.itemAttributes.map((attr) => attr.value)}
                     />
                   </div>
                 </td>

@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Item_Attribute.init(
     {
-      value: DataTypes.STRING,
+      name: DataTypes.STRING,
       type: DataTypes.ENUM('select', 'checkbox'),
       value: DataTypes.STRING,
     },
