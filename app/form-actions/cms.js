@@ -217,7 +217,16 @@ export async function editContent(state, formData) {
       return { error: 'Error updating item' };
     }
 
-    if (attributeValue) {
+    const hasEmptyAttributes =
+      !attributeName || attributeValue.some((val) => !val || val.trim() === '');
+
+    if (hasEmptyAttributes) {
+      await Item_Attribute.destroy({
+        where: {
+          itemId: existingItem.id,
+        },
+      });
+    } else {
       for (let i = 0; i < attributeValue.length; i++) {
         await Item_Attribute.findOrCreate({
           where: {
