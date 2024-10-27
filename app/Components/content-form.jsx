@@ -67,7 +67,7 @@ export function ContentForm() {
             label={`Attribute Name`}
             type="text"
             id="attribute-name"
-            onChange={(e) => handleAttributeChange(index, 'name', e.target.value)}
+            onChange={(e) => handleAttributeChange('name', e.target.value)}
             className="text-sm"
             required={false}
           />
@@ -76,6 +76,7 @@ export function ContentForm() {
               <FormInput
                 label={`Attribute Value ${index + 1}`}
                 type="text"
+                id="attribute-value"
                 value={attribute.value}
                 onChange={(e) => handleAttributeChange(index, 'value', e.target.value)}
                 className="text-sm"

@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { put } from '@vercel/blob';
 import { revalidatePath } from '@/node_modules/next/cache';
 
-const { item: Item, Category } = db;
+const { item: Item, Category, Item_Attribute } = db;
 
 export async function addContent(state, formData) {
   try {
@@ -20,6 +20,8 @@ export async function addContent(state, formData) {
       category: Joi.string().required(),
       discount: Joi.number().max(100).required(),
       quantity: Joi.number().required(),
+      attributeName: Joi.string().allow(null, ''),
+      attributeValue: Joi.array().items(Joi.string().allow(null, '')),
     });
 
     const { value, error } = schema.validate({
@@ -30,13 +32,24 @@ export async function addContent(state, formData) {
       category: formData.get('category'),
       discount: formData.get('discount'),
       quantity: formData.get('quantity'),
+      attributeName: formData.get('attribute-name'),
+      attributeValue: formData.getAll('attribute-value'),
     });
 
     if (error) {
       return { error: `${error.message}` };
     }
 
-    const { name, description, price, category, discount, quantity } = value;
+    const {
+      name,
+      description,
+      price,
+      category,
+      discount,
+      quantity,
+      attributeValue,
+      attributeName,
+    } = value;
 
     let existingItem = await Item.findOne({ where: { name } });
     if (existingItem) {
@@ -62,7 +75,7 @@ export async function addContent(state, formData) {
         defaults: { name: category },
       });
 
-      await Item.create({
+      let item = await Item.create({
         name,
         description,
         quantity,
@@ -72,6 +85,17 @@ export async function addContent(state, formData) {
         sku: uid,
         discount,
       });
+
+      if (attributeValue) {
+        for (let i = 0; i < attributeValue.length; i++) {
+          await Item_Attribute.create({
+            name: attributeName,
+            value: attributeValue[i],
+            type: 'select',
+            itemId: item.id,
+          });
+        }
+      }
 
       revalidatePath('/admin');
       return { status: 200, value };
