@@ -73,7 +73,9 @@ export default async function CartPage({ params, searchParams }) {
         itemAttributes={
           existingProduct.itemAttributes && existingProduct.itemAttributes.map((attr) => attr.value)
         }
-        itemAttributeName={existingProduct.itemAttributes && existingProduct.itemAttributes.map((attr) => attr.name)}
+        itemAttributeName={
+          existingProduct.itemAttributes && existingProduct.itemAttributes.map((attr) => attr.name)
+        }
         orderId={order.id}
       >
         <div className="inline-flex w-full">
@@ -127,8 +129,10 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
         itemAttributes={
           existingProduct.itemAttributes && existingProduct.itemAttributes.map((attr) => attr.value)
         }
-        itemAttributeName={existingProduct.itemAttributes && existingProduct.
-        itemAttributes.map((attr) => attr.name)[0]}
+        itemAttributeName={
+          existingProduct.itemAttributes &&
+          existingProduct.itemAttributes.map((attr) => attr.name)[0]
+        }
         orderId={currentOrder.id}
       >
         {/* <div>Participants: {currentOrder.totalBuyers}</div>
@@ -220,9 +224,11 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
         itemAttributes={
           existingProduct.itemAttributes && existingProduct.itemAttributes.map((attr) => attr.value)
         }
-        itemAttributeName={existingProduct.itemAttributes && existingProduct.
-          itemAttributes.map((attr) => attr.name)[0]}
-          orderId={currentOrder.id}
+        itemAttributeName={
+          existingProduct.itemAttributes &&
+          existingProduct.itemAttributes.map((attr) => attr.name)[0]
+        }
+        orderId={currentOrder.id}
       >
         {/* <div>Participants: {JSON.stringify(currentOrder)}</div>
       <div>Discount: {discountAmount}</div>

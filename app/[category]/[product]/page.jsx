@@ -5,7 +5,7 @@ import db from '@/models/index';
 import Link from '@/node_modules/next/link';
 import { Suspense } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
-import {getTranslations} from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 
 const { item: Item } = db;
 

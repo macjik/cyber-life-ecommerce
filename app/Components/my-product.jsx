@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import {getTranslations} from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 
 export default async function MyProduct({
   itemName,
