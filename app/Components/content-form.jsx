@@ -208,7 +208,7 @@ export function ContentEdit({
                   <FormInput
                     label={`Attribute Value ${index + 1}`}
                     type="text"
-                    id={`attribute-value-${index}`}
+                    id={`attribute-value`}
                     value={attr.value}
                     onChange={(e) => handleAttributeChange(index, 'value', e.target.value)}
                     className="text-sm"
