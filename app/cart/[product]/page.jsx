@@ -9,7 +9,7 @@ import { Suspense } from 'react';
 import Loading from '@/app/Components/loading';
 import { getTranslations } from 'next-intl/server';
 
-const { item: Item, User, Invite, Order, Category } = db;
+const { item: Item, User, Invite, Order, Category, Item_Attribute } = db;
 
 export default async function CartPage({ params, searchParams }) {
   const { product } = params;
@@ -21,7 +21,10 @@ export default async function CartPage({ params, searchParams }) {
 
   const existingProduct = await Item.findOne({
     where: { name: product },
-    include: [{ model: Category, as: 'itemCategory', attributes: ['name'] }],
+    include: [
+      { model: Category, as: 'itemCategory', attributes: ['name'] },
+      { model: Item_Attribute, as: 'itemAttributes', attributes: ['name', 'value'] },
+    ],
   });
   if (!existingProduct) return <p>{t('product')}</p>;
 
@@ -67,6 +70,11 @@ export default async function CartPage({ params, searchParams }) {
         itemPrice={price}
         itemStatus={status}
         itemQuantity={quantity}
+        itemAttributes={
+          existingProduct.itemAttributes && existingProduct.itemAttributes.map((attr) => attr.value)
+        }
+        itemAttributeName={existingProduct.itemAttributes && existingProduct.itemAttributes.map((attr) => attr.name)}
+        orderId={order.id}
       >
         <div className="inline-flex w-full">
           <PayButton
@@ -116,6 +124,12 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
         originalPrice={price}
         itemStatus={status}
         itemQuantity={quantity}
+        itemAttributes={
+          existingProduct.itemAttributes && existingProduct.itemAttributes.map((attr) => attr.value)
+        }
+        itemAttributeName={existingProduct.itemAttributes && existingProduct.
+        itemAttributes.map((attr) => attr.name)[0]}
+        orderId={currentOrder.id}
       >
         {/* <div>Participants: {currentOrder.totalBuyers}</div>
       <div>Discount: {discountAmount}</div> */}
@@ -152,7 +166,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
   });
 
   const t = await getTranslations();
-  
+
   if (
     !existingInvite ||
     (existingInvite.status === 'expired' && existingInvite.Invitee?.id !== currentUser.id)
@@ -203,6 +217,12 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
         originalPrice={price}
         itemStatus={status}
         itemQuantity={quantity}
+        itemAttributes={
+          existingProduct.itemAttributes && existingProduct.itemAttributes.map((attr) => attr.value)
+        }
+        itemAttributeName={existingProduct.itemAttributes && existingProduct.
+          itemAttributes.map((attr) => attr.name)[0]}
+          orderId={currentOrder.id}
       >
         {/* <div>Participants: {JSON.stringify(currentOrder)}</div>
       <div>Discount: {discountAmount}</div>

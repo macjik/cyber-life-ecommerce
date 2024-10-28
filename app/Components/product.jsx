@@ -1,7 +1,8 @@
 'use server';
 
 import Image from 'next/image';
-import {getTranslations} from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
+import ProductOptions from './product-options';
 
 export default async function Product({
   itemName,
@@ -12,11 +13,13 @@ export default async function Product({
   itemStatus,
   itemQuantity,
   itemDiscount,
+  orderId,
+  itemAttributes = null,
+  itemAttributeName = null,
   originalPrice = null,
   maxQuantity = 100,
   children = null,
-})
-{
+}) {
   const t = await getTranslations('');
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-50 p-4">
@@ -72,8 +75,21 @@ export default async function Product({
                 itemStatus === 'available' ? 'bg-green-500' : 'bg-red-500'
               }`}
             >
-              {itemStatus = t('available') || 'Status'}
+              {(itemStatus = t('available') || 'Status')}
             </span>
+            <div className="my-5">
+              {itemAttributeName && (
+                <p className="inline-block px-4 py-2 bg-teal-500 text-white rounded-full font-bold">
+                  {itemAttributeName}
+                </p>
+              )}
+              {itemAttributes &&
+                itemAttributes.map((attr, index) => (
+                  <ProductOptions key={index} orderId={orderId}>
+                    {attr}
+                  </ProductOptions>
+                ))}
+            </div>
           </div>
           {children}
         </div>
