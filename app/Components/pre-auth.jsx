@@ -137,7 +137,7 @@ export function PreSigninForm({ children }) {
   return (
     <>
       {preSignupState.phone ? (
-        <Form onSubmit={handleSignUp} title={t('sms-confirm')}>
+        <Form onSubmit={handleSignUp} title={t('confirm-sms')}>
           <div className="mt-6">
             <FormInput
               key={preSignupState.phone}
@@ -145,7 +145,7 @@ export function PreSigninForm({ children }) {
               required
               placeholder="xxxx"
               id="sms-confirm"
-              label={`${t('sms-confirm')} +998 ${preSignupState.phone}`}
+              label={`${t('confirm-sms')} +998 ${preSignupState.phone}`}
               maxLength="4"
               minLength="4"
             />
