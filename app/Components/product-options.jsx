@@ -17,8 +17,6 @@ export default function ProductOptions({ orderId, children }) {
     optionAction(formData);
   }
 
-  console.log(optionState);
-
   return (
     <button
       onClick={handleProductOption}

@@ -216,8 +216,6 @@ export async function editContent(state, formData) {
       console.error('Error updating item');
       return { error: 'Error updating item' };
     }
-    console.log(attributeName);
-    console.log(attributeValue);
 
     const hasEmptyAttributes =
       !attributeName || attributeValue.some((val) => !val || val.trim() === '');
