@@ -11,32 +11,32 @@ import { Spinner } from './spinner';
 import axios from '@/node_modules/axios/index';
 import { useTranslations } from 'next-intl';
 
-function SubmitButton({ children }) {
+function SubmitButton({ children, isPending }) {
   const { pending } = useFormStatus();
-  const status = useFormStatus();
   return (
     <Button
       type="submit"
-      disabled={pending}
+      disabled={pending || isPending}
       className="text-center text-white bg-blue-600 rounded-r-none rounded-l focus:outline-none p-0"
     >
-      {pending ? <Spinner /> : children}
+      {pending || isPending ? <Spinner /> : children}
     </Button>
   );
 }
 
 export function PreLoginForm({ children }) {
   const [loginState, loginAction] = useFormState(login, '');
+  const [isPending, setIsPending] = useState(false);
   const [phone, setPhone] = useState('');
-  // const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
 
   useEffect(() => {
-    if (loginState.status === 200) {
+    if (loginState.status === 200 && !isPending) {
+      setIsPending(true);
       window.location.href = redirect;
     }
-  }, [loginState.status]);
+  }, [loginState.status, isPending, redirect]);
 
   const handlePhoneChange = (event) => {
     let input = event.target.value.replace(/\D/g, '');
@@ -56,10 +56,7 @@ export function PreLoginForm({ children }) {
   return (
     <Form action={loginAction} title={t('login')}>
       <div className="inline-flex w-full">
-        <div
-          className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300
-          h-9 font-medium text-center p-1 text-sm mt-6"
-        >
+        <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm mt-6">
           +998
         </div>
         <div className="flex-grow">
@@ -78,7 +75,7 @@ export function PreLoginForm({ children }) {
       <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
       <div className="inline-flex w-full">
-        <SubmitButton>{t('login')}</SubmitButton>
+        <SubmitButton isPending={isPending}>{t('login')}</SubmitButton>
         {children}
       </div>
     </Form>
