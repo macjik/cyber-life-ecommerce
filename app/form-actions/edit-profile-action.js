@@ -3,6 +3,7 @@
 import db from '@/models/index';
 import Joi from 'joi';
 import { put } from '@vercel/blob';
+import { revalidatePath } from '@/node_modules/next/cache';
 
 const User = db.User;
 
@@ -59,6 +60,7 @@ export async function editProfile(state, formData) {
 
     await User.update(updateData, { where: { id } });
 
+    revalidatePath('/user');
     return { status: 200, imageUrl };
   } catch (err) {
     console.error(err);
