@@ -34,7 +34,7 @@ export default async function Dashboard({ children }) {
                 <td className="p-2 text-center text-sm">{item.name}</td>
                 <td className="p-2 text-center text-sm">{item.itemCategory.name}</td>
                 <td className="p-2 text-center text-sm w-auto whitespace-nowrap">
-                  ${`${item.price}`}
+                  {`${item.price}`}UZS
                 </td>
                 <td className="p-2 text-center text-sm">
                   {item.discount ? `${item.discount}%` : 'N/A'}

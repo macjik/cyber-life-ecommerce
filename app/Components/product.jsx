@@ -50,7 +50,7 @@ export default async function Product({
           <div className="flex items-center justify-between mb-4">
             <div>
               <span className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
-                ${itemPrice}
+                {itemPrice}UZS
               </span>
               {originalPrice && (
                 <span className="text-gray-500 line-through text-lg ml-2">{originalPrice}</span>

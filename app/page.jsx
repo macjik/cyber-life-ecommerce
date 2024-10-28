@@ -59,7 +59,7 @@ export default async function Home() {
                     <h3 className="font-bold text-2xl text-gray-900 mb-2">{item.name}</h3>
                     <p className="text-gray-700 text-base mb-2 truncate">{item.description}</p>
                     <p className="text-xl font-semibold text-gray-800 mb-4">
-                      ${item.price}
+                      {item.price}UZS
                       {item.discount > 0 && (
                         <span className="text-green-600">(-{item.discount}%)</span>
                       )}
