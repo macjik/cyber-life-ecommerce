@@ -99,20 +99,19 @@ export async function login(state, formData) {
     }
 
     const { password, phone } = value;
+    const tError = await getTranslations('Auth');
 
     let existingUser = await User.findOne({
       where: { phone },
       attributes: ['hash', 'role', 'sub'],
     });
     if (!existingUser) {
-      console.error('User not found');
-      return { error: `User not found` };
+      return { error: tError('no-user') };
     }
 
     const isPasswordMatch = await bcrypt.compare(password, existingUser.hash);
     if (!isPasswordMatch) {
-      console.error('Incorrect password');
-      return { error: 'Invalid phone number or password' };
+      return { error: tError('wrong-password') };
     }
 
     const { role, sub } = existingUser;
@@ -145,6 +144,8 @@ export async function preSignup(state, formData) {
       phone: formData.get('phone').toString().replace(/\D/g, ''),
     });
 
+    const tError = await getTranslations('Auth');
+
     if (error) {
       console.error('Validation error:', error);
       return { error: `${error}` };
@@ -154,8 +155,7 @@ export async function preSignup(state, formData) {
 
     const existingUser = await User.findOne({ where: { phone } });
     if (existingUser) {
-      console.error('User already exists');
-      return { error: 'User already exists' };
+      return { error: tError('wrong-user') };
     }
 
     const t = await getTranslations();

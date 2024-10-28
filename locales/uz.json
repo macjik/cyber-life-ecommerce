@@ -23,7 +23,12 @@
     "signup": "A'zo bo'lish",
     "already-registered": "Allaqachon ro'yxatdan o'tganmisiz?",
     "confirm-sms": "SMS kodni tasdiqlang",
-    "confirm": "Tashidqlash"
+    "confirm": "Tashidqlash",
+    "wrong-password": "Noto‘g‘ri parol yoki telefon",
+    "wrong-user": "Foydalanuvchi allaqachon mavjud",
+    "no-user": "Foydalanuvchi topilmadi",
+    "existing-phone": "Kechirasiz, bu telefon raqam bilan foydalanuvchi allaqachon mavjud",
+    "wrong-code": "Noto‘g‘ri kod"
   },
   "homePage": {
     "title": "Birga Xarid Qiling, Ko'proq Tejang",

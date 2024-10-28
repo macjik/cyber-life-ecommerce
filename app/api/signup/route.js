@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import client from '@/app/services/redis';
+import { getTranslations } from 'next-intl/server';
 
 const { User } = db;
 
@@ -12,6 +13,7 @@ export async function POST(req) {
   try {
     const { userData, sms } = await req.json();
     const { phone, password } = userData;
+    const t = await getTranslations('Auth');
 
     if (!phone || !password || !sms) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
@@ -19,17 +21,13 @@ export async function POST(req) {
 
     let existingUser = await User.findOne({ where: { phone } });
     if (existingUser) {
-      return new Response(
-        JSON.stringify({ error: `Sorry, a user with phone: ${phone} already exists` }),
-        { status: 409 },
-      );
+      return new Response(JSON.stringify({ error: t('existing-phone') }), { status: 409 });
     }
 
     let smsCode = await client.get(phone.toString());
 
     if (smsCode !== sms.toString()) {
-      console.log('Invalid Code:', `${phone}`);
-      return new Response(JSON.stringify({ error: 'Invalid Code' }));
+      return new Response(JSON.stringify({ error: t('wrong-code') }));
     }
     await client.del(phone.toString());
 
@@ -57,10 +55,8 @@ export async function POST(req) {
       ),
     ]);
 
-    console.log('User created successfully:', phone);
     return new Response(JSON.stringify({ status: 200, phone: phone }), { status: 200 });
   } catch (err) {
-    console.error('Error occurred:', err);
     return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
   }
 }

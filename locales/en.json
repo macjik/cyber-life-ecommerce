@@ -23,7 +23,12 @@
     "signup": "Sign up",
     "already-registered": "Already Registered?",
     "confirm-sms": "Confirm sms code",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "wrong-password": "Incorrect password or phone",
+    "wrong-user": "User already exists",
+    "no-user": "User not found",
+    "existing-phone": "Sorry, a user with this with phone already exists",
+    "wrong-code": "Invalid Code"
   },
   "homePage": {
     "title": "Buy Together, Save More",
