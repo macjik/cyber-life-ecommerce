@@ -39,9 +39,7 @@ export default async function Home() {
     <Suspense fallback={<Loading />}>
       <main className="w-full flex flex-col items-center pt-4 pb-20 space-y-6 min-h-screen">
         <section className="w-full max-w-4xl h-1/3 flex flex-col justify-center items-center text-center space-y-4">
-          <h1 className="text-5xl font-extrabold text-gray-900">
-            Mimi: {t('title')}
-          </h1>
+          <h1 className="text-5xl font-extrabold text-gray-900">Mimi: {t('title')}</h1>
           <p className="text-lg text-gray-700">{t('slogan')}</p>
           {/* <div className="mb-4 md:mb-0 w-full h-full flex justify-center items-center mt-10 md:mt-10"> */}
           {/* <img
@@ -59,7 +57,10 @@ export default async function Home() {
           <div className="flex justify-center flex-wrap gap-6">
             {items && items.length > 0 ? (
               items.map((item, index) => (
-                <Link href={`/${item.itemCategory.name.replace(/\s+/g, '-')}/${item.name.replace(/\s+/g, '-')}`} key={index}>
+                <Link
+                  href={`/${item.itemCategory.name.replace(/\s+/g, '-')}/${item.name.replace(/\s+/g, '-')}`}
+                  key={index}
+                >
                   <div className="border w-64 h-4xl p-4 rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
                     <div className="w-full h-64 overflow-hidden">
                       <Image

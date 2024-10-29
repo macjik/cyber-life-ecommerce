@@ -10,7 +10,9 @@ export default async function ProfilePage({ searchParams }) {
 
   let user = await User.findOne({ where: { sub: id } });
 
-  return <div className='min-h-screen'>
-  <EditProfile id={user.id} name={user?.name && user.name} />;
-  </div> 
+  return (
+    <div className="min-h-screen">
+      <EditProfile id={user.id} name={user?.name && user.name} />;
+    </div>
+  );
 }
