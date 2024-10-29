@@ -3,6 +3,7 @@ import InviteLinkGenerator from '../Components/generate-invite';
 import PayButton from '../Components/pay-button';
 import MyProduct from '../Components/my-product';
 import { getTranslations } from 'next-intl/server';
+import Link from '@/node_modules/next/link';
 
 export default async function MyCart({ searchParams }) {
   const { id } = searchParams;
@@ -55,7 +56,7 @@ export default async function MyCart({ searchParams }) {
             orderId,
             userId,
           }) =>
-            itemName && (
+            itemName ? (
               <MyProduct
                 key={itemName}
                 originalPrice={itemPrice}
@@ -83,6 +84,11 @@ export default async function MyCart({ searchParams }) {
                   {t('invite')}
                 </InviteLinkGenerator>
               </MyProduct>
+            ) : (
+              <>
+                <p key={1}>You have not added any items to the cart yet.</p>
+                <Link href="/">Click here to add</Link>
+              </>
             ),
         )}
       </div>
