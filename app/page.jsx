@@ -29,6 +29,11 @@ export default async function Home() {
     console.error(err);
   }
 
+  items = items.map((item) => ({
+    ...item.toJSON(),
+    name: item.name.replace(/-/g, ' '),
+  }));
+
   const t = await getTranslations('homePage');
   return (
     <Suspense fallback={<Loading />}>

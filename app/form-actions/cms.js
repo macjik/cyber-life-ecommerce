@@ -25,11 +25,11 @@ export async function addContent(state, formData) {
     });
 
     const { value, error } = schema.validate({
-      name: formData.get('title'),
+      name: formData.get('title').replace(/\s+/g, '-'),
       description: formData.get('description'),
       image: imageMimeType,
       price: formData.get('price'),
-      category: formData.get('category'),
+      category: formData.get('category').replace(/\s+/g, '-'),
       discount: formData.get('discount'),
       quantity: formData.get('quantity'),
       attributeName: formData.get('attribute-name'),
@@ -146,11 +146,11 @@ export async function editContent(state, formData) {
   });
 
   const { value, error } = schema.validate({
-    name: formData.get('title'),
+    name: formData.get('title').replace(/\s+/g, '-'),
     description: formData.get('description'),
     image: imageMimeType,
     price: formData.get('price'),
-    category: formData.get('category'),
+    category: formData.get('category').replace(/\s+/g, '-'),
     discount: formData.get('discount'),
     quantity: formData.get('quantity'),
     id: formData.get('id'),
