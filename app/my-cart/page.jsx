@@ -40,7 +40,7 @@ export default async function MyCart({ searchParams }) {
 
     const t = await getTranslations();
     return (
-      <div className="w-full p-4">
+      <div className="w-full p-4 min-h-screen">
         {cart.map(
           ({
             itemName,

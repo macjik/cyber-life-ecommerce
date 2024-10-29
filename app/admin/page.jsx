@@ -36,7 +36,7 @@ export default async function AdminPanel() {
   });
 
   return (
-    <main className="w-full h-full">
+    <main className="w-full min-h-screen">
       <Dashboard>{formattedItems}</Dashboard>
     </main>
   );
