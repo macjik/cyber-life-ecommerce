@@ -10,9 +10,11 @@ import { getTranslations } from 'next-intl/server';
 const { item: Item } = db;
 
 export default async function ItemPage({ params, searchParams }) {
-  const { product } = params;
-  const { invite } = searchParams;
+  let { product } = params;
+  let { invite } = searchParams;
   const t = await getTranslations();
+
+  product = decodeURIComponent(product);
 
   let existingItem = await Item.findOne({ where: { name: product } });
 

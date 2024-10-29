@@ -12,9 +12,11 @@ import { getTranslations } from 'next-intl/server';
 const { item: Item, User, Invite, Order, Category, Item_Attribute } = db;
 
 export default async function CartPage({ params, searchParams }) {
-  const { product } = params;
-  const { id, invite } = searchParams;
+  let { product } = params;
+  let { id, invite } = searchParams;
   const t = await getTranslations();
+
+  product = decodeURIComponent(product);
 
   const currentUser = await User.findOne({ where: { sub: id } });
   if (!currentUser)
