@@ -10,7 +10,7 @@ export default async function Footer() {
     <footer className="w-full bg-gray-900 text-white font-bold p-4 pb-20">
       <div className="mx-auto flex flex-col md:flex-row p-4 gap-10">
         <div className="mb-4 md:mb-0 w-full h-full flex justify-center items-center mt-10 md:mt-10">
-          <img
+          <Image
             src="/transparent-mimi-logo.png"
             alt="mimi logo"
             quality={100}
