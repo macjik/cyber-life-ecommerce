@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FaUser, FaShoppingCart, FaHome } from 'react-icons/fa';
 import { AiFillControl } from 'react-icons/ai';
 import { getTranslations } from 'next-intl/server';
+import Image from '@/node_modules/next/image';
 
 export default async function NavBar({ userRole, isAllowedRoute, children, icon }) {
   if (!isAllowedRoute) return null;
@@ -22,7 +23,15 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon 
         href="/"
         className="flex flex-col items-center text-gray-600 hover:text-blue-500 w-full"
       >
-        <FaHome size={24} />
+        <Image
+          src="/transparent-mimi-logo.png"
+          alt="mimi logo"
+          quality={50}
+          width={50}
+          height={100}
+          className="object-contain"
+        />
+        {/* <FaHome size={24} /> */}
         <span className="text-xs">{t('home')}</span>
       </Link>
       <Link
