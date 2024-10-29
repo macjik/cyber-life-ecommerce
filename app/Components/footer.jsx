@@ -7,18 +7,18 @@ import {getTranslations} from 'next-intl/server';
 export default async function Footer() {
   const t = await getTranslations('footer');
   return (
-    <footer className="w-full bg-slate-800 text-white font-bold p-4">
+    <footer className="w-full bg-gray-900 text-white font-bold p-4 pb-20">
       <div className="mx-auto flex flex-col md:flex-row p-4 gap-10">
-        <section className="mb-4 md:mb-0 w-max h-max text-sm relative">
-          <Image
+        <div className="mb-4 md:mb-0 w-full h-full flex justify-center items-center mt-10 md:mt-10">
+          <img
             src="/transparent-mimi-logo.png"
             alt="mimi logo"
             quality={100}
             width={100}
             height={100}
-            className="object-contain h-max"
+            className="object-contain w-full h-full"
           />
-        </section>
+        </div>
         <section className="mb-4 md:mb-0 max-w-max h-max text-sm">
           <h2 className="text-xl font-semibold mb-2 max-w-max">{t('about-title')}</h2>
           <p className="font-medium text-lg">
