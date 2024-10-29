@@ -59,7 +59,7 @@ export default async function Home() {
           <div className="flex justify-center flex-wrap gap-6">
             {items && items.length > 0 ? (
               items.map((item, index) => (
-                <Link href={`/${item.itemCategory.name}/${item.name}`} key={index}>
+                <Link href={`/${item.itemCategory.name.replace(/\s+/g, '-')}/${item.name.replace(/\s+/g, '-')}`} key={index}>
                   <div className="border w-64 h-4xl p-4 rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
                     <div className="w-full h-64 overflow-hidden">
                       <Image

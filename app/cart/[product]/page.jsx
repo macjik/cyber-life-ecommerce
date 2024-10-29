@@ -102,7 +102,7 @@ export default async function CartPage({ params, searchParams }) {
             </PayButton>
             <InviteLinkGenerator
               category={existingProduct.itemCategory.name}
-              product={product}
+              product={product.replace(/\s+/g, '-')}
               inviterId={currentUser.id}
               className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
             >
@@ -166,7 +166,7 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
             </PayButton>
             <InviteLinkGenerator
               category={existingProduct.itemCategory.name}
-              product={product}
+              product={product.replace(/\s+/g, '-')}
               inviterId={currentUser.id}
               className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
             >
@@ -272,7 +272,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
             </PayButton>
             <InviteLinkGenerator
               category={existingProduct.category}
-              product={product}
+              product={product.replace(/\s+/g, '-')}
               inviterId={currentUser.id}
               className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
             >

@@ -77,7 +77,7 @@ export default async function MyCart({ searchParams }) {
                 </PayButton>
                 <InviteLinkGenerator
                   category={categoryName}
-                  product={itemName}
+                  product={itemName.replace(/\s+/g, '-')}
                   inviterId={userId}
                   className="bg-blue-500 text-white rounded-sm shadow-md hover:bg-green-600 text-base font-bold w-20"
                 >
