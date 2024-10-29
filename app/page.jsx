@@ -37,24 +37,6 @@ export default async function Home() {
           <h1 className="text-5xl font-extrabold text-gray-900">Mimi: {t('title')}</h1>
           <p className="text-lg text-gray-700">{t('slogan')}</p>
         </section>
-        <div className="w-full inline-flex justify-center relative m-0">
-          <Image
-            quality={100}
-            width={60}
-            height={60}
-            className="object-cover"
-            src={'/uzcard_transparent.png'}
-            alt={'uzcard logo'}
-          />
-          <Image
-            quality={100}
-            width={60}
-            height={60}
-            className="object-contain rounded-lg"
-            src={'/humo_card_transparent.png'}
-            alt={'uzcard logo'}
-          />
-        </div>
         <section className="w-full max-w-4xl flex flex-col justify-center items-center space-y-8">
           <h2 className="text-3xl font-semibold text-gray-800">{t('featured-deals')}</h2>
           <div className="flex justify-center flex-wrap gap-6">
