@@ -52,5 +52,20 @@
     "image": "profil rasmi",
     "back": "Orqaga qaytish",
     "confirm": "Tasdiqlash"
+  },
+  "footer": {
+    "about-title": "Biz haqimizda",
+    "about-text": "Mimi-da biz kollektiv xarid qilish kuchiga ishonamiz! Platformamiz orqali xaridlarni ko‘proq tejamli qilishning innovatsion usulini taqdim etamiz. Xaridorlarni bir joyga to‘plash orqali, keng assortimentdagi mahsulotlarga sezilarli chegirmalarni har bir kishi uchun yaratamiz.",
+    "pages-title": "Sahifalar",
+    "home": "Bosh sahifa",
+    "profile": "Profil",
+    "cart": "Savatcha",
+    "policy": "Maxfiylik siyosati",
+    "payment-methods-title": "Qabul qilingan to'lov usullari",
+    "payment-methods-text": "Biz Uzcard va Humo kartalari orqali to'lovlarni qabul qilamiz. Yetkazib berish manzillari to'lovdan oldin yig'iladi, chunki mahsulotlar faqat yetkazib berish orqali yuboriladi.",
+    "contacts": "Kontaktlar",
+    "email": "Elektron pochta",
+    "tel": "Telefon",
+    "telegram-bot": "Telegram bot"
   }
 }

@@ -52,5 +52,20 @@
     "image": "profile-image",
     "back": "Go Back",
     "confirm": "Confirm"
+  },
+  "footer": {
+    "about-title": "About",
+    "about-text": "At Mimi, we believe in the power of collective shopping! Our platform offers an innovative way to make purchases more affordable through group buying. By bringing shoppers together, we create opportunities for everyone to enjoy significant discounts on a wide range of exciting products.",
+    "pages-title": "Pages",
+    "home": "Home",
+    "profile": "Profile",
+    "cart": "Cart",
+    "policy": "Privacy Policy",
+    "payment-methods-title": "Accepted Payment Methods",
+    "payment-methods-text": "We accept payments via Uzcard and Humo cards through our payment form Delivery addresses are collected before payment, as items are sent exclusively through delivery.",
+    "contacts": "Contacts",
+    "email": "Email",
+    "tel": "Tel",
+    "telegram-bot": "Telegram bot"
   }
 }
