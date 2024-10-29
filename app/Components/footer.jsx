@@ -43,9 +43,14 @@ export default async function Footer() {
               </Link>
             </li>
             <li className="w-max">
-              <Link href="#" className="hover:text-gray-400 font-medium underline text-lg">
-                {t('policy')}
-              </Link>
+              <a
+                href="/offerta.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gray-400 font-medium underline text-lg"
+              >
+                {t('offerta')}
+              </a>
             </li>
           </ul>
         </section>
