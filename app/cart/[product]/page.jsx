@@ -116,21 +116,25 @@ export default async function CartPage({ params, searchParams }) {
 }
 
 async function renderOrderView(currentOrder, existingProduct, currentUser, product, invite) {
-  const discountAmount = calculateDiscount(
-    existingProduct.discount,
-    existingProduct.price,
-    currentOrder.totalBuyers,
-  );
-  const totalPrice = existingProduct.price - discountAmount;
-  let trackInvites = null;
+  let discountAmount = 0;
+  let totalPrice = existingProduct.price;
 
+  if (currentOrder.totalBuyers > 1) {
+    discountAmount = calculateDiscount(
+      existingProduct.discount,
+      existingProduct.price,
+      currentOrder.totalBuyers,
+    );
+    totalPrice -= discountAmount;
+  }
+
+  let trackInvites = null;
   if (invite) {
     trackInvites = await handleInviteProcessing(invite, currentUser);
   }
-  //ui update after price change
   const { name, description, image, category, price, status, quantity } = existingProduct;
-
   const t = await getTranslations();
+
   return (
     <div className="min-h-screen">
       <Suspense fallback={<Loading />}>
@@ -221,16 +225,19 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     inviterOrder,
   );
 
-  const discountAmount = calculateDiscount(
-    existingProduct.discount,
-    existingProduct.price,
-    inviterOrder.totalBuyers,
-  );
-  const totalPrice = existingProduct.price - discountAmount;
+  let discountAmount = 0;
+  let totalPrice = existingProduct.price;
+  if (inviterOrder.totalBuyers > 1) {
+    discountAmount = calculateDiscount(
+      existingProduct.discount,
+      existingProduct.price,
+      inviterOrder.totalBuyers,
+    );
+    totalPrice -= discountAmount;
+  }
 
   const trackInvites = await trackInviteChain(existingInvite.inviter);
 
-  const { name, description, image, category, price, status, quantity } = existingProduct;
   return (
     <div className="min-h-screen">
       <Suspense fallback={<Loading />}>
@@ -298,25 +305,30 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
       userId: inviterId,
       inviteId,
       itemId: existingProduct.id,
-      discount: Math.floor(discountAmount),
-      totalAmount: Math.floor(totalPrice),
+      discount: 0,
+      totalAmount: existingProduct.price,
       totalBuyers: 1,
       status: 'pending',
     });
+  } else if (inviteId) {
+    inviterOrder.totalBuyers += 1;
   }
-
-  inviterOrder.totalBuyers += 1;
   await inviterOrder.save();
   return inviterOrder;
 }
 
 async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
-  const discountAmount = calculateDiscount(
-    existingProduct.discount,
-    existingProduct.price,
-    inviterOrder.totalBuyers,
-  );
-  const totalPrice = existingProduct.price - discountAmount;
+  let discountAmount = 0;
+  let totalPrice = existingProduct.price;
+
+  if (inviterOrder.totalBuyers > 1) {
+    discountAmount = calculateDiscount(
+      existingProduct.discount,
+      existingProduct.price,
+      inviterOrder.totalBuyers,
+    );
+    totalPrice = existingProduct.price - discountAmount;
+  }
 
   return await Order.create({
     userId,
