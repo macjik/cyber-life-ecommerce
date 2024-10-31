@@ -22,7 +22,7 @@ export default async function Product({
 }) {
   const t = await getTranslations('');
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 via-white to-gray-50 p-4">
+    <div className="flex items-center justify-center min-h-screen p-4">
       <div className="max-w-lg w-full bg-white shadow-xl rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gray-50 mb-6">
         <div className="relative h-56 w-full group">
           <Image
