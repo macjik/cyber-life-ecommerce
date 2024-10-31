@@ -34,7 +34,9 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang={locale}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-200`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-red-100 via-blue-100 to-indigo-100 min-h-full`}
+      >
         <NavBar userRole={userRole} isAllowedRoute={isAllowedRoute} />
         <NextIntlClientProvider messages={messages}>
           <main>{children}</main>

@@ -44,7 +44,7 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon 
           className="flex flex-col items-center text-black hover:text-gray-500 w-full"
         >
           <AiFillControl size={24} />
-          <span className="text-xs">CMS</span>
+          <span className="text-xs">Admin</span>
         </Link>
       )}
 

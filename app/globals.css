@@ -4,7 +4,8 @@
 
 html,
 body {
-  height: 100vh;
+  /* height: 100lvh; */
+  min-height: 100%;
   width: 100%;
   scroll-behavior: smooth;
 }
