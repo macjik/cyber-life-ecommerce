@@ -61,7 +61,7 @@ export default async function Home() {
                   href={`/${item.itemCategory.name.replace(/\s+/g, '-')}/${item.name.replace(/\s+/g, '-')}`}
                   key={index}
                 >
-                  <div className="border w-64 h-4xl p-4 rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                  <div className="border w-64 h-4xl p-4 rounded-lg shadow-lg bg-white border-blue-200 hover:shadow-xl transition-shadow duration-300 ease-in-out">
                     <div className="w-full h-64 overflow-hidden">
                       <Image
                         priority
