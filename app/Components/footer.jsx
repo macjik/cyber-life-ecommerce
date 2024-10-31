@@ -78,12 +78,12 @@ export default async function Footer() {
         </section>
         <section className="mb-10 md:mb-0 text-sm max-w-max h-max space-y-2">
           <h2 className="text-xl font-semibold mb-2">{t('contacts')}</h2>
-          <p className="text-lg font-medium">
+          {/* <p className="text-lg font-medium">
             {t('email')}:
             <a className="underline" href="mailto:mimi-cyberlife@gmail.com">
               Mimi@email
             </a>
-          </p>
+          </p> */}
           <p className="text-lg font-medium">
             {t('tel')}:
             <a className="underline" href="tel:+123456789">
