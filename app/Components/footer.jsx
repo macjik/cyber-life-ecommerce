@@ -74,22 +74,6 @@ export default async function Footer() {
               height={100}
               className="object-contain"
             />
-            <Image
-              src="/visa.png"
-              alt="mimi logo"
-              quality={60}
-              width={60}
-              height={100}
-              className="object-contain"
-            />
-            <Image
-              src="/mastercard.png"
-              alt="mimi logo"
-              quality={60}
-              width={60}
-              height={100}
-              className="object-contain"
-            />
           </div>
         </section>
         <section className="mb-10 md:mb-0 text-sm max-w-max h-max space-y-2">
