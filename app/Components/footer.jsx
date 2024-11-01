@@ -42,7 +42,7 @@ export default async function Footer() {
                 {t('cart')}
               </Link>
             </li>
-            <li className="w-max">
+            {/* <li className="w-max">
               <a
                 href="/offerta.pdf"
                 target="_blank"
@@ -51,7 +51,7 @@ export default async function Footer() {
               >
                 {t('offerta')}
               </a>
-            </li>
+            </li> */}
           </ul>
         </section>
         <section className="mb-10 md:mb-0 text-sm max-w-max h-max space-y-2">
