@@ -8,6 +8,7 @@ import axios from 'axios';
 import client from '../services/redis';
 import { getTranslations } from 'next-intl/server';
 import bcrypt from 'bcrypt';
+import { t } from '@/node_modules/i18next/index';
 
 const { User } = db;
 
@@ -29,7 +30,7 @@ export async function checkPhone(state, formData) {
     let user = await User.findOne({ where: { phone: phone } });
 
     if (!user) {
-      return { error: `User not found, please create a new account` };
+      return { error: t('Auth.no-user') };
     }
 
     let form = new FormData();
@@ -83,7 +84,7 @@ export async function confirmSmsCode(state, formData) {
   if (clientSms == smsCode) {
     return { phone: phone };
   } else {
-    return { error: 'Invalid sms code' };
+    return { error: t('Auth.wrong-code') };
   }
 }
 
@@ -95,7 +96,7 @@ export async function changePassword(state, formData) {
     let user = await User.findOne({ where: { phone: phone } });
 
     if (!user) {
-      return { status: 404, error: 'User not found' };
+      return { status: 404, error: t('Auth.no-user') };
     }
 
     user.hash = await bcrypt.hash(password, 8);

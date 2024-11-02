@@ -28,7 +28,12 @@
     "wrong-user": "Foydalanuvchi allaqachon mavjud",
     "no-user": "Foydalanuvchi topilmadi",
     "existing-phone": "Kechirasiz, bu telefon raqam bilan foydalanuvchi allaqachon mavjud",
-    "wrong-code": "Noto‘g‘ri kod"
+    "wrong-code": "Noto‘g‘ri kod",
+    "forgot-password": "Parolni unutdingizmi?",
+    "reset-password": "Parolni tiklash uchun tasdiqlash kodini oling",
+    "send-code": "Tasdiqlash kodini yuborish",
+    "verify-code": "Kodni tekshirish",
+    "create-new-password": "Yangi parol yaratish"
   },
   "homePage": {
     "title": "Birga Xarid Qiling, Ko'proq Tejang",
