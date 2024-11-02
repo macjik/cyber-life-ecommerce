@@ -11,7 +11,7 @@ export async function middleware(req) {
   let cookies = parse(cookieHeader || '');
   let token = cookies.token;
 
-  const paths = ['/auth'];
+  const paths = ['/auth', '/reset-password'];
   const dynamicCategoryProductPattern = /^\/[^\/]+\/[^\/]+$/;
   const cartPathPattern = /^\/cart\/[^\/]+$/;
 

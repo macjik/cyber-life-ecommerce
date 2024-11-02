@@ -28,7 +28,12 @@
     "wrong-user": "User already exists",
     "no-user": "User not found",
     "existing-phone": "Sorry, a user with this with phone already exists",
-    "wrong-code": "Invalid Code"
+    "wrong-code": "Invalid Code",
+    "forgot-password": "Forgot Password?",
+    "reset-password": "Reset password by getting verification code",
+    "send-code": "Send verification code",
+    "verify-code": "Verify code",
+    "create-new-password": "Create a new password"
   },
   "homePage": {
     "title": "Buy Together, Save More",
