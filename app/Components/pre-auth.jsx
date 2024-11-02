@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner } from './spinner';
 import axios from '@/node_modules/axios/index';
 import { useTranslations } from 'next-intl';
+import Link from '@/node_modules/next/link';
 
 function SubmitButton({ children, isPending }) {
   const { pending } = useFormStatus();
@@ -73,6 +74,9 @@ export function PreLoginForm({ children }) {
         </div>
       </div>
       <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
+      <Link href="/reset-password">
+        <p className="text-blue-700 text-sm text-right mt-3 underline">Forgot Password?</p>
+      </Link>
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
       <div className="inline-flex w-full">
         <SubmitButton isPending={isPending}>{t('login')}</SubmitButton>
