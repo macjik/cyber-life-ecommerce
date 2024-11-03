@@ -91,15 +91,10 @@ export function PreSigninForm({ children }) {
   const [signUpError, setSignUpError] = useState('');
   const [isPending, setIsPending] = useState(false);
   const [phone, setPhone] = useState('');
+  const [countdown, setCountdown] = useState(60);
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
-
-  // useEffect(() => {
-  //   if (signupState.status === 200) {
-  //     router.push(redirect);
-  //   }
-  // }, [signupState.status]);
 
   const handlePhoneChange = (event) => {
     let input = event.target.value.replace(/\D/g, '');
@@ -114,6 +109,22 @@ export function PreSigninForm({ children }) {
     }
     setPhone(input);
   };
+
+  useEffect(() => {
+    if (preSignupState.phone) {
+      const interval = setInterval(() => {
+        setCountdown((prevCountdown) => {
+          if (prevCountdown <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prevCountdown - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [preSignupState.phone]);
 
   async function handleSignUp(event) {
     event.preventDefault();
@@ -150,13 +161,20 @@ export function PreSigninForm({ children }) {
               maxLength="4"
               minLength="4"
             />
+            {countdown > 0 ? (
+              <p className="text-gray-500 mt-2">Time remaining: {countdown} seconds</p>
+            ) : (
+              <button className="text-gray-500 mt-2 underline">
+                Did not receive code? Click here to resend.
+              </button>
+            )}
           </div>
           {signUpError && <p className="text-red-700">{signUpError}</p>}
           <div className="inline-flex w-full">
             <Button
               type="submit"
               className="text-white rounded-lg bg-blue-600 text-xl"
-              disabled={isPending}
+              disabled={isPending || countdown === 0}
             >
               {isPending ? <Spinner /> : t('confirm')}
             </Button>
@@ -183,7 +201,7 @@ export function PreSigninForm({ children }) {
                 maxLength="14"
               />
             </div>
-          </div>{' '}
+          </div>
           <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
           {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
           <div className="inline-flex w-full">
