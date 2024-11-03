@@ -158,7 +158,7 @@ export function PreSigninForm({ children }) {
       try {
         setIsPending(true);
         await preSignupAction(formData);
-        setCountdown(30);
+        // setCountdown(30);
       } catch (error) {
         setSignUpError('Failed to resend code. Please try again.');
       } finally {
