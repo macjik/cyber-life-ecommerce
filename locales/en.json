@@ -33,7 +33,9 @@
     "reset-password": "Reset password by getting verification code",
     "send-code": "Send verification code",
     "verify-code": "Verify code",
-    "create-new-password": "Create a new password"
+    "create-new-password": "Create a new password",
+    "resend-code": "Did not receive code? Click here to resend.",
+    "time-remaining": "Time remaining"
   },
   "homePage": {
     "title": "Buy Together, Save More",

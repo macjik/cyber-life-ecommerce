@@ -140,8 +140,8 @@ export async function preSignup(state, formData) {
 
   try {
     const { value, error } = schema.validate({
-      password: formData.get('password'),
       phone: formData.get('phone').toString().replace(/\D/g, ''),
+      password: formData.get('password'),
     });
 
     const tError = await getTranslations('Auth');

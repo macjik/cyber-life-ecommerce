@@ -91,7 +91,7 @@ export function PreSigninForm({ children }) {
   const [signUpError, setSignUpError] = useState('');
   const [isPending, setIsPending] = useState(false);
   const [phone, setPhone] = useState('');
-  const [countdown, setCountdown] = useState(60);
+  const [countdown, setCountdown] = useState(30);
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
@@ -146,6 +146,27 @@ export function PreSigninForm({ children }) {
   }
 
   const t = useTranslations('Auth');
+
+  async function handleCodeResend(event) {
+    event.preventDefault();
+
+    if (countdown === 0) {
+      const formData = new FormData();
+      formData.append('phone', preSignupState.phone);
+      formData.append('password', preSignupState.password);
+
+      try {
+        setIsPending(true);
+        await preSignupAction(formData);
+        setCountdown(30);
+      } catch (error) {
+        setSignUpError('Failed to resend code. Please try again.');
+      } finally {
+        setIsPending(false);
+      }
+    }
+  }
+
   return (
     <>
       {preSignupState.phone ? (
@@ -162,10 +183,16 @@ export function PreSigninForm({ children }) {
               minLength="4"
             />
             {countdown > 0 ? (
-              <p className="text-gray-500 mt-2">Time remaining: {countdown} seconds</p>
+              <p className="text-gray-500 mt-2">
+                {t('time-remaining')}: {countdown}
+              </p>
             ) : (
-              <button className="text-gray-500 mt-2 underline">
-                Did not receive code? Click here to resend.
+              <button
+                className="text-gray-500 mt-2 underline"
+                type="button"
+                onClick={handleCodeResend}
+              >
+                {t('resend-code')}
               </button>
             )}
           </div>

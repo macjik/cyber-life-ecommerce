@@ -33,7 +33,9 @@
     "reset-password": "Parolni tiklash uchun tasdiqlash kodini oling",
     "send-code": "Tasdiqlash kodini yuborish",
     "verify-code": "Kodni tekshirish",
-    "create-new-password": "Yangi parol yaratish"
+    "create-new-password": "Yangi parol yaratish",
+    "resend-code": "Kod kelmadimi? Qayta yuborish uchun bu yerni bosing.",
+    "time-remaining": "Qolgan vaqt"
   },
   "homePage": {
     "title": "Birga Xarid Qiling, Ko'proq Tejang",
