@@ -1,12 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import axios from 'axios';
-import axiosRetry from 'axios-retry';
 import Button from './button';
 import { Spinner } from './spinner';
-
-axiosRetry(axios, { retries: 3 });
+import { generateInviteLink } from '../form-actions/copy-link'; // Assuming this is your server action import
 
 export default function InviteLinkGenerator({
   category,
@@ -21,18 +18,23 @@ export default function InviteLinkGenerator({
   async function handleLinkGenerate(event) {
     event.preventDefault();
     setLoading(true);
+    setButtonText('Generating Link...');
 
     try {
-      setButtonText('Link Copied!');
-
-      let res = await axios.post('/api/invite', { inviterId });
-      res = res.data;
+      // Await the server action to generate the invite link
+      let res = await generateInviteLink(inviterId);
+      if (res.status === 500) {
+        throw new Error('Error generating invite link');
+      }
 
       const newInviteLink = `${process.env.NEXT_PUBLIC_FRONTEND_HOST}/${category}/${product}/?invite=${res.inviteCode}`;
 
+      // Copy the generated link to clipboard
       const successful = await copyToClipboard(newInviteLink);
 
-      if (!successful) {
+      if (successful) {
+        setButtonText('Link Copied!');
+      } else {
         setButtonText('Copy Failed');
       }
     } catch (err) {
@@ -50,6 +52,7 @@ export default function InviteLinkGenerator({
         await navigator.clipboard.writeText(text);
         return true;
       } else {
+        // Fallback for older browsers
         const textArea = document.createElement('textarea');
         textArea.value = text;
         document.body.appendChild(textArea);
