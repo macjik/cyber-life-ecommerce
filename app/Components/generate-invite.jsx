@@ -1,58 +1,87 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from './button';
 import { Spinner } from './spinner';
-import { generateInviteLink } from '../form-actions/copy-link'; // Assuming this is your server action import
+import { generateInviteLink } from '../form-actions/copy-link';
 
-export default function InviteLinkGenerator({
+export default function InviteLinkGeneratorWrapper(props) {
+  const [key, setKey] = useState(0);
+
+  function handleRerender() {
+    setKey((prevKey) => prevKey + 1);
+  }
+
+  return <InviteLinkGenerator key={key} {...props} onRerender={handleRerender} />;
+}
+
+function InviteLinkGenerator({
   category,
   product,
   inviterId,
-  children,
+  children = 'Generate Link',
   className = '',
+  onRerender,
 }) {
   const [buttonText, setButtonText] = useState(children);
   const [loading, setLoading] = useState(false);
+  const [inviteLink, setInviteLink] = useState('');
+  const isGenerated = useRef(false);
+  const hasMounted = useRef(false);
 
-  async function handleLinkGenerate(event) {
+  useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+
+      async function generateLink() {
+        if (isGenerated.current) return;
+
+        try {
+          const res = await generateInviteLink(inviterId);
+          if (res.status === 500) {
+            throw new Error('Error generating invite link');
+          }
+
+          const newInviteLink = `${process.env.NEXT_PUBLIC_FRONTEND_HOST}/${category}/${product}/?invite=${res.inviteCode}`;
+          setInviteLink(newInviteLink);
+          isGenerated.current = true; // Mark link as generated
+        } catch (err) {
+          console.error('Error generating invite link on mount:', err);
+        }
+      }
+
+      generateLink();
+    }
+  }, [category, product, inviterId]);
+
+  function handleLinkGenerate(event) {
     event.preventDefault();
     setLoading(true);
-    setButtonText('Generating Link...');
+    setButtonText('Copying Link...');
 
-    try {
-      // Await the server action to generate the invite link
-      let res = await generateInviteLink(inviterId);
-      if (res.status === 500) {
-        throw new Error('Error generating invite link');
-      }
+    if (inviteLink && copyToClipboardSync(inviteLink)) {
+      setButtonText('Link Copied!');
 
-      const newInviteLink = `${process.env.NEXT_PUBLIC_FRONTEND_HOST}/${category}/${product}/?invite=${res.inviteCode}`;
-
-      // Copy the generated link to clipboard
-      const successful = await copyToClipboard(newInviteLink);
-
-      if (successful) {
-        setButtonText('Link Copied!');
-      } else {
-        setButtonText('Copy Failed');
-      }
-    } catch (err) {
-      console.error('Error generating invite link:', err);
-      setButtonText('Error');
-    } finally {
-      setLoading(false);
-      setTimeout(() => setButtonText(children), 2000);
+      setTimeout(() => {
+        setButtonText(children);
+        onRerender();
+      }, 2000);
+    } else {
+      setButtonText('Copy Failed');
+      setTimeout(() => {
+        setButtonText(children);
+      }, 2000);
     }
+
+    setLoading(false);
   }
 
-  async function copyToClipboard(text) {
+  function copyToClipboardSync(text) {
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(text);
+        navigator.clipboard.writeText(text);
         return true;
       } else {
-        // Fallback for older browsers
         const textArea = document.createElement('textarea');
         textArea.value = text;
         document.body.appendChild(textArea);
