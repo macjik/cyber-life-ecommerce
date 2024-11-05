@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Button from './button';
 import { Spinner } from './spinner';
-import { generateInviteLink } from '../form-actions/copy-link';
+import axios from '@/node_modules/axios/index';
+// import { generateInviteLink } from '../form-actions/copy-link';
 
 export default function InviteLinkGeneratorWrapper(props) {
   const [key, setKey] = useState(0);
@@ -37,14 +38,12 @@ function InviteLinkGenerator({
         if (isGenerated.current) return;
 
         try {
-          const res = await generateInviteLink(inviterId);
-          if (res.status === 500) {
-            throw new Error('Error generating invite link');
-          }
+          let res = await axios.post('/api/invite', { inviterId });
+          res = res.data;
 
           const newInviteLink = `${process.env.NEXT_PUBLIC_FRONTEND_HOST}/${category}/${product}/?invite=${res.inviteCode}`;
           setInviteLink(newInviteLink);
-          isGenerated.current = true; // Mark link as generated
+          isGenerated.current = true;
         } catch (err) {
           console.error('Error generating invite link on mount:', err);
         }
