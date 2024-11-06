@@ -294,15 +294,12 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
 async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
   let inviterOrder = await Order.findOne({
     where: { userId: inviterId, itemId: existingProduct.id, status: 'pending' },
+    include: Invite, 
   });
 
   if (!inviterOrder) {
-    // const discountAmount = calculateDiscount(existingProduct.discount, existingProduct.price, 1);
-    // const totalPrice = existingProduct.price - discountAmount;
-
     inviterOrder = await Order.create({
       userId: inviterId,
-      inviteId,
       itemId: existingProduct.id,
       discount: 0,
       totalAmount: existingProduct.price,
@@ -311,6 +308,10 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
     });
   } else if (inviteId) {
     inviterOrder.totalBuyers += 1;
+    const invite = await Invite.findByPk(inviteId);
+    if (invite) {
+      await inviterOrder.addInvite(invite); 
+    }
 
     if (inviterOrder.totalBuyers > 1) {
       const discountAmount = calculateDiscount(
@@ -339,15 +340,23 @@ async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
     totalPrice = existingProduct.price - discountAmount;
   }
 
-  return await Order.create({
+  const newOrder = await Order.create({
     userId,
-    inviteId,
     itemId: existingProduct.id,
     discount: Math.round(discountAmount),
     totalAmount: Math.round(totalPrice),
     totalBuyers: inviterOrder.totalBuyers,
     status: 'pending',
   });
+
+  if (inviteId) {
+    const invite = await Invite.findByPk(inviteId);
+    if (invite) {
+      await newOrder.addInvite(invite);
+    }
+  }
+
+  return newOrder;
 }
 
 async function handleInviteProcessing(invite, currentUser) {
