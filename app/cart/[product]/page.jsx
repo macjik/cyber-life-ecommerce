@@ -4,7 +4,7 @@ import calculateDiscount from '@/app/helper/calculate-discount';
 import InviteLinkGenerator from '@/app/Components/generate-invite';
 import trackInviteChain from '@/app/helper/track-invites';
 import PayButton from '@/app/Components/pay-button';
-import { FaMoneyBill, FaPercent } from 'react-icons/fa';
+import { FaMoneyBill } from 'react-icons/fa';
 import { Suspense } from 'react';
 import Loading from '@/app/Components/loading';
 import { getTranslations } from 'next-intl/server';
@@ -156,9 +156,6 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
           }
           orderId={currentOrder.id}
         >
-          {/* <div>Participants: {currentOrder.totalBuyers}</div>
-      <div>Discount: {discountAmount}</div> */}
-          {/* <div>{trackInvites ? JSON.stringify(trackInvites) : <p>No Invites</p>}</div> */}
           <div className="inline-flex w-full">
             <PayButton
               className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
@@ -217,78 +214,15 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     existingProduct,
     existingInvite.id,
   );
-  const currentOrder = await createNewOrder(
-    currentUser.id,
-    existingInvite.id,
-    existingProduct,
-    inviterOrder,
-  );
 
-  let discountAmount = 0;
-  let totalPrice = existingProduct.price;
-  if (inviterOrder.totalBuyers > 1) {
-    discountAmount = calculateDiscount(
-      existingProduct.discount,
-      existingProduct.price,
-      inviterOrder.totalBuyers,
-    );
-    totalPrice -= discountAmount;
-  }
+  const inviteChain = await trackInviteChain(existingInvite.Inviter.id);
+  await updateInviteChainOrders(existingProduct, inviteChain);
 
-  const trackInvites = await trackInviteChain(existingInvite.inviter);
+  const currentOrder = await Order.findOne({
+    where: { userId: currentUser.id, itemId: existingProduct.id, status: 'pending' },
+  });
 
-  return (
-    <div className="min-h-screen">
-      <Suspense fallback={<Loading />}>
-        <Product
-          itemName={name}
-          itemDescription={description}
-          itemSrc={image}
-          itemCategory={existingProduct.itemCategory.name}
-          itemPrice={totalPrice}
-          originalPrice={price}
-          itemStatus={status}
-          itemQuantity={quantity}
-          itemAttributes={
-            existingProduct.itemAttributes &&
-            existingProduct.itemAttributes.map((attr) => attr.value)
-          }
-          itemAttributeName={
-            existingProduct.itemAttributes &&
-            existingProduct.itemAttributes.map((attr) => attr.name)[0]
-          }
-          orderId={currentOrder.id}
-        >
-          {/* <div>Participants: {JSON.stringify(currentOrder)}</div>
-      <div>Discount: {discountAmount}</div>
-      <div>Total Price: {totalPrice}</div>
-      <div>Invite Chain: {JSON.stringify(trackInvites)}</div> */}
-          {/* <{t('link')} href={`/pay?orderId=${currentOrder.id}`}>
-        <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
-          Pay
-        </Button>
-      </{t('link')}> */}
-          <div className="inline-flex w-full">
-            <PayButton
-              className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
-              orderId={currentOrder.id}
-            >
-              {t('pay')}
-              <FaMoneyBill size={22} />
-            </PayButton>
-            <InviteLinkGenerator
-              category={existingProduct.category}
-              product={product.replace(/\s+/g, '-')}
-              inviterId={currentUser.id}
-              className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
-            >
-              {t('link')}
-            </InviteLinkGenerator>
-          </div>
-        </Product>
-      </Suspense>
-    </div>
-  );
+  return await renderOrderView(currentOrder, existingProduct, currentUser, product, invite);
 }
 
 async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
@@ -297,9 +231,6 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
   });
 
   if (!inviterOrder) {
-    // const discountAmount = calculateDiscount(existingProduct.discount, existingProduct.price, 1);
-    // const totalPrice = existingProduct.price - discountAmount;
-
     inviterOrder = await Order.create({
       userId: inviterId,
       inviteId,
@@ -311,18 +242,15 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
     });
   } else if (inviteId) {
     inviterOrder.totalBuyers += 1;
-
-    if (inviterOrder.totalBuyers > 1) {
-      const discountAmount = calculateDiscount(
-        existingProduct.discount,
-        existingProduct.price,
-        inviterOrder.totalBuyers,
-      );
-      inviterOrder.discount = Math.round(discountAmount);
-      inviterOrder.totalAmount = Math.round(existingProduct.price - discountAmount);
-    }
+    const discountAmount = calculateDiscount(
+      existingProduct.discount,
+      existingProduct.price,
+      inviterOrder.totalBuyers,
+    );
+    inviterOrder.discount = Math.round(discountAmount);
+    inviterOrder.totalAmount = Math.round(existingProduct.price - discountAmount);
+    await inviterOrder.save();
   }
-  await inviterOrder.save();
   return inviterOrder;
 }
 
@@ -350,16 +278,25 @@ async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
   });
 }
 
-async function handleInviteProcessing(invite, currentUser) {
-  const existingInvite = await Invite.findOne({ where: { inviteCode: invite } });
-  if (
-    existingInvite &&
-    existingInvite.status !== 'expired' &&
-    existingInvite.inviter !== currentUser.id
-  ) {
-    existingInvite.invitee = currentUser.id;
-    existingInvite.status = 'expired';
-    await existingInvite.save();
+async function updateInviteChainOrders(existingProduct, inviteChain) {
+  const totalBuyers = inviteChain.length;
+  const discountAmount = calculateDiscount(
+    existingProduct.discount,
+    existingProduct.price,
+    totalBuyers,
+  );
+  const totalAmount = existingProduct.price - discountAmount;
+
+  for (const invitee of inviteChain) {
+    let order = await Order.findOne({
+      where: { userId: invitee.invitee.id, itemId: existingProduct.id, status: 'pending' },
+    });
+
+    if (order) {
+      order.discount = Math.round(discountAmount);
+      order.totalAmount = Math.round(totalAmount);
+      order.totalBuyers = totalBuyers;
+      await order.save();
+    }
   }
-  return await trackInviteChain(existingInvite.inviter);
 }
