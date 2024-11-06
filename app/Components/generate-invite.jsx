@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import Button from './button';
 import { Spinner } from './spinner';
-import axios from '@/node_modules/axios/index';
-// import { generateInviteLink } from '../form-actions/copy-link';
+
+axiosRetry(axios, { retries: 3 });
 
 export default function InviteLinkGeneratorWrapper(props) {
   const [key, setKey] = useState(0);
