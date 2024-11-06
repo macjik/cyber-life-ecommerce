@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ User, Order }) {
       Invite.belongsTo(User, { foreignKey: 'inviter', as: 'Inviter' });
       Invite.belongsTo(User, { foreignKey: 'invitee', as: 'Invitee' });
-      Invite.hasMany(Order, { foreignKey: 'inviteId' });
+      Invite.belongsToMany(Order, { through: 'OrderInvites', foreignKey: 'inviteId' });
     }
   }
   Invite.init(

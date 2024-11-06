@@ -294,12 +294,12 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
 async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
   let inviterOrder = await Order.findOne({
     where: { userId: inviterId, itemId: existingProduct.id, status: 'pending' },
+    include: Invite, 
   });
 
   if (!inviterOrder) {
     inviterOrder = await Order.create({
       userId: inviterId,
-      inviteId,
       itemId: existingProduct.id,
       discount: 0,
       totalAmount: existingProduct.price,
@@ -348,13 +348,21 @@ async function updateRelatedOrders(orders, totalBuyers, discountAmount, original
 async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
   return await Order.create({
     userId,
-    inviteId,
     itemId: existingProduct.id,
     discount: inviterOrder.discount,
     totalAmount: inviterOrder.totalAmount,
     totalBuyers: inviterOrder.totalBuyers,
     status: 'pending',
   });
+
+  if (inviteId) {
+    const invite = await Invite.findByPk(inviteId);
+    if (invite) {
+      await newOrder.addInvite(invite);
+    }
+  }
+
+  return newOrder;
 }
 
 async function handleInviteProcessing(invite, currentUser) {

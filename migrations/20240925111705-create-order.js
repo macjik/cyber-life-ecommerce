@@ -16,6 +16,7 @@ module.exports = {
       itemId: { type: Sequelize.INTEGER, references: { model: 'items', key: 'id' } },
       userId: { type: Sequelize.INTEGER, references: { model: 'Users', key: 'id' } },
       inviteId: { type: Sequelize.INTEGER, references: { model: 'Invites', key: 'id' } },
+      orderId: { type: Sequelize.INTEGER, references: { model: 'Orders', key: 'id' } },
       item_attribute_id: {
         type: Sequelize.INTEGER,
         references: { model: 'Item_Attributes', key: 'id' },
