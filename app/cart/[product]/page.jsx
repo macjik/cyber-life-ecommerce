@@ -205,7 +205,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
 
   if (existingInvite.inviter !== currentUser.id) {
     existingInvite.invitee = currentUser.id;
-    existingInvite.status = 'active';
+    existingInvite.status = 'expired';
     await existingInvite.save();
   }
 
