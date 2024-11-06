@@ -62,7 +62,6 @@ export default async function CartPage({ params, searchParams }) {
   }
 
   const { name, description, image, category, price, status, quantity } = existingProduct;
-  //ui update after price change
   let order = await Order.create({
     itemId: existingProduct.id,
     status: 'pending',
@@ -298,8 +297,8 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
   });
 
   if (!inviterOrder) {
-    const discountAmount = calculateDiscount(existingProduct.discount, existingProduct.price, 1);
-    const totalPrice = existingProduct.price - discountAmount;
+    // const discountAmount = calculateDiscount(existingProduct.discount, existingProduct.price, 1);
+    // const totalPrice = existingProduct.price - discountAmount;
 
     inviterOrder = await Order.create({
       userId: inviterId,
@@ -312,6 +311,16 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
     });
   } else if (inviteId) {
     inviterOrder.totalBuyers += 1;
+
+    if (inviterOrder.totalBuyers > 1) {
+      const discountAmount = calculateDiscount(
+        existingProduct.discount,
+        existingProduct.price,
+        inviterOrder.totalBuyers,
+      );
+      inviterOrder.discount = Math.round(discountAmount);
+      inviterOrder.totalAmount = Math.round(existingProduct.price - discountAmount);
+    }
   }
   await inviterOrder.save();
   return inviterOrder;
