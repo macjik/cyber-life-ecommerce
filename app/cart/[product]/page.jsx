@@ -145,7 +145,7 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
           itemPrice={totalPrice}
           originalPrice={price}
           itemStatus={status}
-          itemQuantity={quantity}
+          itemQuantity={quantity - currentOrder.totalBuyers}
           itemAttributes={
             existingProduct.itemAttributes &&
             existingProduct.itemAttributes.map((attr) => attr.value)
@@ -248,7 +248,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
           itemPrice={totalPrice}
           originalPrice={existingProduct.price}
           itemStatus={existingProduct.status}
-          itemQuantity={existingProduct.quantity}
+          itemQuantity={existingProduct.quantity - currentOrder.totalBuyers}
           itemAttributes={
             existingProduct.itemAttributes &&
             existingProduct.itemAttributes.map((attr) => attr.value)
