@@ -297,9 +297,6 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
   });
 
   if (!inviterOrder) {
-    // const discountAmount = calculateDiscount(existingProduct.discount, existingProduct.price, 1);
-    // const totalPrice = existingProduct.price - discountAmount;
-
     inviterOrder = await Order.create({
       userId: inviterId,
       inviteId,
@@ -312,39 +309,42 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
   } else if (inviteId) {
     inviterOrder.totalBuyers += 1;
 
-    if (inviterOrder.totalBuyers > 1) {
-      const discountAmount = calculateDiscount(
-        existingProduct.discount,
-        existingProduct.price,
-        inviterOrder.totalBuyers,
-      );
-      inviterOrder.discount = Math.round(discountAmount);
-      inviterOrder.totalAmount = Math.round(existingProduct.price - discountAmount);
-    }
-  }
-  await inviterOrder.save();
-  return inviterOrder;
-}
-
-async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
-  let discountAmount = 0;
-  let totalPrice = existingProduct.price;
-
-  if (inviterOrder.totalBuyers > 1) {
-    discountAmount = calculateDiscount(
+    const discountAmount = calculateDiscount(
       existingProduct.discount,
       existingProduct.price,
       inviterOrder.totalBuyers,
     );
-    totalPrice = existingProduct.price - discountAmount;
+    inviterOrder.discount = Math.round(discountAmount);
+    inviterOrder.totalAmount = Math.round(existingProduct.price - discountAmount);
   }
 
+  await inviterOrder.save();
+
+  await updateRelatedOrders(inviterOrder, existingProduct.price);
+
+  return inviterOrder;
+}
+
+async function updateRelatedOrders(inviterOrder, originalPrice) {
+  const relatedOrders = await Order.findAll({
+    where: { itemId: inviterOrder.itemId, inviteId: inviterOrder.inviteId },
+  });
+
+  for (const order of relatedOrders) {
+    order.totalBuyers = inviterOrder.totalBuyers;
+    order.discount = inviterOrder.discount;
+    order.totalAmount = inviterOrder.totalAmount;
+    await order.save();
+  }
+}
+
+async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
   return await Order.create({
     userId,
     inviteId,
     itemId: existingProduct.id,
-    discount: Math.round(discountAmount),
-    totalAmount: Math.round(totalPrice),
+    discount: inviterOrder.discount,
+    totalAmount: inviterOrder.totalAmount,
     totalBuyers: inviterOrder.totalBuyers,
     status: 'pending',
   });
