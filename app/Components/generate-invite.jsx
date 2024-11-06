@@ -8,7 +8,17 @@ import { Spinner } from './spinner';
 
 axiosRetry(axios, { retries: 3 });
 
-export default function InviteLinkGenerator({
+export default function InviteLinkGeneratorWrapper(props) {
+  const [key, setKey] = useState(0);
+
+  function handleRerender() {
+    setKey((prevKey) => prevKey + 1);
+  }
+
+  return <InviteLinkGenerator key={key} {...props} onRerender={handleRerender} />;
+}
+
+function InviteLinkGenerator({
   category,
   product,
   inviterId,
