@@ -121,7 +121,7 @@ export async function login(state, formData) {
     await cookies().set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 3600,
+      maxAge: 604800,
       sameSite: 'lax',
       path: '/',
     });
