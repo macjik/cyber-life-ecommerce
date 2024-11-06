@@ -44,11 +44,11 @@ export async function POST(req) {
 
       cookies().set(
         'token',
-        jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '7d' }),
+        jwt.sign({ id: uid, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' }),
         {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
-          maxAge: 7 * 24 * 60 * 60,
+          maxAge: 3600,
           sameSite: 'lax',
           path: '/',
         },
