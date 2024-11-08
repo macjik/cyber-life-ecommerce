@@ -294,12 +294,12 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
 async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
   let inviterOrder = await Order.findOne({
     where: { userId: inviterId, itemId: existingProduct.id, status: 'pending' },
-    include: Invite, 
   });
 
   if (!inviterOrder) {
     inviterOrder = await Order.create({
       userId: inviterId,
+      inviteId,
       itemId: existingProduct.id,
       discount: 0,
       totalAmount: existingProduct.price,
@@ -312,16 +312,21 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
 
   allRelatedOrders.push(inviterOrder);
 
-  const maxTotalBuyers = Math.max(...allRelatedOrders.map(order => order.totalBuyers));
+  const maxTotalBuyers = Math.max(...allRelatedOrders.map((order) => order.totalBuyers));
   const updatedTotalBuyers = maxTotalBuyers + 1;
 
   const discountAmount = calculateDiscount(
     existingProduct.discount,
     existingProduct.price,
-    updatedTotalBuyers
+    updatedTotalBuyers,
   );
 
-  await updateRelatedOrders(allRelatedOrders, updatedTotalBuyers, discountAmount, existingProduct.price);
+  await updateRelatedOrders(
+    allRelatedOrders,
+    updatedTotalBuyers,
+    discountAmount,
+    existingProduct.price,
+  );
 
   return inviterOrder;
 }
@@ -348,6 +353,7 @@ async function updateRelatedOrders(orders, totalBuyers, discountAmount, original
 async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
   return await Order.create({
     userId,
+    inviteId,
     itemId: existingProduct.id,
     discount: inviterOrder.discount,
     totalAmount: inviterOrder.totalAmount,
