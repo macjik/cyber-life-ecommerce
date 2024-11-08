@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       Order.belongsTo(User, { foreignKey: 'userId' });
       Order.belongsTo(item, { foreignKey: 'itemId' });
       Order.belongsTo(Item_Attribute, { foreignKey: 'item_attribute_id' });
-      Order.belongsToMany(Invite, { through: 'OrderInvites', foreignKey: 'orderId' });
+      // Order.belongsToMany(Invite, { through: 'OrderInvites', foreignKey: 'orderId' });
       Order.hasOne(Payment, { foreignKey: 'orderId', as: 'payment' });
     }
   }
