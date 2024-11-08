@@ -1,6 +1,6 @@
 const db = require('../../models/index');
 
-const { User, Invite } = db;
+const { User, Invite, Order } = db;
 
 async function trackInviteChain(inviterId, visited = new Set()) {
   if (visited.has(inviterId)) {
@@ -9,36 +9,31 @@ async function trackInviteChain(inviterId, visited = new Set()) {
 
   visited.add(inviterId);
 
-  let directInvitees = await Invite.findAll({
+  let directInvites = await Invite.findAll({
     where: { inviter: inviterId },
-    include: [
-      { model: User, as: 'Invitee' },
-      { model: User, as: 'Inviter' },
-    ],
+    include: [{ model: User, as: 'Invitee' }]
   });
 
-  let allInvitees = [];
+  let allInvites = [];
 
-  for (let invite of directInvitees) {
+  for (let invite of directInvites) {
     const invitee = invite.Invitee;
 
-    if (!invitee) {
-      console.warn(`Invite with code ${invite.inviteCode} has no invitee associated.`);
-      continue;
-    }
+    if (!invitee) continue;
 
-    allInvitees.push({
-      invitee,
-      inviteCode: invite.inviteCode,
-      status: invite.status,
+    // Fetch orders related to this invitee
+    let relatedOrders = await Order.findAll({
+      where: { userId: invitee.id }
     });
 
-    const nestedInvitees = await trackInviteChain(invitee.id, visited);
+    allInvites = allInvites.concat(relatedOrders);
 
-    allInvitees = allInvitees.concat(nestedInvitees);
+    const nestedInvites = await trackInviteChain(invitee.id, visited);
+    allInvites = allInvites.concat(nestedInvites);
   }
 
-  return allInvitees;
+  return allInvites;
 }
+
 
 module.exports = trackInviteChain;

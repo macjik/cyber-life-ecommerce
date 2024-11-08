@@ -235,8 +235,8 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     totalPrice -= discountAmount;
   }
 
-  const trackInvites = await trackInviteChain(existingInvite.inviter);
-
+  // const trackInvites = await trackInviteChain(existingInvite.inviter);
+  // console.log(trackInvites);
   return (
     <div className="min-h-screen">
       <Suspense fallback={<Loading />}>
@@ -306,34 +306,41 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
       totalBuyers: 1,
       status: 'pending',
     });
-  } else if (inviteId) {
-    inviterOrder.totalBuyers += 1;
-
-    const discountAmount = calculateDiscount(
-      existingProduct.discount,
-      existingProduct.price,
-      inviterOrder.totalBuyers,
-    );
-    inviterOrder.discount = Math.round(discountAmount);
-    inviterOrder.totalAmount = Math.round(existingProduct.price - discountAmount);
   }
 
-  await inviterOrder.save();
+  let allRelatedOrders = await fetchRelatedOrders(existingProduct.id, inviteId);
 
-  await updateRelatedOrders(inviterOrder, existingProduct.price);
+  allRelatedOrders.push(inviterOrder);
+
+  const maxTotalBuyers = Math.max(...allRelatedOrders.map(order => order.totalBuyers));
+  const updatedTotalBuyers = maxTotalBuyers + 1;
+
+  const discountAmount = calculateDiscount(
+    existingProduct.discount,
+    existingProduct.price,
+    updatedTotalBuyers
+  );
+
+  await updateRelatedOrders(allRelatedOrders, updatedTotalBuyers, discountAmount, existingProduct.price);
 
   return inviterOrder;
 }
 
-async function updateRelatedOrders(inviterOrder, originalPrice) {
-  const relatedOrders = await Order.findAll({
-    where: { itemId: inviterOrder.itemId, inviteId: inviterOrder.inviteId },
+async function fetchRelatedOrders(itemId, inviteId) {
+  return await Order.findAll({
+    where: {
+      itemId,
+      inviteId,
+      status: 'pending',
+    },
   });
+}
 
-  for (const order of relatedOrders) {
-    order.totalBuyers = inviterOrder.totalBuyers;
-    order.discount = inviterOrder.discount;
-    order.totalAmount = inviterOrder.totalAmount;
+async function updateRelatedOrders(orders, totalBuyers, discountAmount, originalPrice) {
+  for (const order of orders) {
+    order.totalBuyers = totalBuyers;
+    order.discount = Math.round(discountAmount);
+    order.totalAmount = Math.round(originalPrice - discountAmount);
     await order.save();
   }
 }
