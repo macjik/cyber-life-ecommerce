@@ -354,15 +354,6 @@ async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
     totalBuyers: inviterOrder.totalBuyers,
     status: 'pending',
   });
-
-  if (inviteId) {
-    const invite = await Invite.findByPk(inviteId);
-    if (invite) {
-      await newOrder.addInvite(invite);
-    }
-  }
-
-  return newOrder;
 }
 
 async function handleInviteProcessing(invite, currentUser) {
