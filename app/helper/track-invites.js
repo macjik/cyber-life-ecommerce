@@ -2,38 +2,41 @@ const db = require('../../models/index');
 
 const { User, Invite, Order } = db;
 
-async function trackInviteChain(inviterId, visited = new Set()) {
-  if (visited.has(inviterId)) {
-    return [];
+async function trackInviteChain(rootInviteId) {
+  const invites = [];
+  const visited = new Set();
+  const queue = [rootInviteId];
+
+  while (queue.length > 0) {
+    const currentInviteId = queue.shift();
+
+    if (visited.has(currentInviteId)) continue;
+
+    visited.add(currentInviteId);
+
+    const currentInvite = await Invite.findOne({ where: { id: currentInviteId } });
+    if (!currentInvite) continue;
+
+    invites.push(currentInvite);
+
+    const invitesAsInviter = await Invite.findAll({ where: { inviter: currentInvite.invitee } });
+
+    const invitesAsInvitee = await Invite.findAll({ where: { invitee: currentInvite.inviter } });
+
+    for (let i = 0; i < invitesAsInviter.length; i++) {
+      if (!visited.has(invitesAsInviter[i].id)) {
+        queue.push(invitesAsInviter[i].id);
+      }
+    }
+
+    for (let i = 0; i < invitesAsInvitee.length; i++) {
+      if (!visited.has(invitesAsInvitee[i].id)) {
+        queue.push(invitesAsInvitee[i].id);
+      }
+    }
   }
 
-  visited.add(inviterId);
-
-  let directInvites = await Invite.findAll({
-    where: { inviter: inviterId },
-    include: [{ model: User, as: 'Invitee' }]
-  });
-
-  let allInvites = [];
-
-  for (let invite of directInvites) {
-    const invitee = invite.Invitee;
-
-    if (!invitee) continue;
-
-    // Fetch orders related to this invitee
-    let relatedOrders = await Order.findAll({
-      where: { userId: invitee.id }
-    });
-
-    allInvites = allInvites.concat(relatedOrders);
-
-    const nestedInvites = await trackInviteChain(invitee.id, visited);
-    allInvites = allInvites.concat(nestedInvites);
-  }
-
-  return allInvites;
+  return invites;
 }
-
 
 module.exports = trackInviteChain;

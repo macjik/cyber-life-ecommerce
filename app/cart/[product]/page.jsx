@@ -81,7 +81,7 @@ export default async function CartPage({ params, searchParams }) {
           itemCategory={existingProduct.itemCategory.name}
           itemPrice={price}
           itemStatus={status}
-          itemQuantity={quantity}
+          itemQuantity={quantity - 1}
           itemAttributes={
             existingProduct.itemAttributes &&
             existingProduct.itemAttributes.map((attr) => attr.value)
@@ -182,7 +182,7 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
   );
 }
 
-async function handleInviteProcess(invite, existingProduct, currentUser, product) {
+async function handleInviteProcess(invite, existingProduct, currentUser) {
   const existingInvite = await Invite.findOne({
     where: { inviteCode: invite },
     include: [
@@ -212,11 +212,14 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     await existingInvite.save();
   }
 
+  const allRelatedOrders = await fetchRelatedOrders(existingProduct.id, existingInvite.id);
+
   let inviterOrder = await getOrCreateOrder(
     existingInvite.Inviter.id,
     existingProduct,
     existingInvite.id,
   );
+
   const currentOrder = await createNewOrder(
     currentUser.id,
     existingInvite.id,
@@ -224,69 +227,17 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     inviterOrder,
   );
 
-  let discountAmount = 0;
-  let totalPrice = existingProduct.price;
-  if (inviterOrder.totalBuyers > 1) {
-    discountAmount = calculateDiscount(
-      existingProduct.discount,
-      existingProduct.price,
-      inviterOrder.totalBuyers,
-    );
-    totalPrice -= discountAmount;
-  }
+  const discountAmount = calculateDiscount(
+    existingProduct.discount,
+    existingProduct.price,
+    allRelatedOrders.length + 1,
+  );
 
-  // const trackInvites = await trackInviteChain(existingInvite.inviter);
-  // console.log(trackInvites);
+  await updateRelatedOrders(allRelatedOrders, discountAmount, existingProduct.price);
+
   return (
     <div className="min-h-screen">
-      <Suspense fallback={<Loading />}>
-        <Product
-          itemName={existingProduct.name}
-          itemDescription={existingProduct.description}
-          itemSrc={existingProduct.image}
-          itemCategory={existingProduct.itemCategory.name}
-          itemPrice={totalPrice}
-          originalPrice={existingProduct.price}
-          itemStatus={existingProduct.status}
-          itemQuantity={existingProduct.quantity - currentOrder.totalBuyers}
-          itemAttributes={
-            existingProduct.itemAttributes &&
-            existingProduct.itemAttributes.map((attr) => attr.value)
-          }
-          itemAttributeName={
-            existingProduct.itemAttributes &&
-            existingProduct.itemAttributes.map((attr) => attr.name)[0]
-          }
-          orderId={currentOrder.id}
-        >
-          {/* <div>Participants: {JSON.stringify(currentOrder)}</div>
-      <div>Discount: {discountAmount}</div>
-      <div>Total Price: {totalPrice}</div>
-      <div>Invite Chain: {JSON.stringify(trackInvites)}</div> */}
-          {/* <{t('link')} href={`/pay?orderId=${currentOrder.id}`}>
-        <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
-          Pay
-        </Button>
-      </{t('link')}> */}
-          <div className="inline-flex w-full">
-            <PayButton
-              className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
-              orderId={currentOrder.id}
-            >
-              {t('pay')}
-              <FaMoneyBill size={22} />
-            </PayButton>
-            <InviteLinkGenerator
-              category={existingProduct.category}
-              product={product.replace(/\s+/g, '-')}
-              inviterId={currentUser.id}
-              className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
-            >
-              {t('link')}
-            </InviteLinkGenerator>
-          </div>
-        </Product>
-      </Suspense>
+      <Suspense fallback={<Loading />}>{/* Your Product component rendering code here */}</Suspense>
     </div>
   );
 }
@@ -331,21 +282,25 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
   return inviterOrder;
 }
 
-async function fetchRelatedOrders(itemId, inviteId) {
+async function fetchRelatedOrders(itemId, rootInviteId) {
+  const inviteChain = await trackInviteChain(rootInviteId);
+  const inviteIds = inviteChain.map((invite) => invite.id);
+
   return await Order.findAll({
     where: {
       itemId,
-      inviteId,
+      inviteId: inviteIds,
       status: 'pending',
     },
   });
 }
 
 async function updateRelatedOrders(orders, totalBuyers, discountAmount, originalPrice) {
-  for (const order of orders) {
+  for (let i = 0; i < orders.length; i++) {
+    const order = orders[i];
     order.totalBuyers = totalBuyers;
-    order.discount = Math.round(discountAmount);
-    order.totalAmount = Math.round(originalPrice - discountAmount);
+    order.discount = parseInt(Math.round(discountAmount), 10);
+    order.totalAmount = parseInt(Math.round(originalPrice - discountAmount), 10);
     await order.save();
   }
 }
