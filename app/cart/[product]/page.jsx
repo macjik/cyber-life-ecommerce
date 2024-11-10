@@ -18,41 +18,46 @@ export default async function CartPage({ params, searchParams }) {
 
   product = decodeURIComponent(product);
 
-  const currentUser = await User.findOne({ where: { sub: id } });
-  if (!currentUser)
+const currentUser = await User.findOne({ where: { sub: id } });
+const existingProduct = await Item.findOne({
+  where: { name: product },
+  include: [
+    { model: Category, as: 'itemCategory', attributes: ['name'] },
+    { model: Item_Attribute, as: 'itemAttributes', attributes: ['name', 'value'] },
+  ],
+});
+
+if (!currentUser || !existingProduct) {
+  return (
+    <div className="min-h-screen w-full">
+      <p>{!currentUser ? t('user') : t('product')}</p>
+    </div>
+  );
+}
+
+
+  if (!currentUser || !existingProduct) {
     return (
       <div className="min-h-screen w-full">
-        <p>{t('user')}</p>
+        <p>{!currentUser ? t('user') : t('product')}</p>
       </div>
     );
+  }
 
-  const existingProduct = await Item.findOne({
-    where: { name: product },
-    include: [
-      { model: Category, as: 'itemCategory', attributes: ['name'] },
-      { model: Item_Attribute, as: 'itemAttributes', attributes: ['name', 'value'] },
-    ],
-  });
-  if (!existingProduct)
-    return (
-      <div className="min-h-screen w-full">
-        <p>{t('product')}</p>
-      </div>
-    );
+const currentOrder = await Order.findOne({
+  where: { userId: currentUser.id, itemId: existingProduct.id },
+  attributes: [
+    'id',
+    'userId',
+    'itemId',
+    'inviteId',
+    'discount',
+    'totalAmount',
+    'totalBuyers',
+    'status',
+  ],
+});
 
-  const currentOrder = await Order.findOne({
-    where: { userId: currentUser.id, itemId: existingProduct.id },
-    attributes: [
-      'id',
-      'userId',
-      'itemId',
-      'inviteId',
-      'discount',
-      'totalAmount',
-      'totalBuyers',
-      'status',
-    ],
-  });
   if (currentOrder) {
     return await renderOrderView(currentOrder, existingProduct, currentUser, product, invite);
   }
@@ -233,7 +238,12 @@ async function handleInviteProcess(invite, existingProduct, currentUser) {
     allRelatedOrders.length + 1,
   );
 
-  await updateRelatedOrders(allRelatedOrders, allRelatedOrders.length, discountAmount, existingProduct.price);
+  await updateRelatedOrders(
+    allRelatedOrders,
+    allRelatedOrders.length,
+    discountAmount,
+    existingProduct.price,
+  );
 
   return (
     <div className="min-h-screen">
@@ -296,13 +306,14 @@ async function fetchRelatedOrders(itemId, rootInviteId) {
 }
 
 async function updateRelatedOrders(orders, totalBuyers, discountAmount, originalPrice) {
-  for (let i = 0; i < orders.length; i++) {
-    const order = orders[i];
+  const updates = orders.map((order) => {
     order.totalBuyers = totalBuyers;
-    order.discount = parseInt(Math.round(discountAmount), 10);
-    order.totalAmount = parseInt(Math.round(originalPrice - discountAmount), 10);
-    await order.save();
-  }
+    order.discount = Math.round(discountAmount);
+    order.totalAmount = Math.round(originalPrice - discountAmount);
+    return order.save();
+  });
+
+  await Promise.all(updates);
 }
 
 async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
