@@ -1,13 +1,8 @@
-function calculateDiscount(discount, price, invitesCount) {
+function calculateDiscount(discount, price, invitesCount = 0) {
   if (invitesCount === 0) return price;
-  const total = (100 - discount) / invitesCount;
-  return (price * total) / 100;
+  const effectiveDiscount = Math.min(discount, (discount / 100) * invitesCount);
+  const discountFactor = (100 - effectiveDiscount) / 100;
+  return price * discountFactor;
 }
-
-// (async () => {
-//   const finalPrice = await calculateDiscount('turtle', 4);
-//   console.log(finalPrice);
-//   console.log(`Final price for "turtle" with 4 invites: ${finalPrice}`);
-// })();
 
 module.exports = calculateDiscount;
