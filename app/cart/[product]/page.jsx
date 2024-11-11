@@ -370,7 +370,7 @@ async function updateRelatedOrders(orders, totalBuyers, discountAmount, original
   const updates = orders.map((order) => {
     order.totalBuyers = totalBuyers;
     order.discount = Math.round(discountAmount);
-    order.totalAmount = Math.round(originalPrice - discountAmount);
+    order.totalAmount = Math.round(discountAmount);
     return order.save();
   });
 
