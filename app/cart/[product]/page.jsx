@@ -11,6 +11,8 @@ import { getTranslations } from 'next-intl/server';
 
 const { item: Item, User, Invite, Order, Category, Item_Attribute } = db;
 
+export const revalidate = 0;
+
 export default async function CartPage({ params, searchParams }) {
   let { product } = params;
   let { id, invite } = searchParams;
@@ -18,23 +20,14 @@ export default async function CartPage({ params, searchParams }) {
 
   product = decodeURIComponent(product);
 
-const currentUser = await User.findOne({ where: { sub: id } });
-const existingProduct = await Item.findOne({
-  where: { name: product },
-  include: [
-    { model: Category, as: 'itemCategory', attributes: ['name'] },
-    { model: Item_Attribute, as: 'itemAttributes', attributes: ['name', 'value'] },
-  ],
-});
-
-if (!currentUser || !existingProduct) {
-  return (
-    <div className="min-h-screen w-full">
-      <p>{!currentUser ? t('user') : t('product')}</p>
-    </div>
-  );
-}
-
+  const currentUser = await User.findOne({ where: { sub: id } });
+  const existingProduct = await Item.findOne({
+    where: { name: product },
+    include: [
+      { model: Category, as: 'itemCategory', attributes: ['name'] },
+      { model: Item_Attribute, as: 'itemAttributes', attributes: ['name', 'value'] },
+    ],
+  });
 
   if (!currentUser || !existingProduct) {
     return (
@@ -44,19 +37,27 @@ if (!currentUser || !existingProduct) {
     );
   }
 
-const currentOrder = await Order.findOne({
-  where: { userId: currentUser.id, itemId: existingProduct.id },
-  attributes: [
-    'id',
-    'userId',
-    'itemId',
-    'inviteId',
-    'discount',
-    'totalAmount',
-    'totalBuyers',
-    'status',
-  ],
-});
+  if (!currentUser || !existingProduct) {
+    return (
+      <div className="min-h-screen w-full">
+        <p>{!currentUser ? t('user') : t('product')}</p>
+      </div>
+    );
+  }
+
+  const currentOrder = await Order.findOne({
+    where: { userId: currentUser.id, itemId: existingProduct.id },
+    attributes: [
+      'id',
+      'userId',
+      'itemId',
+      'inviteId',
+      'discount',
+      'totalAmount',
+      'totalBuyers',
+      'status',
+    ],
+  });
 
   if (currentOrder) {
     return await renderOrderView(currentOrder, existingProduct, currentUser, product, invite);
@@ -123,20 +124,21 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
   let discountAmount = 0;
   let totalPrice = existingProduct.price;
 
-  if (currentOrder.totalBuyers > 1) {
-    discountAmount = calculateDiscount(
-      existingProduct.discount,
-      existingProduct.price,
-      currentOrder.totalBuyers,
-    );
-    totalPrice -= discountAmount;
-  }
-
+  //if (currentOrder.totalBuyers > 1) {
+  // discountAmount = calculateDiscount(
+  //   existingProduct.discount,
+  //   existingProduct.price,
+  //   currentOrder.totalBuyers,
+  // );
+  // totalPrice -= discountAmount;
+  // }
   let trackInvites = null;
   if (invite) {
     trackInvites = await handleInviteProcessing(invite, currentUser);
   }
   const { name, description, image, category, price, status, quantity } = existingProduct;
+  const { discount, totalAmount, totalBuyers } = currentOrder;
+
   const t = await getTranslations();
 
   return (
@@ -147,10 +149,10 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
           itemDescription={description}
           itemSrc={image}
           itemCategory={existingProduct.itemCategory.name}
-          itemPrice={totalPrice}
+          itemPrice={totalAmount}
           originalPrice={price}
           itemStatus={status}
-          itemQuantity={quantity - currentOrder.totalBuyers}
+          itemQuantity={quantity - totalBuyers}
           itemAttributes={
             existingProduct.itemAttributes &&
             existingProduct.itemAttributes.map((attr) => attr.value)
