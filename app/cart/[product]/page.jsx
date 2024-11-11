@@ -20,14 +20,16 @@ export default async function CartPage({ params, searchParams }) {
 
   product = decodeURIComponent(product);
 
-  const currentUser = await User.findOne({ where: { sub: id } });
-  const existingProduct = await Item.findOne({
-    where: { name: product },
-    include: [
-      { model: Category, as: 'itemCategory', attributes: ['name'] },
-      { model: Item_Attribute, as: 'itemAttributes', attributes: ['name', 'value'] },
-    ],
-  });
+  const [currentUser, existingProduct] = await Promise.all([
+    User.findOne({ where: { sub: id } }),
+    Item.findOne({
+      where: { name: product },
+      include: [
+        { model: Category, as: 'itemCategory', attributes: ['name'] },
+        { model: Item_Attribute, as: 'itemAttributes', attributes: ['name', 'value'] },
+      ],
+    }),
+  ]);
 
   if (!currentUser || !existingProduct) {
     return (
@@ -247,9 +249,66 @@ async function handleInviteProcess(invite, existingProduct, currentUser) {
     existingProduct.price,
   );
 
+  // if (inviterOrder.totalBuyers > 1) {
+  //   discountAmount = calculateDiscount(
+  //     existingProduct.discount,
+  //     existingProduct.price,
+  //     inviterOrder.totalBuyers,
+  //   );
+  //   totalPrice -= discountAmount;
+  // }
+  // const trackInvites = await trackInviteChain(existingInvite.inviter);
+  // console.log(trackInvites);
   return (
     <div className="min-h-screen">
-      <Suspense fallback={<Loading />}>{/* Your Product component rendering code here */}</Suspense>
+      <Suspense fallback={<Loading />}>
+        <Product
+          itemName={existingProduct.name}
+          itemDescription={existingProduct.description}
+          itemSrc={existingProduct.image}
+          itemCategory={existingProduct.itemCategory.name}
+          itemPrice={currentOrder.totalAmount || existingProduct.price}
+          originalPrice={existingProduct.price}
+          itemStatus={existingProduct.status}
+          itemQuantity={existingProduct.quantity - currentOrder.totalBuyers}
+          itemAttributes={
+            existingProduct.itemAttributes &&
+            existingProduct.itemAttributes.map((attr) => attr.value)
+          }
+          itemAttributeName={
+            existingProduct.itemAttributes &&
+            existingProduct.itemAttributes.map((attr) => attr.name)[0]
+          }
+          orderId={currentOrder.id}
+        >
+          {/* <div>Participants: {JSON.stringify(currentOrder)}</div>
+      <div>Discount: {discountAmount}</div>
+      <div>Total Price: {totalPrice}</div>
+      <div>Invite Chain: {JSON.stringify(trackInvites)}</div> */}
+          {/* <{t('link')} href={`/pay?orderId=${currentOrder.id}`}>
+        <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
+          Pay
+        </Button>
+      </{t('link')}> */}
+          <div className="inline-flex w-full">
+            <PayButton
+              className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
+              orderId={currentOrder.id}
+            >
+              {t('pay')}
+              <FaMoneyBill size={22} />
+            </PayButton>
+            <InviteLinkGenerator
+              category={existingProduct.category}
+              product={existingProduct.name.replace(/\s+/g, '-')}
+              inviterId={currentUser.id}
+              className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
+            >
+              {t('link')}
+            </InviteLinkGenerator>
+          </div>
+        </Product>
+      </Suspense>
     </div>
   );
 }
