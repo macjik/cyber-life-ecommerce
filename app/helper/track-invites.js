@@ -35,7 +35,6 @@ async function trackInviteChain(rootInviteId) {
       }
     }
   }
-
   return invites;
 }
 
