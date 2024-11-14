@@ -1,5 +1,6 @@
 const db = require('../../models/index');
-const { Invite } = db;
+
+const { User, Invite, Order } = db;
 
 async function trackInviteChain(rootInviteId) {
   const invites = [];
@@ -10,27 +11,30 @@ async function trackInviteChain(rootInviteId) {
     const currentInviteId = queue.shift();
 
     if (visited.has(currentInviteId)) continue;
+
     visited.add(currentInviteId);
 
     const currentInvite = await Invite.findOne({ where: { id: currentInviteId } });
-    if (!currentInvite || currentInvite.invitee === null) continue;
+    if (!currentInvite) continue;
 
     invites.push(currentInvite);
 
-    const relatedInvites = await Invite.findAll({
-      where: {
-        inviter: currentInvite.invitee,
-        invitee: { [db.Sequelize.Op.ne]: null },
-      },
-    });
+    const invitesAsInviter = await Invite.findAll({ where: { inviter: currentInvite.invitee } });
 
-    for (let invite of relatedInvites) {
-      if (!visited.has(invite.id)) {
-        queue.push(invite.id);
+    const invitesAsInvitee = await Invite.findAll({ where: { invitee: currentInvite.inviter } });
+
+    for (let i = 0; i < invitesAsInviter.length; i++) {
+      if (!visited.has(invitesAsInviter[i].id)) {
+        queue.push(invitesAsInviter[i].id);
+      }
+    }
+
+    for (let i = 0; i < invitesAsInvitee.length; i++) {
+      if (!visited.has(invitesAsInvitee[i].id)) {
+        queue.push(invitesAsInvitee[i].id);
       }
     }
   }
-
   return invites;
 }
 
