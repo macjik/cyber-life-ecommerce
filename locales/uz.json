@@ -9,6 +9,7 @@
   "pay": "To'lash",
   "link": "Havola",
   "invite": "Taklif qilish",
+  "invite-friends": "Xarid savatiga qo'shib, yanada ko'proq chegirmalarni oching va do'stingizni taklif qilib yanada ko'proq tejang!",
   "buy": "Sotib olish",
   "sms": "Sizning www.mimi.cyberlife.com saytida ro'yxatdan o'tish uchun tasdiqlash kodingiz: {codeToken}. Ushbu kodni boshqa shaxslarga bermang. Kod 10 daqiqa davomida amal qiladi.",
   "error": {
