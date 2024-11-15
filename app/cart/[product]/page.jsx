@@ -1,5 +1,5 @@
 import Product from '../../Components/product';
-import db from '@/models/index';
+import db, { sequelize } from '@/models/index';
 import calculateDiscount from '@/app/helper/calculate-discount';
 import InviteLinkGenerator from '@/app/Components/generate-invite';
 import trackInviteChain from '@/app/helper/track-invites';
@@ -14,134 +14,153 @@ const { item: Item, User, Invite, Order, Category, Item_Attribute } = db;
 export const revalidate = 0;
 
 export default async function CartPage({ params, searchParams }) {
-  let { product } = params;
-  let { id, invite } = searchParams;
-  const t = await getTranslations();
+  const transaction = await sequelize.transaction();
 
-  product = decodeURIComponent(product);
+  try {
+    let { product } = params;
+    let { id, invite } = searchParams;
+    const t = await getTranslations();
 
-  const [currentUser, existingProduct] = await Promise.all([
-    User.findOne({ where: { sub: id } }),
-    Item.findOne({
-      where: { name: product },
-      include: [
-        { model: Category, as: 'itemCategory', attributes: ['name'] },
-        { model: Item_Attribute, as: 'itemAttributes', attributes: ['name', 'value'] },
+    product = decodeURIComponent(product);
+
+    const [currentUser, existingProduct] = await Promise.all([
+      User.findOne({ where: { sub: id } }),
+      Item.findOne({
+        where: { name: product },
+        include: [
+          { model: Category, as: 'itemCategory', attributes: ['name'] },
+          { model: Item_Attribute, as: 'itemAttributes', attributes: ['name', 'value'] },
+        ],
+      }),
+    ]);
+
+    if (!currentUser || !existingProduct) {
+      await transaction.rollback();
+      return (
+        <div className="min-h-screen w-full">
+          <p>{!currentUser ? t('user') : t('product')}</p>
+        </div>
+      );
+    }
+
+    const currentOrder = await Order.findOne({
+      where: { userId: currentUser.id, itemId: existingProduct.id },
+      attributes: [
+        'id',
+        'userId',
+        'itemId',
+        'inviteId',
+        'discount',
+        'totalAmount',
+        'totalBuyers',
+        'status',
       ],
-    }),
-  ]);
+    });
 
-  if (!currentUser || !existingProduct) {
+    if (currentOrder) {
+      const result = await renderOrderView(
+        currentOrder,
+        existingProduct,
+        currentUser,
+        product,
+        invite,
+        transaction,
+      );
+      await transaction.commit();
+      return result;
+    }
+
+    if (invite) {
+      const result = await handleInviteProcess(
+        invite,
+        existingProduct,
+        currentUser,
+        product,
+        transaction,
+      );
+      await transaction.commit();
+      return result;
+    }
+
+    const { name, description, image, category, price, status, quantity } = existingProduct;
+    let order = await Order.create(
+      {
+        itemId: existingProduct.id,
+        status: 'pending',
+        userId: currentUser.id,
+        discount: 0,
+        totalBuyers: 1,
+        totalAmount: parseInt(price, 10),
+      },
+      { transaction },
+    );
+
+    await transaction.commit();
+
     return (
-      <div className="min-h-screen w-full">
-        <p>{!currentUser ? t('user') : t('product')}</p>
+      <div className="min-h-screen">
+        <Suspense fallback={<Loading />}>
+          <Product
+            itemName={name}
+            itemDescription={description}
+            itemSrc={image}
+            itemCategory={existingProduct.itemCategory.name}
+            itemPrice={price}
+            itemStatus={status}
+            itemQuantity={quantity - 1}
+            itemAttributes={
+              existingProduct.itemAttributes &&
+              existingProduct.itemAttributes.map((attr) => attr.value)
+            }
+            itemAttributeName={
+              existingProduct.itemAttributes &&
+              existingProduct.itemAttributes.map((attr) => attr.name)
+            }
+            orderId={order.id}
+          >
+            <div className="inline-flex w-full">
+              <PayButton
+                className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
+                orderId={order.id}
+              >
+                {t('pay')} <FaMoneyBill size={22} />
+              </PayButton>
+              <InviteLinkGenerator
+                category={existingProduct.itemCategory.name}
+                product={product.replace(/\s+/g, '-')}
+                inviterId={currentUser.id}
+                className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
+              >
+                {t('link')}
+              </InviteLinkGenerator>
+            </div>
+          </Product>
+        </Suspense>
       </div>
     );
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
   }
-
-  if (!currentUser || !existingProduct) {
-    return (
-      <div className="min-h-screen w-full">
-        <p>{!currentUser ? t('user') : t('product')}</p>
-      </div>
-    );
-  }
-
-  const currentOrder = await Order.findOne({
-    where: { userId: currentUser.id, itemId: existingProduct.id },
-    attributes: [
-      'id',
-      'userId',
-      'itemId',
-      'inviteId',
-      'discount',
-      'totalAmount',
-      'totalBuyers',
-      'status',
-    ],
-  });
-
-  if (currentOrder) {
-    return await renderOrderView(currentOrder, existingProduct, currentUser, product, invite);
-  }
-
-  if (invite) {
-    return await handleInviteProcess(invite, existingProduct, currentUser, product);
-  }
-
-  const { name, description, image, category, price, status, quantity } = existingProduct;
-  let order = await Order.create({
-    itemId: existingProduct.id,
-    status: 'pending',
-    userId: currentUser.id,
-    discount: 0,
-    totalBuyers: 1,
-    totalAmount: parseInt(price, 10),
-  });
-
-  return (
-    <div className="min-h-screen">
-      <Suspense fallback={<Loading />}>
-        <Product
-          itemName={name}
-          itemDescription={description}
-          itemSrc={image}
-          itemCategory={existingProduct.itemCategory.name}
-          itemPrice={price}
-          itemStatus={status}
-          itemQuantity={quantity - 1}
-          itemAttributes={
-            existingProduct.itemAttributes &&
-            existingProduct.itemAttributes.map((attr) => attr.value)
-          }
-          itemAttributeName={
-            existingProduct.itemAttributes &&
-            existingProduct.itemAttributes.map((attr) => attr.name)
-          }
-          orderId={order.id}
-        >
-          <div className="inline-flex w-full">
-            <PayButton
-              className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
-              orderId={order.id}
-            >
-              {t('pay')} <FaMoneyBill size={22} />
-            </PayButton>
-            <InviteLinkGenerator
-              category={existingProduct.itemCategory.name}
-              product={product.replace(/\s+/g, '-')}
-              inviterId={currentUser.id}
-              className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
-            >
-              {t('link')}
-            </InviteLinkGenerator>
-          </div>
-        </Product>
-      </Suspense>
-    </div>
-  );
 }
 
-async function renderOrderView(currentOrder, existingProduct, currentUser, product, invite) {
-  let discountAmount = 0;
-  let totalPrice = existingProduct.price;
+async function renderOrderView(
+  currentOrder,
+  existingProduct,
+  currentUser,
+  product,
+  invite,
+  transaction,
+) {
+  const t = await getTranslations();
 
-  //if (currentOrder.totalBuyers > 1) {
-  // discountAmount = calculateDiscount(
-  //   existingProduct.discount,
-  //   existingProduct.price,
-  //   currentOrder.totalBuyers,
-  // );
-  // totalPrice -= discountAmount;
-  // }
   let trackInvites = null;
   if (invite) {
-    trackInvites = await handleInviteProcessing(invite, currentUser);
+    trackInvites = await handleInviteProcessing(invite, currentUser, transaction);
   }
+
   const { name, description, image, category, price, status, quantity } = existingProduct;
   const { discount, totalAmount, totalBuyers } = currentOrder;
-
-  const t = await getTranslations();
 
   return (
     <div className="min-h-screen">
@@ -165,9 +184,6 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
           }
           orderId={currentOrder.id}
         >
-          {/* <div>Participants: {currentOrder.totalBuyers}</div>
-      <div>Discount: {discountAmount}</div> */}
-          {/* <div>{trackInvites ? JSON.stringify(trackInvites) : <p>No Invites</p>}</div> */}
           <div className="inline-flex w-full">
             <PayButton
               className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
@@ -191,7 +207,9 @@ async function renderOrderView(currentOrder, existingProduct, currentUser, produ
   );
 }
 
-async function handleInviteProcess(invite, existingProduct, currentUser) {
+async function handleInviteProcess(invite, existingProduct, currentUser, product, transaction) {
+  const t = await getTranslations();
+
   const existingInvite = await Invite.findOne({
     where: { inviteCode: invite },
     include: [
@@ -199,8 +217,6 @@ async function handleInviteProcess(invite, existingProduct, currentUser) {
       { model: User, as: 'Invitee' },
     ],
   });
-
-  const t = await getTranslations();
 
   if (
     !existingInvite ||
@@ -218,15 +234,20 @@ async function handleInviteProcess(invite, existingProduct, currentUser) {
   if (existingInvite.inviter !== currentUser.id) {
     existingInvite.invitee = currentUser.id;
     existingInvite.status = 'expired';
-    await existingInvite.save();
+    await existingInvite.save({ transaction });
   }
 
-  const allRelatedOrders = await fetchRelatedOrders(existingProduct.id, existingInvite.id);
+  const allRelatedOrders = await fetchRelatedOrders(
+    existingProduct.id,
+    existingInvite.id,
+    transaction,
+  );
 
   let inviterOrder = await getOrCreateOrder(
     existingInvite.Inviter.id,
     existingProduct,
     existingInvite.id,
+    transaction,
   );
 
   const currentOrder = await createNewOrder(
@@ -234,6 +255,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser) {
     existingInvite.id,
     existingProduct,
     inviterOrder,
+    transaction,
   );
 
   const discountAmount = calculateDiscount(
@@ -247,18 +269,9 @@ async function handleInviteProcess(invite, existingProduct, currentUser) {
     allRelatedOrders.length,
     discountAmount,
     existingProduct.price,
+    transaction,
   );
 
-  // if (inviterOrder.totalBuyers > 1) {
-  //   discountAmount = calculateDiscount(
-  //     existingProduct.discount,
-  //     existingProduct.price,
-  //     inviterOrder.totalBuyers,
-  //   );
-  //   totalPrice -= discountAmount;
-  // }
-  // const trackInvites = await trackInviteChain(existingInvite.inviter);
-  // console.log(trackInvites);
   return (
     <div className="min-h-screen">
       <Suspense fallback={<Loading />}>
@@ -281,15 +294,6 @@ async function handleInviteProcess(invite, existingProduct, currentUser) {
           }
           orderId={currentOrder.id}
         >
-          {/* <div>Participants: {JSON.stringify(currentOrder)}</div>
-      <div>Discount: {discountAmount}</div>
-      <div>Total Price: {totalPrice}</div>
-      <div>Invite Chain: {JSON.stringify(trackInvites)}</div> */}
-          {/* <{t('link')} href={`/pay?orderId=${currentOrder.id}`}>
-        <Button className="bg-blue-400 text-xl hover:bg-blue-500 transition duration-300 ease-in-out">
-          Pay
-        </Button>
-      </{t('link')}> */}
           <div className="inline-flex w-full">
             <PayButton
               className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
@@ -313,21 +317,25 @@ async function handleInviteProcess(invite, existingProduct, currentUser) {
   );
 }
 
-async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
+async function getOrCreateOrder(inviterId, existingProduct, inviteId, transaction) {
   let inviterOrder = await Order.findOne({
     where: { userId: inviterId, itemId: existingProduct.id, status: 'pending' },
+    transaction,
   });
 
   if (!inviterOrder) {
-    inviterOrder = await Order.create({
-      userId: inviterId,
-      inviteId,
-      itemId: existingProduct.id,
-      discount: 0,
-      totalAmount: existingProduct.price,
-      totalBuyers: 1,
-      status: 'pending',
-    });
+    inviterOrder = await Order.create(
+      {
+        userId: inviterId,
+        inviteId,
+        itemId: existingProduct.id,
+        discount: 0,
+        totalAmount: existingProduct.price,
+        totalBuyers: 1,
+        status: 'pending',
+      },
+      { transaction },
+    );
   }
 
   let allRelatedOrders = await fetchRelatedOrders(existingProduct.id, inviteId);
@@ -348,6 +356,7 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId) {
     updatedTotalBuyers,
     discountAmount,
     existingProduct.price,
+    transaction,
   );
 
   return inviterOrder;
@@ -366,31 +375,40 @@ async function fetchRelatedOrders(itemId, rootInviteId) {
   });
 }
 
-async function updateRelatedOrders(orders, totalBuyers, discountAmount, originalPrice) {
+async function updateRelatedOrders(
+  orders,
+  totalBuyers,
+  discountAmount,
+  originalPrice,
+  transaction,
+) {
   const updates = orders.map((order) => {
     order.totalBuyers = totalBuyers;
     order.discount = Math.round(discountAmount);
     order.totalAmount = Math.round(discountAmount);
-    return order.save();
+    return order.save({ transaction });
   });
 
   await Promise.all(updates);
 }
 
-async function createNewOrder(userId, inviteId, existingProduct, inviterOrder) {
-  return await Order.create({
-    userId,
-    inviteId,
-    itemId: existingProduct.id,
-    discount: inviterOrder.discount,
-    totalAmount: inviterOrder.totalAmount,
-    totalBuyers: inviterOrder.totalBuyers,
-    status: 'pending',
-  });
+async function createNewOrder(userId, inviteId, existingProduct, inviterOrder, transaction) {
+  return await Order.create(
+    {
+      userId,
+      inviteId,
+      itemId: existingProduct.id,
+      discount: inviterOrder.discount,
+      totalAmount: inviterOrder.totalAmount,
+      totalBuyers: inviterOrder.totalBuyers,
+      status: 'pending',
+    },
+    { transaction },
+  );
 }
 
-async function handleInviteProcessing(invite, currentUser) {
-  const existingInvite = await Invite.findOne({ where: { inviteCode: invite } });
+async function handleInviteProcessing(invite, currentUser, transaction) {
+  const existingInvite = await Invite.findOne({ where: { inviteCode: invite }, transaction });
   if (
     existingInvite &&
     existingInvite.status !== 'expired' &&
@@ -398,7 +416,7 @@ async function handleInviteProcessing(invite, currentUser) {
   ) {
     existingInvite.invitee = currentUser.id;
     existingInvite.status = 'expired';
-    await existingInvite.save();
+    await existingInvite.save({ transaction });
   }
   return await trackInviteChain(existingInvite.inviter);
 }
