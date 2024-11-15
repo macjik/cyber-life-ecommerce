@@ -17,11 +17,17 @@ module.exports = {
     },
   },
   test: {
-    url: 'postgresql://localhost:5432',
-    database: 'postgres',
-    dialect: 'postgres',
+    url: process.env.DB_URL,
     logging: false,
-  },
+    ssl: true,
+    dialect: 'postgres',
+    dialectModule: pg,
+    dialectOptions: {
+      ssl: { require: true, rejectUnauthorized: false },
+    },
+    define: {
+      timestamps: true,
+    },  },
   production: {
     url: process.env.DB_URL,
     ssl: true,
