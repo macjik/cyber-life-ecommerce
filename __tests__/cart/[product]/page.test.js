@@ -1,50 +1,29 @@
 import db from '@/models/index';
 import { v4 as uuidv4 } from 'uuid';
+import calculateDiscount from '@/app/helper/calculate-discount';
+import trackInviteChain from '@/app/helper/track-invites';
 
 const { User, item: Item, Invite, Order } = db;
 
-describe('Check Orders', () => {
+describe('CartPage Server and DB Interaction Tests', () => {
   beforeAll(async () => {
-    try {
-      const users = [
-        { name: 'test', phone: '1234567890', hash: 'password', sub: 'user-test-1' },
-        { name: 'test', phone: '2234567890', hash: 'password', sub: 'user-test-2' },
-        { name: 'test', phone: '3234567890', hash: 'password', sub: 'user-test-3' },
-        { name: 'test', phone: '4234567890', hash: 'password', sub: 'user-test-4' },
-        { name: 'test', phone: '5234567890', hash: 'password', sub: 'user-test-5' },
-        { name: 'test', phone: '6234567890', hash: 'password', sub: 'user-test-6' },
-        { name: 'test', phone: '7234567890', hash: 'password', sub: 'user-test-7' },
-        { name: 'test', phone: '8234567890', hash: 'password', sub: 'user-test-8' },
-        { name: 'test', phone: '9234567890', hash: 'password', sub: 'user-test-9' },
-        { name: 'test', phone: '0234567890', hash: 'password', sub: 'user-test-10' },
-      ];
-      await Promise.all(
-        users.map(async (user) => {
-          await User.findOrCreate({
-            where: { phone: user.phone },
-            defaults: user,
-          });
-        }),
-      );
-    } catch (err) {
-      throw new Error(err);
-    }
-  });
+    const users = [
+      { name: 'test', phone: '1234567890', hash: 'password', sub: 'user-test-1' },
+      { name: 'test', phone: '2234567890', hash: 'password', sub: 'user-test-2' },
+      { name: 'test', phone: '3234567890', hash: 'password', sub: 'user-test-3' },
+      { name: 'test', phone: '4234567890', hash: 'password', sub: 'user-test-4' },
+      { name: 'test', phone: '5234567890', hash: 'password', sub: 'user-test-5' },
+    ];
+    await Promise.all(
+      users.map(async (user) => {
+        await User.findOrCreate({
+          where: { phone: user.phone },
+          defaults: user,
+        });
+      }),
+    );
 
-  it('Should create or find and retrieve fake users', async () => {
-    let users = await User.findAll({ where: { name: 'test' } });
-    users = users.map((user) => ({
-      id: user.id,
-      name: user.name,
-      phone: user.phone,
-      hash: user.hash,
-      sub: user.sub,
-    }));
-    expect(users).toBeDefined();
-  });
-
-  it('Should create 1 order', async () => {
-    let [createdItem, wasCreatedItem] = await Item.findOrCreate({
+    await Item.findOrCreate({
       where: { id: 100 },
       defaults: {
         name: 'test-item',
@@ -54,49 +33,103 @@ describe('Check Orders', () => {
         sku: 'test-item-sku',
       },
     });
+  });
 
-    expect(createdItem).toBeDefined();
-    if (wasCreatedItem) {
-      expect(wasCreatedItem).toBe(true);
-    } else {
-      expect(wasCreatedItem).toBe(false);
-    }
+  it('Should handle user invite and order processing in sequence', async () => {
+    const users = await User.findAll({ where: { name: 'test' } });
+    const existingProduct = await Item.findOne({ where: { id: 100 } });
 
-    let users = await User.findAll({ where: { name: 'test' } });
-    if (!users || users.length === 0) {
-      throw new Error('No users found with the specified name.');
-    }
+    for (let i = 0; i < users.length - 1; i++) {
+      const inviter = users[i];
+      const invitee = users[i + 1];
 
-    let [createdOrder, created] = await Order.findOrCreate({
-      where: {
-        itemId: createdItem.id,
-        status: 'pending',
-        userId: users[0].id,
-      },
-      defaults: {
-        discount: 0,
-        totalBuyers: 1,
-        totalAmount: parseInt(createdItem.price, 10),
-      },
-    });
+      const [createdOrder, orderCreated] = await Order.findOrCreate({
+        where: {
+          itemId: existingProduct.id,
+          userId: inviter.id,
+          status: 'pending',
+        },
+        defaults: {
+          discount: 0,
+          totalBuyers: 1,
+          totalAmount: parseInt(existingProduct.price, 10),
+        },
+      });
 
-    expect(createdOrder).toBeDefined();
+      expect(createdOrder).toBeDefined();
+      if (orderCreated) {
+        expect(createdOrder.status).toBe('pending');
+      }
 
-    if (created) {
-      expect(created).toBe(true);
-    } else {
-      expect(created).toBe(false);
-    }
-
-    let invites = [];
-    for (let i = 0; i < users.length; i++) {
-      const invite = await Invite.create({
-        inviter: users[i].id,
+      let invite = await Invite.create({
+        inviter: inviter.id,
         inviteCode: uuidv4(),
         status: 'pending',
       });
-      invites.push(invite);
+
+      invite.invitee = invitee.id;
+      invite.status = 'expired';
+      await invite.save();
+
+      createdOrder.inviteId = invite.id;
+      await createdOrder.save();
+
+      let newOrder = await Order.create({
+        userId: invitee.id,
+        inviteId: invite.id,
+        itemId: existingProduct.id,
+        discount: createdOrder.discount,
+        totalAmount: createdOrder.totalAmount,
+        totalBuyers: createdOrder.totalBuyers + 1,
+        status: 'pending',
+      });
+
+      expect(newOrder).toBeDefined();
+      console.log('new order', newOrder.totalAmount, newOrder.totalBuyers);
+
+      let allRelatedOrders = await fetchRelatedOrders(existingProduct.id, invite.id);
+
+      allRelatedOrders.push(newOrder);
+
+      const maxTotalBuyers = Math.max(...allRelatedOrders.map((order) => order.totalBuyers));
+      const updatedTotalBuyers = maxTotalBuyers + 1;
+
+      const discountAmount = calculateDiscount(
+        existingProduct.discount,
+        existingProduct.price,
+        updatedTotalBuyers,
+      );
+
+      await updateRelatedOrders(
+        allRelatedOrders,
+        updatedTotalBuyers,
+        discountAmount,
+      );
     }
-    expect(invites.length).toBeGreaterThanOrEqual(users.length);
-  });
+  }, 5000);
 });
+
+async function fetchRelatedOrders(itemId, rootInviteId) {
+  const inviteChain = await trackInviteChain(rootInviteId);
+  const inviteIds = inviteChain.map((invite) => invite.id);
+
+  return await Order.findAll({
+    where: {
+      itemId,
+      inviteId: inviteIds,
+      status: 'pending',
+    },
+  });
+}
+
+async function updateRelatedOrders(orders, totalBuyers, discountAmount, originalPrice) {
+  console.log('nigga jala', [totalBuyers, discountAmount]);
+  const updates = orders.map((order) => {
+    order.totalBuyers = totalBuyers;
+    order.discount = Math.round(discountAmount);
+    order.totalAmount = Math.round(discountAmount);
+    return order.save();
+  });
+
+  await Promise.all(updates);
+}
