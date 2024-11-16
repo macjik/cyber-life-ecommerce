@@ -18,16 +18,17 @@ module.exports = {
   },
   test: {
     url: process.env.DB_URL,
-    logging: false,
-    ssl: true,
+    // logging: false,
+    // ssl: true,
     dialect: 'postgres',
     dialectModule: pg,
-    dialectOptions: {
-      ssl: { require: true, rejectUnauthorized: false },
-    },
-    define: {
-      timestamps: true,
-    },  },
+    // dialectOptions: {
+    //   ssl: { require: true, rejectUnauthorized: false },
+    // },
+    // define: {
+    //   timestamps: true,
+    },  
+    //},
   production: {
     url: process.env.DB_URL,
     ssl: true,
