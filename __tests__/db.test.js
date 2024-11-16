@@ -13,10 +13,8 @@ describe('Database Connection Test', () => {
   it('should successfully connect to the database', async () => {
     try {
       await sequelize.authenticate();
-      console.log('Connection has been established successfully.');
     } catch (error) {
-      console.error('Unable to connect to the database:', error);
-      throw new Error('Database connection failed');
+      throw new Error('Database connection failed', error);
     }
   });
 

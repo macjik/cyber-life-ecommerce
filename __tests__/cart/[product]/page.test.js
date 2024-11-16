@@ -44,9 +44,22 @@ describe('Check Orders', () => {
   });
 
   it('Should create 1 order', async () => {
-    let existingItem = await Item.findOne({ where: { id: 20 } });
-    if (!existingItem) {
-      throw new Error('No item found with the specified ID.');
+    let [createdItem, wasCreatedItem] = await Item.findOrCreate({
+      where: { id: 100 },
+      defaults: {
+        name: 'test-item',
+        description: 'This is a test item',
+        quantity: 80,
+        price: 50_000,
+        sku: 'test-item-sku',
+      },
+    });
+
+    expect(createdItem).toBeDefined();
+    if (wasCreatedItem) {
+      expect(wasCreatedItem).toBe(true);
+    } else {
+      expect(wasCreatedItem).toBe(false);
     }
 
     let users = await User.findAll({ where: { name: 'test' } });
@@ -56,31 +69,29 @@ describe('Check Orders', () => {
 
     let [createdOrder, created] = await Order.findOrCreate({
       where: {
-        itemId: existingItem.id,
+        itemId: createdItem.id,
         status: 'pending',
         userId: users[0].id,
       },
       defaults: {
         discount: 0,
         totalBuyers: 1,
-        totalAmount: parseInt(existingItem.price, 10),
+        totalAmount: parseInt(createdItem.price, 10),
       },
     });
 
     expect(createdOrder).toBeDefined();
 
     if (created) {
-      console.log('A new order was created.');
       expect(created).toBe(true);
     } else {
-      console.log('An existing order was found.');
       expect(created).toBe(false);
     }
 
     let invites = [];
-    for (let i = users.length; users.length; i++) {
+    for (let i = 0; i < users.length; i++) {
       const invite = await Invite.create({
-        inviter: (users[i].id),
+        inviter: users[i].id,
         inviteCode: uuidv4(),
         status: 'pending',
       });
