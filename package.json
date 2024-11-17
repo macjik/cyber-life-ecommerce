@@ -13,7 +13,9 @@
     "rollback": "sequelize db:migrate:undo",
     "db:status": "sequelize db:migrate:status",
     "db:undo": "sequelize db:migrate:undo",
-    "db:generate": "sequelize model:generate --name"
+    "db:generate": "sequelize model:generate --name",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@sentry/node": "^8.34.0",
@@ -45,13 +47,22 @@
     "vercel": "^37.8.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
     "@next/eslint-plugin-next": "^14.2.8",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
+    "babel-jest": "^29.7.0",
     "eslint": "^8.50.0",
     "eslint-config-next": "14.2.10",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "joi": "^17.13.3",
     "postcss": "^8",
     "prettier": "^3.3.3",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2"
   },
   "main": "index.js",
   "license": "MIT"
