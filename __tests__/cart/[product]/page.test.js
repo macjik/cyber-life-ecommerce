@@ -31,6 +31,7 @@ describe('CartPage Server and DB Interaction Tests', () => {
         quantity: 80,
         price: 50_000,
         sku: 'test-item-sku',
+        discount: 15,
       },
     });
   });
@@ -85,7 +86,6 @@ describe('CartPage Server and DB Interaction Tests', () => {
       });
 
       expect(newOrder).toBeDefined();
-      console.log('new order', newOrder.totalAmount, newOrder.totalBuyers);
 
       let allRelatedOrders = await fetchRelatedOrders(existingProduct.id, invite.id);
 
@@ -95,18 +95,17 @@ describe('CartPage Server and DB Interaction Tests', () => {
       const updatedTotalBuyers = maxTotalBuyers + 1;
 
       const discountAmount = calculateDiscount(
-        existingProduct.discount,
-        existingProduct.price,
+        parseInt(existingProduct.discount, 10),
+        parseInt(existingProduct.price, 10),
         updatedTotalBuyers,
       );
 
-      await updateRelatedOrders(
-        allRelatedOrders,
-        updatedTotalBuyers,
-        discountAmount,
-      );
+      await updateRelatedOrders(allRelatedOrders, updatedTotalBuyers, discountAmount);
     }
-  }, 5000);
+  }, 30000);
+  afterAll(async () => {
+    await db.sequelize.close();
+  });
 });
 
 async function fetchRelatedOrders(itemId, rootInviteId) {
@@ -123,7 +122,6 @@ async function fetchRelatedOrders(itemId, rootInviteId) {
 }
 
 async function updateRelatedOrders(orders, totalBuyers, discountAmount, originalPrice) {
-  console.log('nigga jala', [totalBuyers, discountAmount]);
   const updates = orders.map((order) => {
     order.totalBuyers = totalBuyers;
     order.discount = Math.round(discountAmount);
