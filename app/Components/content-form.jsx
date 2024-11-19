@@ -136,6 +136,7 @@ export function ContentEdit({
   category,
   attributeName,
   attributes,
+  ikpu,
 }) {
   const [editItemState, editItemAction] = useFormState(editContent, '');
   const [isEdit, setIsEdit] = useState(false);
@@ -244,6 +245,7 @@ export function ContentEdit({
               type="text"
               className="text-sm"
               maxLength="17"
+              defaultValue={ikpu}
             />
             <Link
               href="https://tasnif.soliq.uz/"
