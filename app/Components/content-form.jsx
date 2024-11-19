@@ -8,6 +8,7 @@ import { addContent, deleteContent, editContent } from '../form-actions/cms';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Spinner } from './spinner';
+import Link from '@/node_modules/next/link';
 
 function SubmitButton({ children, className = '' }) {
   const { pending } = useFormStatus();
@@ -59,6 +60,21 @@ export function ContentForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <FormInput label="Category" id="category" type="text" className="text-sm" />
           <FormInput label="Image" id="image" type="file" className="text-sm" />
+          <FormInput
+            label="IKPU"
+            id="category-ikpu"
+            type="text"
+            className="text-sm"
+            maxLength="17"
+          />
+          <Link
+            href="https://tasnif.soliq.uz/"
+            fallback="black"
+            target="_blank"
+            className="underline"
+          >
+            You can check the IKPU of the product in here
+          </Link>
         </div>
 
         <div className="mt-4">
@@ -222,6 +238,21 @@ export function ContentEdit({
             </div>
 
             <FormInput label="Image" id="image" type="file" className="text-sm" />
+            <FormInput
+              label="IKPU"
+              id="category-ikpu"
+              type="text"
+              className="text-sm"
+              maxLength="17"
+            />
+            <Link
+              href="https://tasnif.soliq.uz/"
+              fallback="black"
+              target="_blank"
+              className="underline"
+            >
+              You can check the IKPU of the product in here
+            </Link>
             <FormInput
               defaultValue={description}
               label="Description"
