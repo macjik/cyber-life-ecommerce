@@ -47,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(5, 2),
         defaultValue: 0.0,
       },
+      ikpu: DataTypes.STRING,
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
