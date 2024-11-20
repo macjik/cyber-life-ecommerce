@@ -62,6 +62,7 @@ export default async function Dashboard({ children }) {
                       attributeName={item.itemAttributes.map((attr) => attr.name)}
                       attributes={item.itemAttributes.map((attr) => attr.value)}
                       ikpu={item.ikpu}
+                      packageCode={item.packageCode}
                     />
                   </div>
                 </td>
