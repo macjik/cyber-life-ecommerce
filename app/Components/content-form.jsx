@@ -67,13 +67,14 @@ export function ContentForm() {
             className="text-sm"
             maxLength="17"
           />
+          <FormInput label="Package code" id="package-code" type="text" className={'text-sm'} />
           <Link
             href="https://tasnif.soliq.uz/"
             fallback="black"
             target="_blank"
             className="underline"
           >
-            You can check the IKPU of the product in here
+            You can check the IKPU and package code of the product in here
           </Link>
         </div>
 
@@ -137,6 +138,7 @@ export function ContentEdit({
   attributeName,
   attributes,
   ikpu,
+  packageCode,
 }) {
   const [editItemState, editItemAction] = useFormState(editContent, '');
   const [isEdit, setIsEdit] = useState(false);
@@ -247,13 +249,20 @@ export function ContentEdit({
               maxLength="17"
               defaultValue={ikpu}
             />
+            <FormInput
+              label="Package code"
+              id="package-code"
+              type="text"
+              className={'text-sm'}
+              defaultValue={packageCode}
+            />
             <Link
               href="https://tasnif.soliq.uz/"
               fallback="black"
               target="_blank"
               className="underline"
             >
-              You can check the IKPU of the product in here
+              You can check the IKPU and package code of the product in here
             </Link>
             <FormInput
               defaultValue={description}

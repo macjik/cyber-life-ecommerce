@@ -23,6 +23,7 @@ export async function addContent(state, formData) {
       attributeName: Joi.string().allow(null, ''),
       attributeValue: Joi.array().items(Joi.string().allow(null, '')),
       ikpu: Joi.string().pattern(/^\d+$/).length(17).required(),
+      packageCode: Joi.string().max(20).required(),
     });
 
     const { value, error } = schema.validate({
@@ -36,6 +37,7 @@ export async function addContent(state, formData) {
       attributeName: formData.get('attribute-name'),
       attributeValue: formData.getAll('attribute-value'),
       ikpu: formData.get('category-ikpu'),
+      packageCode: formData.get('package-code')
     });
 
     if (error) {
@@ -52,6 +54,7 @@ export async function addContent(state, formData) {
       attributeValue,
       attributeName,
       ikpu,
+      packageCode
     } = value;
 
     let existingItem = await Item.findOne({ where: { name } });
@@ -88,6 +91,7 @@ export async function addContent(state, formData) {
         sku: uid,
         discount,
         ikpu: ikpu,
+        packageCode: packageCode
       });
 
       if (attributeValue) {
@@ -148,6 +152,7 @@ export async function editContent(state, formData) {
     attributeName: Joi.string().allow(null, ''),
     attributeValue: Joi.array().items(Joi.string().allow(null, '')),
     ikpu: Joi.string().pattern(/^\d+$/).length(17).required(),
+    packageCode: Joi.string().max(20).required()
   });
 
   const { value, error } = schema.validate({
@@ -162,6 +167,7 @@ export async function editContent(state, formData) {
     attributeName: formData.get('attribute-name'),
     attributeValue: formData.getAll('attribute-value'),
     ikpu: formData.get('category-ikpu'),
+    packageCode: formData.get('package-code')
   });
 
   if (error) {
@@ -181,6 +187,7 @@ export async function editContent(state, formData) {
       attributeValue,
       attributeName,
       ikpu,
+      packageCode
     } = value;
 
     const existingItem = await Item.findOne({ where: { sku: id } });
@@ -218,6 +225,7 @@ export async function editContent(state, formData) {
       quantity,
       image: imageUrl,
       ikpu: ikpu,
+      packageCode: packageCode
     });
 
     if (!updatedItem) {
