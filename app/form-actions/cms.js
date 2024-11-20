@@ -22,6 +22,7 @@ export async function addContent(state, formData) {
       quantity: Joi.number().required(),
       attributeName: Joi.string().allow(null, ''),
       attributeValue: Joi.array().items(Joi.string().allow(null, '')),
+      ikpu: Joi.string().pattern(/^\d+$/).length(17).required(),
     });
 
     const { value, error } = schema.validate({
@@ -34,6 +35,7 @@ export async function addContent(state, formData) {
       quantity: formData.get('quantity'),
       attributeName: formData.get('attribute-name'),
       attributeValue: formData.getAll('attribute-value'),
+      ikpu: formData.get('category-ikpu'),
     });
 
     if (error) {
@@ -49,6 +51,7 @@ export async function addContent(state, formData) {
       quantity,
       attributeValue,
       attributeName,
+      ikpu,
     } = value;
 
     let existingItem = await Item.findOne({ where: { name } });
@@ -84,6 +87,7 @@ export async function addContent(state, formData) {
         categoryId: newCategory.id,
         sku: uid,
         discount,
+        ikpu: ikpu,
       });
 
       if (attributeValue) {
@@ -143,6 +147,7 @@ export async function editContent(state, formData) {
     id: Joi.string().required(),
     attributeName: Joi.string().allow(null, ''),
     attributeValue: Joi.array().items(Joi.string().allow(null, '')),
+    ikpu: Joi.string().pattern(/^\d+$/).length(17).required(),
   });
 
   const { value, error } = schema.validate({
@@ -156,6 +161,7 @@ export async function editContent(state, formData) {
     id: formData.get('id'),
     attributeName: formData.get('attribute-name'),
     attributeValue: formData.getAll('attribute-value'),
+    ikpu: formData.get('category-ikpu'),
   });
 
   if (error) {
@@ -174,6 +180,7 @@ export async function editContent(state, formData) {
       quantity,
       attributeValue,
       attributeName,
+      ikpu,
     } = value;
 
     const existingItem = await Item.findOne({ where: { sku: id } });
@@ -210,6 +217,7 @@ export async function editContent(state, formData) {
       discount,
       quantity,
       image: imageUrl,
+      ikpu: ikpu,
     });
 
     if (!updatedItem) {

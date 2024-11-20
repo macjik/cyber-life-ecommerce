@@ -18,6 +18,7 @@ export default async function AdminPanel() {
       'discount',
       'createdAt',
       'price',
+      'ikpu'
     ],
     include: [
       { model: Category, as: 'itemCategory', attributes: ['name'] },
