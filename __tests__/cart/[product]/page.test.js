@@ -1,18 +1,19 @@
 import db from '@/models/index';
 import { v4 as uuidv4 } from 'uuid';
 import calculateDiscount from '@/app/helper/calculate-discount';
-import trackInviteChain from '@/app/helper/track-invites';
+// import trackInviteChain from '@/app/helper/track-invites';
+import { fetchRelatedOrders } from '@/app/cart/[product]/page';
 
 const { User, item: Item, Invite, Order } = db;
 
 describe('CartPage Server and DB Interaction Tests', () => {
   beforeAll(async () => {
     const users = [
-      { name: 'test', phone: '1234567890', hash: 'password', sub: 'user-test-1' },
-      { name: 'test', phone: '2234567890', hash: 'password', sub: 'user-test-2' },
-      { name: 'test', phone: '3234567890', hash: 'password', sub: 'user-test-3' },
-      { name: 'test', phone: '4234567890', hash: 'password', sub: 'user-test-4' },
-      { name: 'test', phone: '5234567890', hash: 'password', sub: 'user-test-5' },
+      { name: 'fake', phone: '1234567890', hash: 'password', sub: 'user-fake-1' },
+      { name: 'fake', phone: '2234567890', hash: 'password', sub: 'user-fake-2' },
+      { name: 'fake', phone: '3234567890', hash: 'password', sub: 'user-fake-3' },
+      { name: 'fake', phone: '4234567890', hash: 'password', sub: 'user-fake-4' },
+      { name: 'fake', phone: '5234567890', hash: 'password', sub: 'user-fake-5' },
     ];
     await Promise.all(
       users.map(async (user) => {
@@ -26,18 +27,18 @@ describe('CartPage Server and DB Interaction Tests', () => {
     await Item.findOrCreate({
       where: { id: 100 },
       defaults: {
-        name: 'test-item',
-        description: 'This is a test item',
+        name: 'fake-item',
+        description: 'This is a fake item',
         quantity: 80,
         price: 50_000,
-        sku: 'test-item-sku',
+        sku: 'fake-item-sku',
         discount: 15,
       },
     });
   });
 
   it('Should handle user invite and order processing in sequence', async () => {
-    const users = await User.findAll({ where: { name: 'test' } });
+    const users = await User.findAll({ where: { name: 'fake' } });
     const existingProduct = await Item.findOne({ where: { id: 100 } });
 
     for (let i = 0; i < users.length - 1; i++) {
@@ -108,18 +109,6 @@ describe('CartPage Server and DB Interaction Tests', () => {
   });
 });
 
-async function fetchRelatedOrders(itemId, rootInviteId) {
-  const inviteChain = await trackInviteChain(rootInviteId);
-  const inviteIds = inviteChain.map((invite) => invite.id);
-
-  return await Order.findAll({
-    where: {
-      itemId,
-      inviteId: inviteIds,
-      status: 'pending',
-    },
-  });
-}
 
 async function updateRelatedOrders(orders, totalBuyers, discountAmount, originalPrice) {
   const updates = orders.map((order) => {

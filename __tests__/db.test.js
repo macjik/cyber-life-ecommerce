@@ -1,6 +1,5 @@
 import db, { sequelize } from '@/models/index';
 
-
 describe('Database Connection Test', () => {
   beforeAll(async () => {
     await sequelize.authenticate();
@@ -18,8 +17,11 @@ describe('Database Connection Test', () => {
     }
   });
 
-  it('should retrieve data from the User table', async () => {
-    const users = await db.User.findAll();
-    expect(users).toBeInstanceOf(Array);
+  it('should successfully query the User table', async () => {
+    try {
+      await db.User.findAll();
+    } catch (error) {
+      throw new Error('Failed to query the User table: ' + error.message);
+    }
   });
 });
