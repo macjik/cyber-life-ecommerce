@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const { validate: uuidValidate, version: uuidVersion } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
   class Invite extends Model {
     /**
@@ -15,7 +16,18 @@ module.exports = (sequelize, DataTypes) => {
   }
   Invite.init(
     {
-      inviteCode: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4 },
+      inviteCode: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isUUIDv4(value) {
+            if (!uuidValidate(value) || uuidVersion(value) !== 4) {
+              throw new Error('Invalid UUIDv4 format for inviteCode');
+            }
+          },
+        },
+      },
       discountPercentage: DataTypes.INTEGER,
       status: {
         type: DataTypes.ENUM('pending', 'used', 'expired', 'unused'),
