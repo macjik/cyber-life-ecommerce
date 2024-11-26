@@ -362,7 +362,7 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId, transactio
   return inviterOrder;
 }
 
-async function fetchRelatedOrders(itemId, rootInviteId) {
+export async function fetchRelatedOrders(itemId, rootInviteId) {
   const inviteChain = await trackInviteChain(rootInviteId);
   const inviteIds = inviteChain.map((invite) => invite.id);
 
