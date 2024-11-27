@@ -368,14 +368,14 @@ export async function fetchRelatedOrders(itemId, rootInviteId) {
 
   return await Order.findAll({
     where: {
-      itemId,
+      itemId: itemId,
       inviteId: inviteIds,
       status: 'pending',
     },
   });
 }
 
-async function updateRelatedOrders(
+export async function updateRelatedOrders(
   orders,
   totalBuyers,
   discountAmount,

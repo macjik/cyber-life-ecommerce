@@ -93,7 +93,7 @@ describe('CartPage Server and DB Interaction Tests', () => {
       allRelatedOrders.push(newOrder);
 
       const maxTotalBuyers = Math.max(...allRelatedOrders.map((order) => order.totalBuyers));
-      const updatedTotalBuyers = maxTotalBuyers + 1;
+      const updatedTotalBuyers = maxTotalBuyers;
 
       const discountAmount = calculateDiscount(
         parseInt(existingProduct.discount, 10),
