@@ -8,6 +8,7 @@ import { FaMoneyBill, FaPercent } from 'react-icons/fa';
 import { Suspense } from 'react';
 import Loading from '@/app/Components/loading';
 import { getTranslations } from 'next-intl/server';
+import { v4 as uuidv4 } from 'uuid';
 
 const { item: Item, User, Invite, Order, Category, Item_Attribute } = db;
 
@@ -83,6 +84,13 @@ export default async function CartPage({ params, searchParams }) {
     }
 
     const { name, description, image, category, price, status, quantity } = existingProduct;
+    let createInvite = await Invite.create({
+      inviter: currentUser.id,
+      invitee: currentUser.id,
+      inviteCode: uuidv4(),
+      status: 'expired',
+    });
+
     let order = await Order.create(
       {
         itemId: existingProduct.id,
@@ -90,6 +98,7 @@ export default async function CartPage({ params, searchParams }) {
         userId: currentUser.id,
         discount: 0,
         totalBuyers: 1,
+        inviteId: createInvite.id,
         totalAmount: parseInt(price, 10),
       },
       { transaction },
@@ -261,14 +270,13 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
   const discountAmount = calculateDiscount(
     existingProduct.discount,
     existingProduct.price,
-    allRelatedOrders.length + 1,
+    allRelatedOrders.length,
   );
 
   await updateRelatedOrders(
     allRelatedOrders,
     allRelatedOrders.length,
     discountAmount,
-    existingProduct.price,
     transaction,
   );
 
@@ -343,7 +351,7 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId, transactio
   allRelatedOrders.push(inviterOrder);
 
   const maxTotalBuyers = Math.max(...allRelatedOrders.map((order) => order.totalBuyers));
-  const updatedTotalBuyers = maxTotalBuyers + 1;
+  const updatedTotalBuyers = maxTotalBuyers;
 
   const discountAmount = calculateDiscount(
     existingProduct.discount,
@@ -351,13 +359,7 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId, transactio
     updatedTotalBuyers,
   );
 
-  await updateRelatedOrders(
-    allRelatedOrders,
-    updatedTotalBuyers,
-    discountAmount,
-    existingProduct.price,
-    transaction,
-  );
+  await updateRelatedOrders(allRelatedOrders, updatedTotalBuyers, discountAmount, transaction);
 
   return inviterOrder;
 }
@@ -375,13 +377,7 @@ export async function fetchRelatedOrders(itemId, rootInviteId) {
   });
 }
 
-export async function updateRelatedOrders(
-  orders,
-  totalBuyers,
-  discountAmount,
-  originalPrice,
-  transaction,
-) {
+export async function updateRelatedOrders(orders, totalBuyers, discountAmount, transaction) {
   const updates = orders.map((order) => {
     order.totalBuyers = totalBuyers;
     order.discount = Math.round(discountAmount);
