@@ -19,7 +19,9 @@ export async function middleware(req) {
     if (language === 'ru') return 'ru';
     if (language === 'uz') return 'uz';
     if (language === 'en') return 'en';
-    if (language === 'zh') return 'zh';
+    if (language === 'zh' || language === 'zh-CN') return 'zh-CN';
+    if (language === 'zh-TW') return 'zh-TW';
+    if (language === 'zh-HK') return 'zh-HK';
     return 'ru';
   };
 
