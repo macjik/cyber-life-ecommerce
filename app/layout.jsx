@@ -5,6 +5,7 @@ import { headers } from 'next/headers';
 import { getLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import Footer from './Components/footer';
+import Locales from './Components/locales';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -31,12 +32,13 @@ export default async function RootLayout({ children }) {
 
   const locale = await getLocale();
   const messages = await getMessages();
-
+  //<FontAwesomeIcon icon="fa-solid fa-earth-asia" />
   return (
     <html lang={locale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-red-100 via-blue-100 to-indigo-100 min-h-full`}
       >
+        <Locales/>
         <NavBar userRole={userRole} isAllowedRoute={isAllowedRoute} />
         <NextIntlClientProvider messages={messages}>
           <main className="min-h-screen">{children}</main>
