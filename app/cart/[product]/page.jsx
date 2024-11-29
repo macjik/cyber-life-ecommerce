@@ -9,6 +9,7 @@ import { Suspense } from 'react';
 import Loading from '@/app/Components/loading';
 import { getTranslations } from 'next-intl/server';
 import { v4 as uuidv4 } from 'uuid';
+import Counter from '@/app/Components/counter';
 
 const { item: Item, User, Invite, Order, Category, Item_Attribute } = db;
 
@@ -19,10 +20,12 @@ export default async function CartPage({ params, searchParams }) {
 
   try {
     let { product } = params;
-    let { id, invite } = searchParams;
+    let { id, invite, count } = searchParams;
     const t = await getTranslations();
 
     product = decodeURIComponent(product);
+    console.log(count);
+    count = parseInt(count, 10);
 
     const [currentUser, existingProduct] = await Promise.all([
       User.findOne({ where: { sub: id } }),
@@ -55,6 +58,7 @@ export default async function CartPage({ params, searchParams }) {
         'totalAmount',
         'totalBuyers',
         'status',
+        'quantity',
       ],
     });
 
@@ -77,6 +81,7 @@ export default async function CartPage({ params, searchParams }) {
         existingProduct,
         currentUser,
         product,
+        count,
         transaction,
       );
       await transaction.commit();
@@ -100,6 +105,7 @@ export default async function CartPage({ params, searchParams }) {
         totalBuyers: 1,
         inviteId: createInvite.id,
         totalAmount: parseInt(price, 10),
+        quantity: parseInt(count, 10),
       },
       { transaction },
     );
@@ -127,6 +133,7 @@ export default async function CartPage({ params, searchParams }) {
             }
             orderId={order.id}
           >
+            <Counter count={count} />
             <div className="inline-flex w-full">
               <PayButton
                 className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
@@ -193,6 +200,7 @@ async function renderOrderView(
           }
           orderId={currentOrder.id}
         >
+          <Counter count={currentOrder.quantity} />
           <div className="inline-flex w-full">
             <PayButton
               className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
@@ -216,7 +224,7 @@ async function renderOrderView(
   );
 }
 
-async function handleInviteProcess(invite, existingProduct, currentUser, product, transaction) {
+async function handleInviteProcess(invite, existingProduct, currentUser, count, transaction) {
   const t = await getTranslations();
 
   const existingInvite = await Invite.findOne({
@@ -256,6 +264,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     existingInvite.Inviter.id,
     existingProduct,
     existingInvite.id,
+    count,
     transaction,
   );
 
@@ -264,6 +273,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     existingInvite.id,
     existingProduct,
     inviterOrder,
+    count,
     transaction,
   );
 
@@ -273,12 +283,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     allRelatedOrders.length,
   );
 
-  await updateRelatedOrders(
-    allRelatedOrders,
-    allRelatedOrders.length,
-    discountAmount,
-    transaction,
-  );
+  await updateRelatedOrders(allRelatedOrders, allRelatedOrders.length, discountAmount, transaction);
 
   return (
     <div className="min-h-screen">
@@ -302,6 +307,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
           }
           orderId={currentOrder.id}
         >
+          <Counter count={count} />
           <div className="inline-flex w-full">
             <PayButton
               className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
@@ -325,7 +331,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
   );
 }
 
-async function getOrCreateOrder(inviterId, existingProduct, inviteId, transaction) {
+async function getOrCreateOrder(inviterId, existingProduct, inviteId, count, transaction) {
   let inviterOrder = await Order.findOne({
     where: { userId: inviterId, itemId: existingProduct.id, status: 'pending' },
     transaction,
@@ -341,6 +347,7 @@ async function getOrCreateOrder(inviterId, existingProduct, inviteId, transactio
         totalAmount: existingProduct.price,
         totalBuyers: 1,
         status: 'pending',
+        quantity: parseInt(count, 10),
       },
       { transaction },
     );
@@ -382,13 +389,14 @@ export async function updateRelatedOrders(orders, totalBuyers, discountAmount, t
     order.totalBuyers = totalBuyers;
     order.discount = Math.round(discountAmount);
     order.totalAmount = Math.round(discountAmount);
+    // order.quantity = parseInt(count, 10);
     return order.save({ transaction });
   });
 
   await Promise.all(updates);
 }
 
-async function createNewOrder(userId, inviteId, existingProduct, inviterOrder, transaction) {
+async function createNewOrder(userId, inviteId, existingProduct, inviterOrder, count, transaction) {
   return await Order.create(
     {
       userId,
@@ -398,12 +406,13 @@ async function createNewOrder(userId, inviteId, existingProduct, inviterOrder, t
       totalAmount: inviterOrder.totalAmount,
       totalBuyers: inviterOrder.totalBuyers,
       status: 'pending',
+      quantity: count,
     },
     { transaction },
   );
 }
 
-async function handleInviteProcessing(invite, currentUser, transaction) {
+async function handleInviteProcessing(invite, currentUser, count, transaction) {
   const existingInvite = await Invite.findOne({ where: { inviteCode: invite }, transaction });
   if (
     existingInvite &&
