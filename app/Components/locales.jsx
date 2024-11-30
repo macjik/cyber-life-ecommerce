@@ -8,6 +8,7 @@ const languages = [
   { code: 'uz', name: "O'zbek tili", flag: '/flags/uz-flag.png' },
   { code: 'en', name: 'English', flag: '/flags/en-flag.png' },
   { code: 'ru', name: 'Русский', flag: '/flags/ru-flag.png' },
+  { code: 'zh', name: '中文', flag: '/flags/zh-flag.png' },
 ];
 
 const translations = {
@@ -18,7 +19,7 @@ const translations = {
 
 export default function Locales() {
   const [language, setLanguage] = useState('ru');
-  const [isDropdownOpen, setDropdownOpen] = useState(false); 
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function Locales() {
 
   const handleLanguageChange = (languageCode) => {
     setLanguage(languageCode);
-    document.cookie = `locale=${languageCode}; path=/; max-age=31536000`; 
+    document.cookie = `locale=${languageCode}; path=/; max-age=31536000`;
 
     router.refresh();
     setDropdownOpen(false);
