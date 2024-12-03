@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       telegramLastName: { type: DataTypes.STRING },
       telegramUserName: { type: DataTypes.STRING },
       phone: { type: DataTypes.STRING, allowNull: false, unique: true },
-      role: { type: DataTypes.ENUM('admin', 'user'), allowNull: false, defaultValue: 'user' },
+      role: { type: DataTypes.ENUM('admin', 'user', 'owner'), allowNull: false, defaultValue: 'user' },
       address: { type: DataTypes.STRING },
       sub: { type: DataTypes.STRING, unique: true },
       hash: { type: DataTypes.STRING, allowNull: false },
