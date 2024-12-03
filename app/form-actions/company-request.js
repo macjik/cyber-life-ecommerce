@@ -14,7 +14,6 @@ export async function registerShop(state, formData) {
     const imageFile = formData.get('image');
     const imageMimeType = imageFile ? imageFile.type : null;
 
-    console.log(imageMimeType);
     const joi = Joi.object({
       name: Joi.string().max(15).required(),
       description: Joi.string().min(10).required(),
@@ -50,11 +49,7 @@ export async function registerShop(state, formData) {
         access: 'public',
       });
 
-      console.log(blob);
-
       const imageUrl = blob.url;
-
-      console.log(imageUrl);
 
       let owner = await User.findOne({ where: { sub: user } });
 
@@ -79,8 +74,6 @@ export async function registerShop(state, formData) {
         let res = await axios.post(`${process.env.BOT_SERVER}/shop`, value, {
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         });
-
-        console.log(res.data);
 
         if (res.status === 200) {
           return { status: 200 };

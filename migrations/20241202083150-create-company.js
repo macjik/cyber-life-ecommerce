@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: Sequelize.STRING,
+      name: { type: Sequelize.STRING, unique: true },
       logo: Sequelize.STRING,
       slogan: Sequelize.STRING,
       description: Sequelize.STRING,
