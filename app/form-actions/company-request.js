@@ -34,7 +34,7 @@ export async function registerShop(state, formData) {
       return `Error: ${error}`;
     }
 
-    const { name, description, slogan, logo, user } = value;
+    const { name, description, slogan, user } = value;
 
     const uid = uuidv4();
 
@@ -55,7 +55,7 @@ export async function registerShop(state, formData) {
 
       let cacheCompany = await client.set(
         user,
-        JSON.stringify({ name: name, description: description, slogan: slogan, logo: imageUrl }),
+        JSON.stringify({ name: name, description: description, slogan: slogan, logo: imageUrl, phone: owner.phone }),
         'EX',
         604800,
       );
