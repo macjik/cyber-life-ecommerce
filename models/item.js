@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       ikpu: DataTypes.STRING,
       packageCode: DataTypes.STRING,
-      shop: DataTypes.STRING,
+      // shop: DataTypes.STRING,
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

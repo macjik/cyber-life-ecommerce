@@ -22,6 +22,7 @@ export default async function Home() {
         'discount',
         'createdAt',
         'price',
+        'companyId'
       ],
       include: [{ model: Category, as: 'itemCategory', attributes: ['name'] }],
     });

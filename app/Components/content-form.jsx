@@ -23,12 +23,15 @@ function SubmitButton({ children, className = '' }) {
   );
 }
 
-export function ContentForm() {
+export function ContentForm({ company = null }) {
   const [contentState, addContentAction] = useFormState(addContent, '');
   const router = useRouter();
   const [attributes, setAttributes] = useState([{ name: '', value: '' }]);
 
   if (contentState?.status === 200) {
+    if (company) {
+      router.push('shop-cms');
+    }
     router.push('/admin');
   }
 
@@ -101,13 +104,13 @@ export function ContentForm() {
               />
             </div>
           ))}
+          {company && <input type='hidden' value={company} name='company'/>}
           <Button className="bg-gray-300 p-3 mt-4 rounded-md" onClick={handleAddAttribute}>
             Add Attribute +
           </Button>
         </div>
 
         <FormInput label="Description" id="description" type="text" className="mt-4 text-sm" />
-
         <SubmitButton>Confirm</SubmitButton>
 
         {contentState?.error && <p className="text-red-700 text-sm mt-2">{contentState.error}</p>}
