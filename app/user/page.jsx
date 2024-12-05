@@ -5,6 +5,7 @@ import UserProfile from '../Components/user-profile';
 import SubNav from '../Components/sub-nav';
 import { FaShoppingCart, FaCommentDots, FaHandshake, FaLink, FaLanguage } from 'react-icons/fa';
 import { getTranslations } from 'next-intl/server';
+import client from '../services/redis';
 
 const User = db.User;
 
@@ -12,9 +13,10 @@ export default async function UserPage({ searchParams }) {
   const userId = searchParams?.id;
   const user = await User.findOne({ where: { sub: userId } });
 
-  const { name, phone, address, sub, id, image } = user;
+  const { name, phone, address, sub, id, image, role } = user;
 
   const t = await getTranslations('profile');
+  let hasApplied = await client.get(userId);
   return (
     <main className="w-full min-h-screen flex-row justify-center items-center overflow-hidden">
       <UserProfile name={name} userId={id} phone={phone} address={address} image={image} />
@@ -23,10 +25,16 @@ export default async function UserPage({ searchParams }) {
       </SubNav>
       {/* <SubNav faIcon={<FaCommentDots size={24} />} link="/feedback">
         My feedback
-      </SubNav> */}
-      <SubNav faIcon={<FaHandshake size={24} />} link="https://t.me/uidas4">
-        {t('partnership')}
-      </SubNav>
+        </SubNav> */}
+      {role !== 'owner' && !hasApplied ? (
+        <SubNav faIcon={<FaHandshake size={24} />} link="/shop">
+          {t('partnership')}
+        </SubNav>
+      ) : (
+        <SubNav faIcon={<FaHandshake size={24} />} link="https://t.me/uuid40">
+          {t('partnership')}
+        </SubNav>
+      )}
       {/* <SubNav faIcon={<FaLink size={24} />} link="/invite">
         Invite Link
       </SubNav> */}

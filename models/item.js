@@ -8,10 +8,11 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ User, Order, Category, Item_Attribute }) {
+    static associate({ User, Order, Category, Item_Attribute, Company }) {
       item.belongsToMany(User, { through: Order, foreignKey: 'itemId' });
       item.belongsTo(Category, { foreignKey: 'categoryId', as: 'itemCategory' });
       item.hasMany(Item_Attribute, { foreignKey: 'itemId', as: 'itemAttributes' });
+      item.belongsTo(Company, {foreignKey: 'companyId', as: 'company'});
     }
   }
 
@@ -49,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       ikpu: DataTypes.STRING,
       packageCode: DataTypes.STRING,
+      // shop: DataTypes.STRING,
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

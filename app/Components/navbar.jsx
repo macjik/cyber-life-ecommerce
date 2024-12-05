@@ -47,7 +47,15 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon 
           <span className="text-xs">Admin</span>
         </Link>
       )}
-
+      {userRole === 'owner' && (
+        <Link
+          href={`/shop-cms`}
+          className="flex flex-col items-center text-black hover:text-gray-500 w-full"
+        >
+          <AiFillControl size={24} />
+          <span className="text-xs">Admin</span>
+        </Link>
+      )}
       {children && (
         <Link
           href={`/${children.toLowerCase()}`}

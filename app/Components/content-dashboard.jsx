@@ -5,13 +5,18 @@ import Button from './button';
 import { ContentDelete, ContentEdit } from './content-form';
 import CopyButtonLink from './copy-button-link';
 
-export default async function Dashboard({ children }) {
+export default async function Dashboard({ children, company = null }) {
   return (
     <div className="p-4 w-full bg-white shadow-md">
-      <div className="flex justify-center w-full mb-3">
-        <Link href="/admin/cms">
+      <div className="flex justify-center w-full mb-3 space-x-4">
+        <Link href={company ? `/admin/cms?company=${company}` : '/admin/cms'}>
           <Button className="bg-indigo-600 text-white rounded-lg">Add +</Button>
         </Link>
+        {!company && (
+          <Link href="/companies">
+            <Button className="bg-orange-600 text-white rounded-lg">Companies</Button>
+          </Link>
+        )}
       </div>
       <div className="overflow-x-auto">
         <table className="w-full table-auto">
