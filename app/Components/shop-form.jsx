@@ -22,6 +22,10 @@ function SubmitButton({ children, className = '' }) {
 export default function ShopForm({ user }) {
   const [shopState, shopAction] = useFormState(registerShop, '');
 
+  if (shopState.status === 200) {
+    window.location.href = '/';
+  }
+
   return (
     <Form title="Enter your shop details" action={shopAction}>
       <FormInput label="Shop name*" id="name" type="text" />
