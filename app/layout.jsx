@@ -6,6 +6,7 @@ import { getLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import Footer from './Components/footer';
 import Locales from './Components/locales';
+import ShopsNav from './Components/shops-nav';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -41,6 +42,7 @@ export default async function RootLayout({ children }) {
         <Locales />
         <NavBar userRole={userRole} isAllowedRoute={isAllowedRoute} />
         <NextIntlClientProvider messages={messages}>
+          {userRole !== 'guest' && <ShopsNav />}
           <main className="min-h-screen">{children}</main>
         </NextIntlClientProvider>
         <Footer />
