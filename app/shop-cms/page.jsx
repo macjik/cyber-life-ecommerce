@@ -14,7 +14,6 @@ export default async function ShopCMS({ searchParams }) {
     return <>Unauthorized!</>;
   }
   const company = user.companyId;
-  console.log(company);
 
   if (company) {
     const items = await Item.findAll({

@@ -29,10 +29,11 @@ export function ContentForm({ company = null }) {
   const [attributes, setAttributes] = useState([{ name: '', value: '' }]);
 
   if (contentState?.status === 200) {
-    if (company) {
-      router.push('shop-cms');
+    if (company !== null) {
+      window.location.href = '/shop-cms';
+    } else {
+      window.location.href = '/admin';
     }
-    router.push('/admin');
   }
 
   function handleAddAttribute(event) {
@@ -104,7 +105,7 @@ export function ContentForm({ company = null }) {
               />
             </div>
           ))}
-          {company && <input type='hidden' value={company} name='company'/>}
+          {company && <input type="hidden" value={company} name="company" />}
           <Button className="bg-gray-300 p-3 mt-4 rounded-md" onClick={handleAddAttribute}>
             Add Attribute +
           </Button>

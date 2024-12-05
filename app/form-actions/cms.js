@@ -111,6 +111,7 @@ export async function addContent(state, formData) {
       }
 
       revalidatePath('/admin');
+      revalidatePath('/shop-cms');
       return { status: 200, value };
     } else {
       return { error: 'No image file found' };

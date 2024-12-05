@@ -19,17 +19,16 @@ function SubmitButton({ children, className = '' }) {
   );
 }
 
-export default function ShopForm({user}) {
+export default function ShopForm({ user }) {
   const [shopState, shopAction] = useFormState(registerShop, '');
 
-  console.log(shopState);
   return (
     <Form title="Enter your shop details" action={shopAction}>
       <FormInput label="Shop name*" id="name" type="text" />
       <FormInput label="Shop logo" id="image" type="file" />
       <FormInput label="Shop description" id="description" type="text" />
       <FormInput label="Shop slogan" id="slogan" />
-      <input value={user} type='hidden' name='user'/>
+      <input value={user} type="hidden" name="user" />
       <SubmitButton>Submit</SubmitButton>
     </Form>
   );

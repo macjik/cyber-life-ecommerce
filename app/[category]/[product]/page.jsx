@@ -8,9 +8,10 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { getTranslations } from 'next-intl/server';
 import trackInviteChain from '@/app/helper/track-invites';
 import calculateDiscount from '@/app/helper/calculate-discount';
+import Image from '@/node_modules/next/image';
 
-const { item: Item, Invite } = db;
-
+const { item: Item, Invite, Company } = db;
+//get company and companies seperate page
 export default async function ItemPage({ params, searchParams }) {
   const { product } = params;
   const { invite } = searchParams;
@@ -21,8 +22,27 @@ export default async function ItemPage({ params, searchParams }) {
   const [existingItem, existingInvite] = await Promise.all([
     Item.findOne({
       where: { name: decodedProduct },
+      include: [
+        {
+          model: Company,
+          as: 'company',
+          attributes: ['id', 'name', 'description', 'slogan', 'logo'],
+        },
+      ],
     }),
-    invite ? Invite.findOne({ where: { inviteCode: invite }, attributes: ['id'] }) : null,
+    invite
+      ? Invite.findOne({
+          where: { inviteCode: invite },
+          attributes: ['id'],
+          include: [
+            {
+              model: Company,
+              as: 'company',
+              attributes: ['id', 'name', 'description', 'slogan', 'logo'],
+            },
+          ],
+        })
+      : null,
   ]);
 
   if (!existingItem) {
@@ -33,7 +53,8 @@ export default async function ItemPage({ params, searchParams }) {
     );
   }
 
-  const { name, description, image, discount, quantity, category, price, status } = existingItem;
+  const { name, description, image, discount, quantity, category, price, status, company } =
+    existingItem;
 
   let totalBuyers = 0;
   let discountApplied;
@@ -57,6 +78,19 @@ export default async function ItemPage({ params, searchParams }) {
           itemStatus={status}
           itemDiscount={discount}
         >
+          <Link href={`/?shop=${company.id}`}>
+            <p>Shop: {company.name}</p>
+            <div className="h-10 w-64">
+              <Image
+                src={company.logo}
+                alt={`${company.name} logo`}
+                quality={100}
+                width={100}
+                height={100}
+                className="object-contain w-full h-full"
+              />
+            </div>
+          </Link>
           <p className="w-full text-center mb-2 bg-green-600 text-white font-semibold rounded p-3">
             {t('invite-friends')}
           </p>
