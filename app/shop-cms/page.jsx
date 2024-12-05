@@ -1,14 +1,21 @@
 'use server';
 
 import Dashboard from '@/app/Components/content-dashboard';
-import db from '@/models/index';
+import db, { Op } from '@/models/index';
 
 const { User, item: Item, Category, Item_Attribute } = db;
 
 export default async function ShopCMS({ searchParams }) {
   const { id } = searchParams;
 
-  let user = await User.findOne({ where: { sub: id, role: 'owner' } });
+  let user = await User.findOne({
+    where: {
+      sub: id,
+      role: {
+        [Op.or]: ['owner', 'admin'],
+      },
+    },
+  });
 
   if (!user) {
     return <>Unauthorized!</>;
