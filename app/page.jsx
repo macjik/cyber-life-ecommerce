@@ -79,7 +79,7 @@ export default async function Home({ searchParams }) {
                 alt={`${company.name} image`}
               />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800">{company.description}</h3>
+            <h3 className="text-xl font-semibold text-gray-800 text-center">{company.description}</h3>
             {/* <p className="text-xl font-medium text-gray-800">{company.slogan}</p> */}
             <h2 className="text-3xl font-semibold text-gray-800">{t('featured-deals')}</h2>
             <div className="flex justify-center flex-wrap gap-6">
