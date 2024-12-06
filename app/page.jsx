@@ -58,13 +58,13 @@ export default async function Home({ searchParams }) {
             <p className="text-lg text-gray-700">{company.slogan || <>{t('slogan')}</>}</p>
             {/* <div className="mb-4 md:mb-0 w-full h-full flex justify-center items-center mt-10 md:mt-10"> */}
             {/* <img
-              src="/transparent-mimi-logo.png"
-              alt="mimi logo"
-              quality={70}
-              width={70}
-              height={100}
-              className="object-contain"
-            /> */}
+                src="/transparent-mimi-logo.png"
+                alt="mimi logo"
+                quality={70}
+                width={70}
+                height={100}
+                className="object-contain"
+              /> */}
             {/* </div> */}
           </section>
           <section className="w-full max-w-4xl flex flex-col justify-center items-center space-y-8">
@@ -89,7 +89,7 @@ export default async function Home({ searchParams }) {
                     href={`/${item.itemCategory.name.replace(/\s+/g, '-')}/${item.name.replace(/\s+/g, '-')}`}
                     key={index}
                   >
-                    <div className="border w-64 h-4xl p-4 rounded-lg shadow-lg bg-white border-blue-200 hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                    <div className="border w-64 flex flex-col h-full p-4 rounded-lg shadow-lg bg-white border-blue-200 hover:shadow-xl transition-shadow duration-300 ease-in-out">
                       <div className="w-full h-64 overflow-hidden">
                         <Image
                           priority
@@ -101,17 +101,19 @@ export default async function Home({ searchParams }) {
                           alt={`${item.name} image`}
                         />
                       </div>
-                      <h3 className="font-bold text-2xl text-gray-900 mb-2">{item.name}</h3>
+                      <h3 className="font-bold text-xl text-gray-900 my-2 truncate">{item.name}</h3>
                       <p className="text-gray-700 text-base mb-2 truncate">{item.description}</p>
                       <p className="text-xl font-semibold text-gray-800 mb-4">
-                        {item.price}UZS
+                        {Math.floor(item.price).toLocaleString()} UZS
                         {item.discount > 0 && (
-                          <span className="text-green-600">(-{item.discount}%)</span>
+                          <span className="text-green-600"> (-{Math.floor(item.discount)}%)</span>
                         )}
                       </p>
-                      <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full transition-colors duration-300 ease-in-out">
-                        {t('join')}
-                      </button>
+                      <div className="mt-auto">
+                        <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full transition-colors duration-300 ease-in-out">
+                          {t('join')}
+                        </button>
+                      </div>
                     </div>
                   </Link>
                 ))
@@ -167,13 +169,13 @@ export default async function Home({ searchParams }) {
           <p className="text-lg text-gray-700">{t('slogan')}</p>
           {/* <div className="mb-4 md:mb-0 w-full h-full flex justify-center items-center mt-10 md:mt-10"> */}
           {/* <img
-            src="/transparent-mimi-logo.png"
-            alt="mimi logo"
-            quality={70}
-            width={70}
-            height={100}
-            className="object-contain"
-          /> */}
+              src="/transparent-mimi-logo.png"
+              alt="mimi logo"
+              quality={70}
+              width={70}
+              height={100}
+              className="object-contain"
+            /> */}
           {/* </div> */}
         </section>
         <section className="w-full max-w-4xl flex flex-col justify-center items-center space-y-8">
@@ -185,7 +187,7 @@ export default async function Home({ searchParams }) {
                   href={`/${item.itemCategory.name.replace(/\s+/g, '-')}/${item.name.replace(/\s+/g, '-')}`}
                   key={index}
                 >
-                  <div className="border w-64 h-4xl p-4 rounded-lg shadow-lg bg-white border-blue-200 hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                  <div className="border w-64 flex flex-col p-4 rounded-lg shadow-lg bg-white border-blue-200 hover:shadow-xl transition-shadow duration-300 ease-in-out h-full">
                     <div className="w-full h-64 overflow-hidden">
                       <Image
                         priority
@@ -197,17 +199,19 @@ export default async function Home({ searchParams }) {
                         alt={`${item.name} image`}
                       />
                     </div>
-                    <h3 className="font-bold text-2xl text-gray-900 mb-2">{item.name}</h3>
+                    <h3 className="font-bold text-xl text-gray-900 my-2 truncate">{item.name}</h3>
                     <p className="text-gray-700 text-base mb-2 truncate">{item.description}</p>
                     <p className="text-xl font-semibold text-gray-800 mb-4">
-                      {item.price}UZS
+                      {Math.floor(item.price).toLocaleString()} UZS
                       {item.discount > 0 && (
-                        <span className="text-green-600">(-{item.discount}%)</span>
+                        <span className="text-green-600"> (-{Math.floor(item.discount)}%)</span>
                       )}
                     </p>
-                    <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full transition-colors duration-300 ease-in-out">
-                      {t('join')}
-                    </button>
+                    <div className="mt-auto">
+                      <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 w-full transition-colors duration-300 ease-in-out">
+                        {t('join')}
+                      </button>
+                    </div>
                   </div>
                 </Link>
               ))
