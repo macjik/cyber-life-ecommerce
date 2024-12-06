@@ -15,7 +15,6 @@ describe('CartPage Server and DB Interaction Tests', () => {
       { name: 'fake', phone: '5234567890', hash: 'password', sub: 'user-fake-5' },
       { name: 'fake', phone: '5234567891', hash: 'password', sub: 'user-fake-6' },
       { name: 'unrelated user', phone: '5234367891', hash: 'password', sub: 'bruv' },
-
     ];
     await Promise.all(
       users.map(async (user) => {

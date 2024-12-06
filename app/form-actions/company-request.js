@@ -55,7 +55,13 @@ export async function registerShop(state, formData) {
 
       let cacheCompany = await client.set(
         user,
-        JSON.stringify({ name: name, description: description, slogan: slogan, logo: imageUrl, phone: owner.phone }),
+        JSON.stringify({
+          name: name,
+          description: description,
+          slogan: slogan,
+          logo: imageUrl,
+          phone: owner.phone,
+        }),
         'EX',
         604800,
       );

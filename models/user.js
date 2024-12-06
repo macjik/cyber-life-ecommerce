@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(item, { through: Order, foreignKey: 'userId' });
       User.hasMany(Invite, { as: 'InvitationsSent', foreignKey: 'inviter' });
       User.hasMany(Invite, { as: 'InvitationsReceived', foreignKey: 'invitee' });
-      User.belongsTo(Company, {foreignKey: 'companyId', as: 'companyOwner'});
+      User.belongsTo(Company, { foreignKey: 'companyId', as: 'companyOwner' });
     }
   }
   User.init(
@@ -24,7 +24,11 @@ module.exports = (sequelize, DataTypes) => {
       telegramLastName: { type: DataTypes.STRING },
       telegramUserName: { type: DataTypes.STRING },
       phone: { type: DataTypes.STRING, allowNull: false, unique: true },
-      role: { type: DataTypes.ENUM('admin', 'user', 'owner'), allowNull: false, defaultValue: 'user' },
+      role: {
+        type: DataTypes.ENUM('admin', 'user', 'owner'),
+        allowNull: false,
+        defaultValue: 'user',
+      },
       address: { type: DataTypes.STRING },
       sub: { type: DataTypes.STRING, unique: true },
       hash: { type: DataTypes.STRING, allowNull: false },

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       item.belongsToMany(User, { through: Order, foreignKey: 'itemId' });
       item.belongsTo(Category, { foreignKey: 'categoryId', as: 'itemCategory' });
       item.hasMany(Item_Attribute, { foreignKey: 'itemId', as: 'itemAttributes' });
-      item.belongsTo(Company, {foreignKey: 'companyId', as: 'company'});
+      item.belongsTo(Company, { foreignKey: 'companyId', as: 'company' });
     }
   }
 

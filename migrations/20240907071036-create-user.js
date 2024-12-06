@@ -16,7 +16,11 @@ module.exports = {
       telegramLastName: { type: Sequelize.STRING },
       telegramUserName: { type: Sequelize.STRING },
       phone: { type: Sequelize.STRING, allowNull: false, unique: true },
-      role: { type: Sequelize.ENUM('admin', 'user', 'owner'), allowNull: false, defaultValue: 'user' },
+      role: {
+        type: Sequelize.ENUM('admin', 'user', 'owner'),
+        allowNull: false,
+        defaultValue: 'user',
+      },
       address: { type: Sequelize.STRING },
       hash: { type: Sequelize.STRING, allowNull: false },
       sub: { type: Sequelize.STRING, unique: true },

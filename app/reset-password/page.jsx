@@ -1,6 +1,6 @@
 'use server';
 
-import {ResetPasswordForm} from '../Components/reset-password';
+import { ResetPasswordForm } from '../Components/reset-password';
 
 export default async function ResetPasswordPage() {
   return (

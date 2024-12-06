@@ -27,8 +27,8 @@ module.exports = {
     // },
     // define: {
     //   timestamps: true,
-    },  
-    //},
+  },
+  //},
   production: {
     url: process.env.DB_URL,
     ssl: true,

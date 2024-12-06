@@ -273,12 +273,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     allRelatedOrders.length,
   );
 
-  await updateRelatedOrders(
-    allRelatedOrders,
-    allRelatedOrders.length,
-    discountAmount,
-    transaction,
-  );
+  await updateRelatedOrders(allRelatedOrders, allRelatedOrders.length, discountAmount, transaction);
 
   return (
     <div className="min-h-screen">
