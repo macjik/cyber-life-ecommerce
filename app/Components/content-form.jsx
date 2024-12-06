@@ -4,7 +4,13 @@ import { useFormState, useFormStatus } from 'react-dom';
 import Form from './form';
 import FormInput from './form-input';
 import Button from './button';
-import { addContent, deleteContent, editContent } from '../form-actions/cms';
+import {
+  addContent,
+  deleteCompany,
+  deleteContent,
+  editCompany,
+  editContent,
+} from '../form-actions/cms';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Spinner } from './spinner';
@@ -289,6 +295,72 @@ export function ContentEdit({
         </div>
       ) : (
         <Button onClick={handleEditItem} className="bg-slate-500 text-white px-4 py-1 rounded">
+          Edit
+        </Button>
+      )}
+    </>
+  );
+}
+
+export function DeleteCompany({ id }) {
+  const [deleteCompanyState, deleteCompanyAction] = useFormState(deleteCompany, '');
+  console.log(deleteCompanyState);
+
+  return (
+    <form action={deleteCompanyAction}>
+      <input type="hidden" value={id} name="id" />
+      <SubmitButton className="bg-red-600 rounded-none">Delete</SubmitButton>
+    </form>
+  );
+}
+
+export function EditCompany({ id, name, description, slogan, logo }) {
+  const [isEdit, setIsEdit] = useState(false);
+  const [companyState, editCompanyAction] = useFormState(editCompany, '');
+
+  function handleEdit(event) {
+    event.preventDefault();
+    setIsEdit((prevState) => !prevState);
+  }
+
+  useEffect(() => {
+    if (companyState.status === 200) {
+      setIsEdit(false);
+    }
+  }, [companyState?.status]);
+
+  return (
+    <>
+      {isEdit ? (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-auto">
+          <Form
+            title="Edit Company"
+            className="w-full max-w-2xl rounded-lg"
+            action={editCompanyAction}
+          >
+            <FormInput defaultValue={name} id="name" label="Title" className="text-sm" />
+            <FormInput
+              defaultValue={description}
+              id="description"
+              label="Description"
+              className="text-sm"
+            />
+            <FormInput defaultValue={slogan} id="slogan" label="slogan" className="text-sm" />
+            <FormInput id="logo" label="Logo" type="file" />
+            <input type="hidden" defaultValue={id} name="id" />
+            {companyState?.error && (
+              <p className="text-red-700 text-sm mt-2">{companyState.error}</p>
+            )}
+            <div className="w-full grid space-y-4">
+              <SubmitButton>Confirm</SubmitButton>
+              <Button className="bg-slate-700 text-white rounded-lg" onClick={handleEdit}>
+                Cancel
+              </Button>
+            </div>
+          </Form>
+        </div>
+      ) : (
+        <Button className="bg-slate-500 text-white px-4 py-1 rounded-none" onClick={handleEdit}>
           Edit
         </Button>
       )}
