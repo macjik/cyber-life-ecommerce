@@ -132,7 +132,7 @@ export default async function CartPage({ params, searchParams }) {
                 className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
                 orderId={order.id}
               >
-                {t('pay')} <FaMoneyBill size={22} />
+                {/* {t('pay')} <FaMoneyBill size={22} /> */}
               </PayButton>
               <InviteLinkGenerator
                 category={existingProduct.itemCategory.name}
@@ -199,7 +199,7 @@ async function renderOrderView(
               orderId={currentOrder.id}
             >
               {t('pay')}
-              <FaMoneyBill size={22} />
+              {/* <FaMoneyBill size={22} /> */}
             </PayButton>
             <InviteLinkGenerator
               category={existingProduct.itemCategory.name}
@@ -303,7 +303,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
               orderId={currentOrder.id}
             >
               {t('pay')}
-              <FaMoneyBill size={22} />
+              {/* <FaMoneyBill size={22} /> */}
             </PayButton>
             <InviteLinkGenerator
               category={existingProduct.category}
