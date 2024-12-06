@@ -15,9 +15,9 @@ export async function registerShop(state, formData) {
     const imageMimeType = imageFile ? imageFile.type : null;
 
     const joi = Joi.object({
-      name: Joi.string().max(15).required(),
+      name: Joi.string().required(),
       description: Joi.string().min(10).required(),
-      slogan: Joi.string().max(15).required(),
+      slogan: Joi.string().required(),
       logo: Joi.string().valid('image/jpg', 'image/jpeg', 'image/png').required(),
       user: Joi.any().required(),
     });
@@ -31,7 +31,7 @@ export async function registerShop(state, formData) {
     });
 
     if (error) {
-      return `Error: ${error}`;
+      return { error: error };
     }
 
     const { name, description, slogan, user } = value;
