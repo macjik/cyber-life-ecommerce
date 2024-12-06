@@ -75,7 +75,7 @@ export function PreLoginForm({ children }) {
       </div>
       <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
       <Link href="/reset-password">
-        <p className="text-blue-700 text-sm text-right mt-3 underline">Forgot Password?</p>
+        <p className="text-blue-700 text-sm text-right mt-3 underline">{t('forgot-password')}</p>
       </Link>
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
       <div className="inline-flex w-full">
