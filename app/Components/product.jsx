@@ -86,8 +86,7 @@ export default async function Product({
               {itemAttributes &&
                 itemAttributes.map(
                   (attr, index) =>
-                    attr &&
-                    index && (
+                    attr && (
                       <ProductOptions key={index} orderId={orderId}>
                         {attr}
                       </ProductOptions>
