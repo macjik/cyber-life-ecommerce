@@ -52,8 +52,10 @@ export default async function Home({ searchParams }) {
       <Suspense fallback={<Loading />}>
         <main className="w-full flex flex-col items-center pt-4 pb-20 space-y-6 min-h-screen">
           <section className="w-full max-w-4xl h-1/3 flex flex-col justify-center items-center text-center space-y-4">
-            <h1 className="text-5xl font-extrabold text-gray-900">Mimi: {t('title')}</h1>
-            <p className="text-lg text-gray-700">{t('slogan')}</p>
+            <h1 className="text-5xl font-extrabold text-gray-900">
+              {company.name || <>Mimi: {t('title')}</>}
+            </h1>
+            <p className="text-lg text-gray-700">{company.slogan || <>{t('slogan')}</>}</p>
             {/* <div className="mb-4 md:mb-0 w-full h-full flex justify-center items-center mt-10 md:mt-10"> */}
             {/* <img
               src="/transparent-mimi-logo.png"
@@ -67,7 +69,7 @@ export default async function Home({ searchParams }) {
           </section>
           <section className="w-full max-w-4xl flex flex-col justify-center items-center space-y-8">
             <div className="w-full flex items-center space-x-4 justify-center">
-              <h1 className="text-3xl font-bold text-gray-800">{company.name}</h1>
+              {/* <h1 className="text-3xl font-bold text-gray-800">{company.name}</h1> */}
               <Image
                 priority
                 width={100}
@@ -78,7 +80,7 @@ export default async function Home({ searchParams }) {
               />
             </div>
             <h3 className="text-xl font-semibold text-gray-800">{company.description}</h3>
-            <p className="text-xl font-medium text-gray-800">{company.slogan}</p>
+            {/* <p className="text-xl font-medium text-gray-800">{company.slogan}</p> */}
             <h2 className="text-3xl font-semibold text-gray-800">{t('featured-deals')}</h2>
             <div className="flex justify-center flex-wrap gap-6">
               {items && items.length > 0 ? (

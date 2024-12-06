@@ -79,8 +79,11 @@ export default async function ItemPage({ params, searchParams }) {
           itemDiscount={discount}
         >
           {company && (
-            <div className="mt-6 p-4 bg-white shadow-lg rounded-lg flex flex-col items-center">
-              <Link href={`/?shop=${company.id}`} className="flex flex-col items-center">
+            <div className="mt-6 py-4 bg-white shadow-lg rounded-lg flex flex-col items-center">
+              <Link
+                href={`/?shop=${company.id}`}
+                className="flex flex-col items-center w-full h-full"
+              >
                 <div className="w-24 h-24 rounded-full overflow-hidden shadow-md">
                   <Image
                     src={company.logo}
