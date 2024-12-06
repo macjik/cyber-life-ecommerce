@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { put } from '@vercel/blob';
 import { revalidatePath } from '@/node_modules/next/cache';
 
-const { item: Item, Category, Item_Attribute } = db;
+const { item: Item, Category, Item_Attribute, Company } = db;
 
 export async function addContent(state, formData) {
   try {
@@ -268,5 +268,104 @@ export async function editContent(state, formData) {
   } catch (err) {
     console.error(err);
     return { error: `${err.message}` };
+  }
+}
+
+export async function deleteCompany(state, formData) {
+  const companyId = formData.get('id');
+
+  try {
+    let company = await Company.findOne({ where: { id: companyId } });
+
+    if (!company) {
+      const errorMessage = { error: `Company with ID ${companyId} does not exist!` };
+      console.error(errorMessage);
+      return { status: 404, message: errorMessage };
+    }
+
+    let items = await Item.findAll({ where: { companyId: companyId } });
+
+    if (items && items.length > 0) {
+      await Promise.all(
+        items.map(async (item) => {
+          await Item_Attribute.destroy({ where: { itemId: item.id } });
+        }),
+      );
+
+      await Promise.all(items.map((item) => item.destroy()));
+    }
+
+    await company.destroy();
+
+    revalidatePath('/companies');
+
+    return { status: 200, message: 'Company and associated items deleted successfully' };
+  } catch (err) {
+    console.error('Error:', err.message);
+    return { status: 500, message: JSON.stringify(err) };
+  }
+}
+
+export async function editCompany(state, formData) {
+  const imageFile = formData.get('image');
+  const imageMimeType = imageFile ? imageFile.type : null;
+
+  try {
+    const schema = Joi.object({
+      id: Joi.any().required(),
+      name: Joi.string().required(),
+      description: Joi.string().allow(''),
+      slogan: Joi.string().allow(''),
+      logo: Joi.string().valid('image/jpg', 'image/jpeg', 'image/png').allow(null),
+    });
+
+    const { value, error } = schema.validate({
+      id: formData.get('id'),
+      name: formData.get('name'),
+      description: formData.get('description'),
+      slogan: formData.get('slogan'),
+      logo: imageMimeType,
+    });
+
+    if (error) {
+      console.error('Validation Error:', error);
+      return { status: 400, error: `Validation Error: ${error.message}` };
+    }
+
+    const { id, name, description, slogan, logo } = value;
+
+    let company = await Company.findOne({ where: { id } });
+
+    if (!company) {
+      console.error('Company not found');
+      return { status: 404, error: 'Company not found' };
+    }
+
+    let imageUrl = company.logo;
+
+    if (imageFile) {
+      const imageArrayBuffer = await imageFile.arrayBuffer();
+      const imageBuffer = Buffer.from(imageArrayBuffer);
+      const imageFileName = `${uuidv4()}.${imageMimeType.split('/')[1]}`;
+
+      const blob = await put(imageFileName, imageBuffer, {
+        contentType: imageMimeType,
+        access: 'public',
+      });
+
+      imageUrl = blob.url;
+    }
+
+    await company.update({
+      name,
+      description,
+      slogan,
+      logo: imageUrl,
+    });
+
+    return { status: 200, message: 'Company updated successfully' };
+  } catch (err) {
+    console.error('Error updating company:', err);
+    return { status: 500, error: `Internal Server Error: ${err.message}` };
   }
 }
