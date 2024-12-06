@@ -73,5 +73,13 @@
     "email": "邮箱",
     "tel": "电话",
     "telegram-bot": "Telegram 机器人"
+  },
+  "Shop": {
+    "shop-form-title": "输入您的商店详细信息",
+    "shop-name": "您的商店名称*",
+    "shop-logo": "商店标志*",
+    "shop-description": "您的商店描述（描述您的商店做什么）*",
+    "shop-slogan": "商店口号（广告中使用的简短短语）*",
+    "submit": "应用"
   }
 }

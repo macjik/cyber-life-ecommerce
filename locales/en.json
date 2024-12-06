@@ -73,5 +73,13 @@
     "email": "Email",
     "tel": "Tel",
     "telegram-bot": "Telegram bot"
+  },
+  "Shop": {
+    "shop-form-title": "Enter your shop details",
+    "shop-name": "Name of your shop*",
+    "shop-logo": "Logo of the shop*",
+    "shop-description": "Description of your shop (Description of what your shop does)*",
+    "shop-slogan": "Slogan of your shop (Brief phrase to display used in advertisements)*",
+    "submit": "Apply"
   }
 }

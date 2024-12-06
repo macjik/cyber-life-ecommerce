@@ -73,5 +73,13 @@
     "email": "Elektron pochta",
     "tel": "Telefon",
     "telegram-bot": "Telegram bot"
+  },
+  "Shop": {
+    "shop-form-title": "Do'koningiz tafsilotlarini kiriting",
+    "shop-name": "Do'koningiz nomi*",
+    "shop-logo": "Do'kon logotipi*",
+    "shop-description": "Do'koningizning tavsifi (Do'koningiz nima qilishi haqida tavsif)*",
+    "shop-slogan": "Do'koningiz shiori (Reklamalarda ishlatiladigan qisqa ibora)*",
+    "submit": "Qo'llash"
   }
 }
