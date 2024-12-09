@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Spinner } from './spinner';
 import Link from '@/node_modules/next/link';
+import { useTranslations } from 'next-intl';
 
 function SubmitButton({ children, className = '' }) {
   const { pending } = useFormStatus();
@@ -33,6 +34,7 @@ export function ContentForm({ company = null }) {
   const [contentState, addContentAction] = useFormState(addContent, '');
   const router = useRouter();
   const [attributes, setAttributes] = useState([{ name: '', value: '' }]);
+  const t = useTranslations('Admin');
 
   if (contentState?.status === 200) {
     if (company !== null) {
@@ -56,20 +58,20 @@ export function ContentForm({ company = null }) {
   return (
     <main className="w-full h-full flex items-center justify-center p-4">
       <Form
-        title="Product Details"
+        title={t('product-details')}
         className="w-full max-w-2xl rounded-lg"
         action={addContentAction}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormInput label="Title" id="title" type="text" className="text-sm" />
-          <FormInput label="Price" id="price" type="number" className="text-sm" />
-          <FormInput label="Quantity" id="quantity" type="number" className="text-sm" />
-          <FormInput label="Discount" id="discount" type="number" className="text-sm" />
+          <FormInput label={t('title')} id="title" type="text" className="text-sm" />
+          <FormInput label={t('price')} id="price" type="number" className="text-sm" />
+          <FormInput label={t('quantity')} id="quantity" type="number" className="text-sm" />
+          <FormInput label={t('discount')} id="discount" type="number" className="text-sm" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <FormInput label="Category" id="category" type="text" className="text-sm" />
-          <FormInput label="Image" id="image" type="file" className="text-sm" />
+          <FormInput label={t('category')} id="category" type="text" className="text-sm" />
+          <FormInput label={t('image')} id="image" type="file" className="text-sm" />
           <FormInput
             label="IKPU"
             id="category-ikpu"
@@ -77,21 +79,26 @@ export function ContentForm({ company = null }) {
             className="text-sm"
             maxLength="17"
           />
-          <FormInput label="Package code" id="package-code" type="text" className={'text-sm'} />
+          <FormInput
+            label={t('package-code')}
+            id="package-code"
+            type="text"
+            className={'text-sm'}
+          />
           <Link
             href="https://tasnif.soliq.uz/"
             fallback="black"
             target="_blank"
             className="underline"
           >
-            You can check the IKPU and package code of the product in here
+            Find IKPU and package code here
           </Link>
         </div>
 
         <div className="mt-4">
-          <h3 className="text-lg font-semibold mb-4">Attributes</h3>
+          <h3 className="text-lg font-semibold mb-4">{t('attributes-title')}</h3>
           <FormInput
-            label={`Attribute Name`}
+            label={t('attribute-name')}
             type="text"
             id="attribute-name"
             onChange={(e) => handleAttributeChange('name', e.target.value)}
@@ -101,7 +108,7 @@ export function ContentForm({ company = null }) {
           {attributes.map((attribute, index) => (
             <div key={index} className="grid grid-cols-2 gap-4 mt-2">
               <FormInput
-                label={`Attribute Value ${index + 1}`}
+                label={`${t('attribute-value')} ${index + 1}`}
                 type="text"
                 id="attribute-value"
                 value={attribute.value}
@@ -113,12 +120,12 @@ export function ContentForm({ company = null }) {
           ))}
           {company && <input type="hidden" value={company} name="company" />}
           <Button className="bg-gray-300 p-3 mt-4 rounded-md" onClick={handleAddAttribute}>
-            Add Attribute +
+            {t('add-attribute')} +
           </Button>
         </div>
 
-        <FormInput label="Description" id="description" type="text" className="mt-4 text-sm" />
-        <SubmitButton>Confirm</SubmitButton>
+        <FormInput label={t('description')}id="description" type="text" className="mt-4 text-sm" />
+        <SubmitButton>{t('confirm')}</SubmitButton>
 
         {contentState?.error && <p className="text-red-700 text-sm mt-2">{contentState.error}</p>}
       </Form>
@@ -128,10 +135,11 @@ export function ContentForm({ company = null }) {
 
 export function ContentDelete({ id }) {
   const [deleteItemState, deleteItemAction] = useFormState(deleteContent, '');
+  const t = useTranslations('Admin');
   return (
     <form action={deleteItemAction}>
       <input type="hidden" value={id} name="id" />
-      <SubmitButton className="bg-red-600">Delete</SubmitButton>
+      <SubmitButton className="bg-red-600">{t('delete')}</SubmitButton>
     </form>
   );
 }
@@ -158,6 +166,7 @@ export function ContentEdit({
       ? attributes.map((value) => ({ name: attributeName, value }))
       : [{ name: '', value: '' }],
   );
+  const t = useTranslations('Admin');
 
   function handleEditItem(event) {
     event.preventDefault();
@@ -186,7 +195,7 @@ export function ContentEdit({
       {isEdit ? (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
           <Form
-            title="Product Details"
+            title={t('product-details')}
             className="w-full max-w-2xl rounded-lg"
             action={editItemAction}
           >
@@ -194,28 +203,28 @@ export function ContentEdit({
               <input type="hidden" value={id} name="id" />
               <FormInput
                 defaultValue={name}
-                label="Title"
+                label={t('title')}
                 id="title"
                 type="text"
                 className="text-sm"
               />
               <FormInput
                 defaultValue={price}
-                label="Price"
+                label={t('price')}
                 id="price"
                 type="number"
                 className="text-sm"
               />
               <FormInput
                 defaultValue={quantity}
-                label="Quantity"
+                label={t('quantity')}
                 id="quantity"
                 type="number"
                 className="text-sm"
               />
               <FormInput
                 defaultValue={discount}
-                label="Discount"
+                label={t('discount')}
                 id="discount"
                 type="number"
                 className="text-sm"
@@ -223,10 +232,10 @@ export function ContentEdit({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <FormInput defaultValue={category} label="Category" id="category" type="text" />
+              <FormInput defaultValue={category} label={t('category')} id="category" type="text" />
               <FormInput
                 defaultValue={attributeName[0]}
-                label="Product Attribute Name"
+                label={t('attributes-title')}
                 id="attribute-name"
                 type="text"
                 required={false}
@@ -235,7 +244,7 @@ export function ContentEdit({
               {attributeList.map((attr, index) => (
                 <div key={index} className="flex mt-2 w-full">
                   <FormInput
-                    label={`Attribute Value ${index + 1}`}
+                    label={`${t('attribute-value')} ${index + 1}`}
                     type="text"
                     id={`attribute-value`}
                     value={attr.value}
@@ -246,11 +255,11 @@ export function ContentEdit({
                 </div>
               ))}
               <Button className="bg-gray-300 p-3 mt-4 rounded-md" onClick={handleAddAttribute}>
-                Add Attribute +
+                {t('add-attribute')} +
               </Button>
             </div>
 
-            <FormInput label="Image" id="image" type="file" className="text-sm" />
+            <FormInput label={t('image')} id="image" type="file" className="text-sm" />
             <FormInput
               label="IKPU"
               id="category-ikpu"
@@ -260,7 +269,7 @@ export function ContentEdit({
               defaultValue={ikpu}
             />
             <FormInput
-              label="Package code"
+              label={t('package-code')}
               id="package-code"
               type="text"
               className={'text-sm'}
@@ -272,11 +281,11 @@ export function ContentEdit({
               target="_blank"
               className="underline"
             >
-              You can check the IKPU and package code of the product in here
+              IKPU and Package code here
             </Link>
             <FormInput
               defaultValue={description}
-              label="Description"
+              label={t('description')}
               id="description"
               type="text"
               className="mt-4 text-sm"
@@ -286,16 +295,16 @@ export function ContentEdit({
               <p className="text-red-700 text-sm mt-2">{editItemState.error}</p>
             )}
             <div className="w-full grid space-y-4">
-              <SubmitButton>Confirm</SubmitButton>
+              <SubmitButton>{t('confirm')}</SubmitButton>
               <Button className="bg-slate-700 text-white rounded-lg" onClick={handleEditItem}>
-                Cancel
+                {t('cancel')}
               </Button>
             </div>
           </Form>
         </div>
       ) : (
         <Button onClick={handleEditItem} className="bg-slate-500 text-white px-4 py-1 rounded">
-          Edit
+          {t('edit')}
         </Button>
       )}
     </>

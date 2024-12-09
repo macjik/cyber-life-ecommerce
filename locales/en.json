@@ -81,5 +81,28 @@
     "shop-description": "Description of your shop (Description of what your shop does)*",
     "shop-slogan": "Slogan of your shop (Brief phrase to display used in advertisements)*",
     "submit": "Apply"
+  },
+  "Admin": {
+    "add": "Add",
+    "title": "Title",
+    "category": "Category",
+    "price": "Price",
+    "discount": "Discount",
+    "description": "Description",
+    "quantity": "Quantity",
+    "status": "Status",
+    "link": "Link",
+    "actions": "Actions",
+    "image": "Image",
+    "package-code": "Package code",
+    "attributes-title": "Attributes",
+    "attribute-name": "Attribute name",
+    "attribute-value": "Attribute value",
+    "add-attribute": "Add Attribute",
+    "confirm": "Confirm",
+    "product-details": "Product Details",
+    "delete": "Delete",
+    "edit": "Edit",
+    "cancel": "Cancel"
   }
 }

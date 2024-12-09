@@ -4,13 +4,15 @@ import Link from 'next/link';
 import Button from './button';
 import { ContentDelete, ContentEdit } from './content-form';
 import CopyButtonLink from './copy-button-link';
+import { getTranslations } from 'next-intl/server';
 
 export default async function Dashboard({ children, company = null }) {
+  const t = await getTranslations('Admin');
   return (
     <div className="p-4 w-full bg-white shadow-md">
       <div className="flex justify-center w-full mb-3 space-x-4">
         <Link href={company ? `/admin/cms?company=${company}` : '/admin/cms'}>
-          <Button className="bg-indigo-600 text-white rounded-lg">Add +</Button>
+          <Button className="bg-indigo-600 text-white rounded-lg">{t('add')} +</Button>
         </Link>
         {!company && (
           <Link href="/companies">
@@ -22,15 +24,15 @@ export default async function Dashboard({ children, company = null }) {
         <table className="w-full table-auto">
           <thead className="bg-gray-200">
             <tr>
-              <th className="text-center p-2">Title</th>
-              <th className="text-center p-2">Category</th>
-              <th className="text-center p-2">Price</th>
-              <th className="text-center p-2">Discount</th>
-              <th className="text-center p-2">Description</th>
-              <th className="text-center p-2">Quantity</th>
-              <th className="text-center p-2">Status</th>
-              <th className="text-center p-2">Link</th>
-              <th className="text-center p-2">Actions</th>
+              <th className="text-center p-2">{t('title')}</th>
+              <th className="text-center p-2">{t('category')}</th>
+              <th className="text-center p-2">{t('price')}</th>
+              <th className="text-center p-2">{t('discount')}</th>
+              <th className="text-center p-2">{t('description')}</th>
+              <th className="text-center p-2">{t('quantity')}</th>
+              <th className="text-center p-2">{t('status')}</th>
+              <th className="text-center p-2">{t('link')}</th>
+              <th className="text-center p-2">{t('actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-300">

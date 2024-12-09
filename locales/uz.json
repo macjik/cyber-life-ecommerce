@@ -81,5 +81,28 @@
     "shop-description": "Do'koningizning tavsifi (Do'koningiz nima qilishi haqida tavsif)*",
     "shop-slogan": "Do'koningiz shiori (Reklamalarda ishlatiladigan qisqa ibora)*",
     "submit": "Qo'llash"
+  },
+  "Admin": {
+    "add": "Qo‘shish",
+    "title": "Sarlavha",
+    "category": "Kategoriya",
+    "price": "Narx",
+    "discount": "Chegirma",
+    "description": "Tavsif",
+    "quantity": "Miqdor",
+    "status": "Holat",
+    "link": "Havola",
+    "actions": "Harakatlar",
+    "image": "Rasm",
+    "package-code": "Paket kodi",
+    "attributes-title": "Xususiyatlar",
+    "attribute-name": "Xususiyat nomi",
+    "attribute-value": "Xususiyat qiymati",
+    "add-attribute": "Xususiyat qo‘shish",
+    "confirm": "Tasdiqlash",
+    "product-details": "Mahsulot tafsilotlari",
+    "delete": "O‘chirish",
+    "edit": "Tahrirlash",
+    "cancel": "Bekor qilish"
   }
 }
