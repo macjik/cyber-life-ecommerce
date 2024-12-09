@@ -26,14 +26,12 @@ export default async function UserPage({ searchParams }) {
       {/* <SubNav faIcon={<FaCommentDots size={24} />} link="/feedback">
         My feedback
         </SubNav> */}
-      {role !== 'owner' && !hasApplied ? (
+      {!['owner', 'admin'].includes(role) && !hasApplied ? (
         <SubNav faIcon={<FaHandshake size={24} />} link="/shop">
           {t('partnership')}
         </SubNav>
       ) : (
-        <SubNav faIcon={<FaHandshake size={24} />} link="https://t.me/uuid40">
-          {t('partnership')}
-        </SubNav>
+        role === 'owner' && <SubNav link="/shop-cms">CMS</SubNav>
       )}
       {/* <SubNav faIcon={<FaLink size={24} />} link="/invite">
         Invite Link
