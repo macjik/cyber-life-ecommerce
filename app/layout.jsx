@@ -40,7 +40,7 @@ export default async function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-red-100 via-blue-100 to-indigo-100 min-h-full`}
       >
         <Locales />
-        <NavBar userRole={userRole} isAllowedRoute={isAllowedRoute} />
+        <NavBar locale={locale} userRole={userRole} isAllowedRoute={isAllowedRoute} />
         <NextIntlClientProvider messages={messages}>
           {/* {userRole !== 'guest' && <ShopsNav />} */}
           <main className="min-h-screen">{children}</main>

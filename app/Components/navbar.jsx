@@ -1,12 +1,12 @@
 'use server';
 
 import Link from 'next/link';
-import { FaUser, FaShoppingCart, FaHome } from 'react-icons/fa';
+import { FaUser, FaShoppingCart, FaHome, FaStarOfLife } from 'react-icons/fa';
 import { AiFillControl } from 'react-icons/ai';
 import { getTranslations } from 'next-intl/server';
 import Image from '@/node_modules/next/image';
 
-export default async function NavBar({ userRole, isAllowedRoute, children, icon }) {
+export default async function NavBar({ userRole, isAllowedRoute, children, icon, locale }) {
   if (!isAllowedRoute) return null;
 
   const t = await getTranslations();
@@ -63,6 +63,15 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon 
         >
           {icon}
           <span className="text-xs">{children}</span>
+        </Link>
+      )}
+      {locale === 'zh' && (
+        <Link
+          href={`/life`}
+          className="flex flex-col items-center text-black hover:text-gray-500 w-full"
+        >
+          <FaStarOfLife size={24} />
+          <span className="text-xs">生活</span>
         </Link>
       )}
     </nav>
