@@ -29,7 +29,7 @@ export default async function RootLayout({ children }) {
   const currentPath = headersList.get('x-current-path');
   const userRole = headersList.get('x-user-role') || 'guest';
 
-  const isAllowedRoute = !currentPath.startsWith('/auth') && !/^\/[^/]+\/[^/]+$/.test(currentPath);
+  const isAllowedRoute = !currentPath.startsWith('/auth') && !/\/item(\/|$)/.test(currentPath);
 
   const locale = await getLocale();
   const messages = await getMessages();

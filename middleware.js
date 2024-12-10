@@ -14,6 +14,7 @@ export async function middleware(req) {
   const paths = ['/auth', '/reset-password'];
   const dynamicCategoryProductPattern = /^\/[^\/]+\/[^\/]+$/;
   const cartPathPattern = /^\/cart\/[^\/]+$/;
+  const lifePathPattern = /^\/life\/[^\/]+$/;
 
   const getLocale = (language) => {
     if (language === 'ru') return 'ru';
@@ -34,7 +35,8 @@ export async function middleware(req) {
 
   if (
     dynamicCategoryProductPattern.test(req.nextUrl.pathname) &&
-    !cartPathPattern.test(req.nextUrl.pathname)
+    !cartPathPattern.test(req.nextUrl.pathname) &&
+    !lifePathPattern.test(req.nextUrl.pathname)
   ) {
     return response;
   }
