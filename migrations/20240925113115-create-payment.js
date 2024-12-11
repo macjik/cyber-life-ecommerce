@@ -13,6 +13,8 @@ module.exports = {
         type: Sequelize.ENUM('pending', 'successful', 'failed'),
         defaultValue: 'pending',
       },
+      service: Sequelize.STRING,
+      amount: Sequelize.INTEGER,
       statusCode: Sequelize.INTEGER,
       region: Sequelize.STRING,
       cardType: Sequelize.STRING,
