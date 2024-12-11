@@ -5,42 +5,65 @@ import Form from './form';
 import FormInput from './form-input';
 import { useFormState, useFormStatus } from 'react-dom';
 import { invoiceReq } from '../form-actions/invoice';
+import { Spinner } from './spinner';
+import Button from './button';
 
-export default function LifeModal() {
+function SubmitButton({ children, className = '' }) {
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      className={`${className} bg-blue-600 text-white rounded-lg`}
+      type="submit"
+      disabled={pending}
+    >
+      {pending ? <Spinner /> : children}
+    </Button>
+  );
+}
+
+export default function LifeModal({ placeholder }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [invoiceReqState, invoiceReqAction] = useFormState(invoiceReq, '');
 
+  const params = new URLSearchParams(searchParams.toString());
+
+  if (invoiceReqState.status === 200) {
+    params.delete('service');
+    router.push(`?${params.toString()}`);
+  }
+
   const handleCancel = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete('operator');
+    params.delete('service');
     router.push(`?${params.toString()}`);
   };
 
-  const service = searchParams.get('operator');
+  const service = searchParams.get('service');
   const id = searchParams.get('id');
 
   console.log(invoiceReqState);
   return (
     <Form title={service} action={invoiceReqAction} className="">
       <div className="w-full inline-flex mt-4">
-        <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm">
-          +998
-        </div>
+        {placeholder === 'Phone Number' ? (
+          <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm">
+            +998
+          </div>
+        ) : null}
         <FormInput
           className="border-l-0 h-9 w-full flex-grow rounded-l-none font-medium text-gray-700"
           inputMode="tel"
-          id="phone"
-          placeholder="(xx) xxx-xx-xx"
+          id="target"
+          placeholder={placeholder}
           type="tel"
-          maxLength="9"
+          // maxLength="9"
         />
       </div>
       <FormInput
         className="w-full"
         inputMode="tel"
         id="amount"
-        placeholder=""
+        placeholder="1000-999 000 UZS"
         type="number"
         maxLength="6"
         minLength="3"
@@ -49,12 +72,7 @@ export default function LifeModal() {
       <input type="hidden" value={id} name="id" />
       <input type="hidden" value={service} name="service" />
       <div className="flex justify-end space-x-4">
-        <button
-          className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none"
-          type="submit"
-        >
-          Confirm
-        </button>
+        <SubmitButton>Confirm</SubmitButton>
         <button
           type="button"
           onClick={handleCancel}

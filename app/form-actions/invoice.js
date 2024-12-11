@@ -7,20 +7,22 @@ import Joi from '@/node_modules/joi/lib/index';
 import { put } from '@vercel/blob';
 import { v4 as uuidv4 } from 'uuid';
 import client from '../services/redis';
+import { revalidate } from '../cart/[product]/page';
+import { revalidatePath } from '@/node_modules/next/cache';
 
 const { User, Payment } = db;
 
 export async function invoiceReq(state, formData) {
   try {
     const joi = Joi.object({
-      phone: Joi.string().length(9).required(),
+      target: Joi.string().length(9).required(),
       amount: Joi.string().min(4).max(6).required(),
       id: Joi.string().required(),
       service: Joi.string().required(),
     });
 
     const { value, error } = joi.validate({
-      phone: formData.get('phone').toString(),
+      target: formData.get('target').toString(),
       amount: formData.get('amount').toString(),
       id: formData.get('id'),
       service: formData.get('service'),
@@ -45,6 +47,8 @@ export async function invoiceReq(state, formData) {
     let res = await axios.post(`${process.env.BOT_SERVER}/pay`, value, {
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     });
+
+    revalidatePath('/life/mobile');
 
     if (res.status === 200) {
       return { status: 200 };

@@ -4,14 +4,14 @@ import LifeModal from '@/app/Components/life-modal';
 import CardWrapper from '../wrapper';
 
 export default async function MobileOperatorsPage({ searchParams }) {
-  const { id, operator } = searchParams;
+  const { id, service } = searchParams;
 
   const operators = [
-    { image: '/mobile/BeeLine_logo.png', route: '/mobile?operator=beeline' },
-    { image: '/mobile/GSM.png', route: '/mobile?operator=gsm' },
-    { image: '/mobile/Humans.png', route: '/mobile?operator=humans' },
-    { image: '/mobile/Perfectum.png', route: '/mobile?operator=perfectum' },
-    { image: '/mobile/usell.png', route: '/mobile?operator=usell' },
+    { image: '/mobile/BeeLine_logo.png', route: '/mobile?service=beeline' },
+    { image: '/mobile/GSM.png', route: '/mobile?service=gsm' },
+    { image: '/mobile/Humans.png', route: '/mobile?service=humans' },
+    { image: '/mobile/Perfectum.png', route: '/mobile?service=perfectum' },
+    { image: '/mobile/usell.png', route: '/mobile?service=usell' },
   ];
 
   return (
@@ -20,7 +20,7 @@ export default async function MobileOperatorsPage({ searchParams }) {
         <h1 className="text-4xl font-bold text-gray-800">Mobile Operators:</h1>
         <p className="text-xl font-normal text-gray-600">Select operator you want to pay for:</p>
       </section>
-      {operator ? <LifeModal /> : <CardWrapper>{operators}</CardWrapper>}
+      {service ? <LifeModal placeholder="Phone Number" /> : <CardWrapper>{operators}</CardWrapper>}
     </main>
   );
 }

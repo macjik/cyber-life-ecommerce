@@ -5,10 +5,10 @@ export default async function LifePage({ searchParams }) {
   const { id } = searchParams;
 
   const services = [
-    { image: '/service1.jpg', route: '/mobile' },
-    { image: '/service2.jpg', route: '/e-visa' },
-    { image: '/service3.jpg', route: '/provider' },
-    { image: '/service3.jpg', route: '/fines' }
+    { image: '/mobile/mobile.png', route: '/mobile' },
+    { image: '/visa/e_visa.png', route: '/e-visa' },
+    { image: '/fine/fine.png', route: '/fines' },
+    { image: '/provider/wifi.png', route: '/provider' },
   ];
 
   return (
@@ -17,7 +17,7 @@ export default async function LifePage({ searchParams }) {
         <h1 className="text-4xl font-bold text-gray-800">Life</h1>
         <p className="text-xl font-normal text-gray-600">Select services you want to pay for:</p>
       </section>
-        <CardWrapper>{services}</CardWrapper>
+      <CardWrapper>{services}</CardWrapper>
     </main>
   );
 }
