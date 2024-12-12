@@ -8,7 +8,7 @@ export default async function CardWrapper({ children }) {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-6xl">
       {children.map((service, index) => (
         <Link href={`/life${service.route}`} key={index} className="group">
-          <div className="relative overflow-hidden rounded-lg shadow-md bg-white">
+          <div className="relative overflow-hidden rounded-lg shadow-md bg-white p-4">
             <Image
               src={service.image}
               alt={`Service ${index + 1}`}

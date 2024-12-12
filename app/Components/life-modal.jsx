@@ -52,7 +52,7 @@ export default function LifeModal({ placeholder = '' }) {
           </div>
         )} */}
         <FormInput
-          className={`w-full`}
+          className='w-full'
           inputMode="tel"
           id="target"
           placeholder={placeholder}
