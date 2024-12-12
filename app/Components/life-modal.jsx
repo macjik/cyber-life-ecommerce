@@ -21,7 +21,7 @@ function SubmitButton({ children, className = '' }) {
   );
 }
 
-export default function LifeModal({ placeholder }) {
+export default function LifeModal({ placeholder = '' }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [invoiceReqState, invoiceReqAction] = useFormState(invoiceReq, '');
@@ -42,16 +42,17 @@ export default function LifeModal({ placeholder }) {
   const id = searchParams.get('id');
 
   console.log(invoiceReqState);
+  console.log(placeholder);
   return (
     <Form title={service} action={invoiceReqAction} className="">
       <div className="w-full inline-flex mt-4">
-        {placeholder === 'Phone Number' ? (
+        {placeholder === 'Phone Number' && (
           <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm">
             +998
           </div>
-        ) : null}
+        )}
         <FormInput
-          className="border-l-0 h-9 w-full flex-grow rounded-l-none font-medium text-gray-700"
+          className={`${placeholder === 'Phone Number' ? 'border-l-0 h-9 w-full flex-grow rounded-l-none font-medium text-gray-700' : 'w-full'} `}
           inputMode="tel"
           id="target"
           placeholder={placeholder}
