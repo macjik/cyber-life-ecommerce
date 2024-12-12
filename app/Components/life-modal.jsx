@@ -44,22 +44,22 @@ export default function LifeModal({ placeholder = '' }) {
   console.log(invoiceReqState);
   console.log(placeholder);
   return (
-    <Form title={service} action={invoiceReqAction} className="">
-      <div className="w-full inline-flex mt-4">
+    <Form title={service} action={invoiceReqAction} className="w-full gap-3">
+      {/* <div className="w-full inline-flex mt-4">
         {placeholder === 'Phone Number' && (
           <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm">
             +998
           </div>
-        )}
+        )} */}
         <FormInput
-          className={`${placeholder === 'Phone Number' ? 'border-l-0 h-9 w-full flex-grow rounded-l-none font-medium text-gray-700' : 'w-full'} `}
+          className={`w-full`}
           inputMode="tel"
           id="target"
           placeholder={placeholder}
           type="tel"
           // maxLength="9"
         />
-      </div>
+      {/* </div> */}
       <FormInput
         className="w-full"
         inputMode="tel"

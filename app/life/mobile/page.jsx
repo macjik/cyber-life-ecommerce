@@ -21,7 +21,7 @@ export default async function MobileOperatorsPage({ searchParams }) {
         <h1 className="text-4xl font-bold text-gray-800">Mobile Operators:</h1>
         <p className="text-xl font-normal text-gray-600">Select operator you want to pay for:</p>
       </section>
-      {service ? <LifeModal placeholder="Phone Number" /> : <CardWrapper>{operators}</CardWrapper>}
+      {service ? <LifeModal placeholder="977777777" /> : <CardWrapper>{operators}</CardWrapper>}
     </main>
   );
 }
