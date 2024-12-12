@@ -12,6 +12,7 @@ export default async function MobileOperatorsPage({ searchParams }) {
     { image: '/mobile/Humans.png', route: '/mobile?service=humans' },
     { image: '/mobile/Perfectum.png', route: '/mobile?service=perfectum' },
     { image: '/mobile/usell.png', route: '/mobile?service=usell' },
+    { image: '/mobile/mobiuz.png', route: '/mobile?service=mobiuz' },
   ];
 
   return (

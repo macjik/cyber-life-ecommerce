@@ -6,9 +6,7 @@ import CardWrapper from '../wrapper';
 export default async function FinesPage({ searchParams }) {
   const { id, service } = searchParams;
 
-  const operators = [
-    { image: '/fine/fine.png', route: '/fines?service=gubdd' },
-  ];
+  const operators = [{ image: '/fine/fine.png', route: '/fines?service=gubdd' }];
 
   return (
     <main className="p-8 w-full min-h-screen flex flex-col items-center">
