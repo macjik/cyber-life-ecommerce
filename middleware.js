@@ -14,7 +14,7 @@ export async function middleware(req) {
   const paths = ['/auth', '/reset-password'];
   const dynamicCategoryProductPattern = /^\/[^\/]+\/[^\/]+$/;
   const cartPathPattern = /^\/cart\/[^\/]+$/;
-  const lifePathPattern = /^\/life\/[^\/]+$/;
+  const lifePathPattern = /^\/life(?:\/.*)?$/;
 
   const getLocale = (language) => {
     if (language === 'ru') return 'ru';
@@ -31,6 +31,13 @@ export async function middleware(req) {
     const primaryLanguage = acceptLanguage.replace(/^([a-z]{2}).*$/i, '$1');
     const preferredLocale = getLocale(primaryLanguage);
     response.cookies.set('locale', preferredLocale, { path: '/' });
+  }
+
+  if (lifePathPattern.test(req.nextUrl.pathname)) {
+    const locale = cookies.locale || getLocale(req.headers.get('accept-language'));
+    if (locale !== 'zh') {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
   }
 
   if (
