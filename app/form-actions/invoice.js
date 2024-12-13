@@ -44,17 +44,35 @@ export async function invoiceReq(state, formData) {
 
     value.from = user.phone;
 
-    let res = await axios.post(`${process.env.BOT_SERVER}/pay`, value, {
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    });
+    const amount = value.amount;
+
+    // let res = await axios.get(
+    //   `https://v6.exchangerate-api.com/v6/${process.env.EXCHANGE_RATE_API_KEY}/latest/UZS`,
+    //   {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       Accept: 'application/json',
+    //     },
+    //   },
+    // );
+
+    // let res = await axios.post(`${process.env.BOT_SERVER}/pay`, value, {
+    //   headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    // });
 
     revalidatePath('/life/mobile');
 
-    if (res.status === 200) {
-      return { status: 200 };
-    } else {
-      return { status: 500 };
-    }
+    let exchangedCurrency = await client.get('currency-rate');
+    //res.data.conversion_rates.CNY;
+    exchangedCurrency = parseInt(exchangedCurrency, 10) * amount * 1.02;
+    console.log(exchangedCurrency);
+
+    return { nigga: 'dd' };
+    // if (res.status === 200) {
+    //   return { status: 200 };
+    // } else {
+    //   return { status: 500 };
+    // }
   } catch (err) {
     console.error(err);
     return { error: `${err}` };
