@@ -53,8 +53,7 @@ export default function VisaModal() {
         // maxLength="9"
       />
       <FormInput className="w-full" id="image" type="file" label="passport" />
-      <FormInput className="w-full" id="image" type="file" label="visa" />
-      <FormInput className="w-full" id="image" type="file" label="other document" />
+      <FormInput className="w-full" id="image" type="file" label="Face photo" />
       {/* <FormInput
         className="w-full"
         inputMode="tel"
