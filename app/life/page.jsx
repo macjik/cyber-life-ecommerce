@@ -12,12 +12,12 @@ export default async function LifePage({ searchParams }) {
   ];
 
   return (
-    <main className="p-8 w-full min-h-screen flex flex-col items-center">
+    <div className="p-6">
       <section className="text-center mb-6">
         <h1 className="text-4xl font-bold text-gray-800">Life</h1>
         <p className="text-xl font-normal text-gray-600">Select services you want to pay for:</p>
       </section>
       <CardWrapper>{services}</CardWrapper>
-    </main>
+    </div>
   );
 }
