@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useSearchParams, useRouter } from '@/node_modules/next/navigation';
 import Form from './form';
 import Image from '@/node_modules/next/image';
+import { setRate } from '../form-actions/cms';
 
 function SubmitButton({ children, className = '' }) {
   const { pending } = useFormStatus();
@@ -22,15 +23,15 @@ function SubmitButton({ children, className = '' }) {
   );
 }
 
-export default function SetCurrency() {
+export default function SetCurrency({currentRate}) {
   const [uzsValue, setUzsValue] = useState('');
   const [cnyValue, setCnyValue] = useState('');
-  const [exchangeRate, setExchangeRate] = useState(1800);
+  const [exchangeRate, setExchangeRate] = useState(currentRate || 1800);
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
+  const [rateState, exchangeRateAction] = useFormState(setRate, '');
 
-  // Format numbers with spaces
   const formatNumber = (value) => {
     if (!value) return '0';
     return parseFloat(value).toLocaleString('en-US').replace(/,/g, ' ');
@@ -63,9 +64,15 @@ export default function SetCurrency() {
     router.push(`?${params.toString()}`);
   };
 
+  console.log(rateState);
+
+  if (rateState.status === 200) {
+    params.delete('exchange_rate');
+    router.push(`?${params.toString()}`);
+  }
+
   return (
-    <Form action={() => {}} title="Currency Conversion">
-      {/* Display Section */}
+    <Form action={exchangeRate} title="货币兑换">
       <div className="bg-gray-100 p-4 rounded-lg shadow space-y-4">
         <div className="flex justify-center items-center space-x-2">
           <Image
@@ -93,36 +100,35 @@ export default function SetCurrency() {
         </div>
       </div>
 
-      {/* Input Section */}
       <div className="mt-6 space-y-4">
         <FormInput
           value={uzsValue}
           className="w-full"
           id="uzs"
           type="number"
-          label="Amount in UZS"
+          label="乌兹别克斯坦苏姆金额"
           onChange={handleUzsChange}
-          placeholder="Enter amount in UZS"
+          placeholder="输入乌兹别克斯坦苏姆金额"
         />
         <FormInput
           value={exchangeRate}
           className="w-full"
           id="exchange-rate"
           type="number"
-          label="Exchange Rate (UZS to CNY)"
+          label="汇率（乌兹别克斯坦苏姆到人民币）"
           onChange={handleExchangeRateChange}
-          placeholder="Enter exchange rate"
+          placeholder="输入汇率"
+          name="exchange-rate"
         />
+        {rateState.error && <p className="text-red-600">{rateState.error}</p>}
       </div>
-
-      {/* Action Buttons */}
       <div className="flex justify-between mt-6">
-        <SubmitButton className="w-1/2 mr-2">Confirm</SubmitButton>
+        <SubmitButton className="w-1/2 mr-2">确认</SubmitButton>
         <Button
           className="w-1/2 border border-blue-600 text-blue-600 rounded-lg px-4 py-2"
           onClick={handleCancel}
         >
-          Cancel
+          取消
         </Button>
       </div>
     </Form>

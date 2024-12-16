@@ -371,7 +371,7 @@ export async function editCompany(state, formData) {
   }
 }
 
-export async function exchangeRate(state, formData) {
+export async function setRate(state, formData) {
   try {
     const schema = Joi.object({ rate: Joi.string().max(5).required() });
     const { value, error } = schema.validate({

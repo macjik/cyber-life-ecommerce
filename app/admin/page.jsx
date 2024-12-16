@@ -43,7 +43,7 @@ export default async function AdminPanel({ searchParams }) {
   const currentRate = await client.get('exchange-rate');
 
   if (exchange_rate) {
-    return <SetCurrency currentRate={currentRate || 0} />;
+    return <SetCurrency currentRate={currentRate} />;
   }
 
   return (
