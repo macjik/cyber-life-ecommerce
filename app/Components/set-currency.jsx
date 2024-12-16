@@ -23,7 +23,7 @@ function SubmitButton({ children, className = '' }) {
   );
 }
 
-export default function SetCurrency({currentRate}) {
+export default function SetCurrency({ currentRate }) {
   const [uzsValue, setUzsValue] = useState('');
   const [cnyValue, setCnyValue] = useState('');
   const [exchangeRate, setExchangeRate] = useState(currentRate || 1800);
@@ -72,7 +72,7 @@ export default function SetCurrency({currentRate}) {
   }
 
   return (
-    <Form action={exchangeRate} title="货币兑换">
+    <Form action={exchangeRateAction} title="货币兑换">
       <div className="bg-gray-100 p-4 rounded-lg shadow space-y-4">
         <div className="flex justify-center items-center space-x-2">
           <Image
@@ -109,9 +109,10 @@ export default function SetCurrency({currentRate}) {
           label="乌兹别克斯坦苏姆金额"
           onChange={handleUzsChange}
           placeholder="输入乌兹别克斯坦苏姆金额"
+          required={false}
         />
         <FormInput
-          value={exchangeRate}
+          defaultValue={exchangeRate}
           className="w-full"
           id="exchange-rate"
           type="number"

@@ -15,9 +15,7 @@ export default async function Dashboard({ children, company = null }) {
     <div className="p-4 w-full bg-white shadow-md">
       <div className="flex justify-center w-full mb-3 space-x-4">
         <Link href={!company && '?exchange_rate=1'}>
-          <Button className="text-white bg-blue-600 rounded">
-            UZS → ¥ = {currentExRate || 0}
-          </Button>
+          <Button className="text-white bg-blue-600 rounded">¥ = {currentExRate || 0}</Button>
         </Link>
         <Link href={company ? `/admin/cms?company=${company}` : '/admin/cms'}>
           <Button className="bg-indigo-600 text-white rounded-lg">{t('add')} +</Button>

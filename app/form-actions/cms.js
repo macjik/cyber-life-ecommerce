@@ -374,9 +374,7 @@ export async function editCompany(state, formData) {
 export async function setRate(state, formData) {
   try {
     const schema = Joi.object({ rate: Joi.string().max(5).required() });
-    const { value, error } = schema.validate({
-      rate: formData.get('rate').toString(),
-    });
+    const { value, error } = schema.validate({ rate: formData.get('exchange-rate').toString() });
 
     if (error) {
       console.error(error);
@@ -386,6 +384,7 @@ export async function setRate(state, formData) {
     let cacheExchangeRate = await client.set('exchange-rate', parseInt(value.rate, 10));
 
     if (cacheExchangeRate) {
+      revalidatePath('/admin');
       return { status: 200 };
     } else {
       return { error: 'Error' };
