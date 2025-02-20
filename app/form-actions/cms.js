@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { put } from '@vercel/blob';
 import { revalidatePath } from '@/node_modules/next/cache';
 import client from '../services/redis';
+import axios from '@/node_modules/axios/index';
+import { generateAuthorizationHeader } from '../helper/wechat-auth';
 
 const { item: Item, Category, Item_Attribute, Company } = db;
 
@@ -376,7 +378,7 @@ export async function setRate(state, formData) {
     const schema = Joi.object({ rate: Joi.string().max(5).required() });
     const { value, error } = schema.validate({ rate: formData.get('exchange-rate').toString() });
 
-    if (error) {
+    if (error) { 
       console.error(error);
       return { error: `${error}` };
     }

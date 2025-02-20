@@ -33,6 +33,10 @@ export async function middleware(req) {
     response.cookies.set('locale', preferredLocale, { path: '/' });
   }
 
+  if (req.nextUrl.pathname === '/') {
+    return response;
+  }
+
   if (lifePathPattern.test(req.nextUrl.pathname)) {
     const locale = cookies.locale || getLocale(req.headers.get('accept-language'));
     if (locale !== 'zh') {
