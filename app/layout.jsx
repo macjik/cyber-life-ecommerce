@@ -29,7 +29,7 @@ export default async function RootLayout({ children }) {
   const currentPath = headersList.get('x-current-path');
   const userRole = headersList.get('x-user-role') || 'guest';
 
-  const isAllowedRoute = !currentPath.startsWith('/auth') && !/^\/[^/]+\/[^/]+$/.test(currentPath);
+  const isAllowedRoute = !currentPath.startsWith('/auth') && !/\/item(\/|$)/.test(currentPath);
 
   const locale = await getLocale();
   const messages = await getMessages();
@@ -40,7 +40,7 @@ export default async function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-red-100 via-blue-100 to-indigo-100 min-h-full`}
       >
         <Locales />
-        <NavBar userRole={userRole} isAllowedRoute={isAllowedRoute} />
+        <NavBar locale={locale} userRole={userRole} isAllowedRoute={isAllowedRoute} />
         <NextIntlClientProvider messages={messages}>
           {/* {userRole !== 'guest' && <ShopsNav />} */}
           <main className="min-h-screen">{children}</main>

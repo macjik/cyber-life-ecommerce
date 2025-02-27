@@ -14,6 +14,7 @@ export async function middleware(req) {
   const paths = ['/auth', '/reset-password'];
   const dynamicCategoryProductPattern = /^\/[^\/]+\/[^\/]+$/;
   const cartPathPattern = /^\/cart\/[^\/]+$/;
+  const lifePathPattern = /^\/life(?:\/.*)?$/;
 
   const getLocale = (language) => {
     if (language === 'ru') return 'ru';
@@ -32,9 +33,21 @@ export async function middleware(req) {
     response.cookies.set('locale', preferredLocale, { path: '/' });
   }
 
+  if (req.nextUrl.pathname === '/') {
+    return response;
+  }
+
+  if (lifePathPattern.test(req.nextUrl.pathname)) {
+    const locale = cookies.locale || getLocale(req.headers.get('accept-language'));
+    if (locale !== 'zh') {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
+  }
+
   if (
     dynamicCategoryProductPattern.test(req.nextUrl.pathname) &&
-    !cartPathPattern.test(req.nextUrl.pathname)
+    !cartPathPattern.test(req.nextUrl.pathname) &&
+    !lifePathPattern.test(req.nextUrl.pathname)
   ) {
     return response;
   }

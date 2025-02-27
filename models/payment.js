@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       status: { type: DataTypes.ENUM('pending', 'successful', 'failed'), defaultValue: 'pending' },
       statusCode: DataTypes.INTEGER,
+      service: DataTypes.STRING,
+      amount: DataTypes.INTEGER,
+      weChatInvoice: DataTypes.STRING,
+      for: DataTypes.STRING,
+      from: DataTypes.STRING,
       region: DataTypes.STRING,
       cardType: DataTypes.STRING,
       cardNumbers: DataTypes.STRING,

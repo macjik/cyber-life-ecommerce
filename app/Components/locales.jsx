@@ -45,7 +45,7 @@ export default function Locales() {
   };
 
   return (
-    <div className="mt-2 relative flex flex-col items-center space-y-4">
+    <div className="absolute top-5 left-1/2 transform -translate-x-1/2">
       <button
         onClick={toggleDropdown}
         className="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all duration-300"
@@ -67,7 +67,7 @@ export default function Locales() {
               key={code}
               onClick={() => handleLanguageChange(code)}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 w-full
-                ${language === code ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+                ${language === code ? 'bg-blue-500 text-white' : 'bg-current text-gray-700 hover:bg-gray-300'}
               `}
             >
               <Image

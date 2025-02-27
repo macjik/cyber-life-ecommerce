@@ -4,6 +4,9 @@ import Joi from 'joi';
 import { v4 as uuidv4 } from 'uuid';
 import { put } from '@vercel/blob';
 import { revalidatePath } from '@/node_modules/next/cache';
+import client from '../services/redis';
+import axios from '@/node_modules/axios/index';
+import { generateAuthorizationHeader } from '../helper/wechat-auth';
 
 const { item: Item, Category, Item_Attribute, Company } = db;
 
@@ -367,5 +370,29 @@ export async function editCompany(state, formData) {
   } catch (err) {
     console.error('Error updating company:', err);
     return { status: 500, error: `Internal Server Error: ${err.message}` };
+  }
+}
+
+export async function setRate(state, formData) {
+  try {
+    const schema = Joi.object({ rate: Joi.string().max(5).required() });
+    const { value, error } = schema.validate({ rate: formData.get('exchange-rate').toString() });
+
+    if (error) { 
+      console.error(error);
+      return { error: `${error}` };
+    }
+
+    let cacheExchangeRate = await client.set('exchange-rate', parseInt(value.rate, 10));
+
+    if (cacheExchangeRate) {
+      revalidatePath('/admin');
+      return { status: 200 };
+    } else {
+      return { error: 'Error' };
+    }
+  } catch (err) {
+    console.error(err);
+    return { status: 500 };
   }
 }

@@ -2,10 +2,12 @@
 
 import db from '@/models/index';
 import Dashboard from '../Components/content-dashboard';
+import SetCurrency from '../Components/set-currency';
+import client from '../services/redis';
 
 const { item: Item, Category, Item_Attribute } = db;
 
-export default async function AdminPanel() {
+export default async function AdminPanel({ searchParams }) {
   const items = await Item.findAll({
     attributes: [
       'name',
@@ -36,6 +38,13 @@ export default async function AdminPanel() {
       image: base64Image,
     };
   });
+
+  const { id, exchange_rate } = searchParams;
+  const currentRate = await client.get('exchange-rate');
+
+  if (exchange_rate) {
+    return <SetCurrency currentRate={currentRate} />;
+  }
 
   return (
     <main className="w-full min-h-screen">
