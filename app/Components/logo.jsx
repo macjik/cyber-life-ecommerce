@@ -1,4 +1,4 @@
-export default async function Logo({ props }) {
+export default function Logo({ props }) {
   return (
     <svg
       id="Layer_1"

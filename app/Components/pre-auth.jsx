@@ -56,7 +56,6 @@ export function PreLoginForm({ children }) {
   const t = useTranslations('Auth');
   return (
     <Form action={loginAction} title={t('login')}>
-      
       <div className="inline-flex w-full">
         <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm mt-6">
           +998
@@ -75,9 +74,11 @@ export function PreLoginForm({ children }) {
         </div>
       </div>
       <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
-      <Link href="/reset-password">
-        <p className="text-blue-700 text-sm text-right mt-3 underline">{t('forgot-password')}</p>
-      </Link>
+      <div className="w-full text-right">
+        <Link href="/reset-password" className="text-end">
+          <span className="text-blue-700 text-sm underline">{t('forgot-password')}</span>
+        </Link>
+      </div>
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
       <div className="inline-flex w-full">
         <SubmitButton isPending={isPending}>{t('login')}</SubmitButton>
