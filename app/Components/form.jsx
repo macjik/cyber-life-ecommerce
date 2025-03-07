@@ -19,7 +19,7 @@ export default function Form({
             <Logo />
           </div>
         </section>
-        <form className="space-y-6" onSubmit={onSubmit} ref={innerRef} action={action}>
+        <form onSubmit={onSubmit} ref={innerRef} action={action}>
           {children}
         </form>
       </div>
