@@ -43,7 +43,7 @@ export default async function RootLayout({ children }) {
         <NavBar locale={locale} userRole={userRole} isAllowedRoute={isAllowedRoute} />
         <NextIntlClientProvider messages={messages}>
           {/* {userRole !== 'guest' && <ShopsNav />} */}
-          <main className="min-h-screen">{children}</main>
+          {children}
         </NextIntlClientProvider>
         <Footer />
       </body>
