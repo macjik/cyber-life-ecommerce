@@ -1,102 +1,101 @@
 'use server';
 
-import Image from '@/node_modules/next/image';
-import Link from '@/node_modules/next/link';
+import Image from 'next/image';
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 export default async function Footer() {
   const t = await getTranslations('footer');
+
   return (
-    <footer className="w-full bg-gray-900 text-white font-bold p-4 pb-20">
-      <div className="mx-auto flex flex-col md:flex-row p-4 gap-10">
-        <div className="mb-4 md:mb-0 w-full h-full flex justify-center items-center mt-10 md:mt-10">
+    <footer className="w-full bg-gray-800 text-white py-8">
+      <div className="container mx-auto px-4 flex flex-col md:flex-row gap-8 md:gap-12 lg:gap-16">
+        <div className="flex justify-center items-center md:items-start">
           <Image
             src="/transparent-mimi-logo.png"
-            alt="mimi logo"
+            alt="Mimi Logo"
             quality={100}
-            width={100}
-            height={100}
-            className="object-contain w-full h-full"
+            width={120}
+            height={120}
+            className="object-contain hover:opacity-90 transition-opacity"
           />
         </div>
-        <section className="mb-4 md:mb-0 max-w-max h-max text-sm">
-          <h2 className="text-xl font-semibold mb-2 max-w-max">{t('about-title')}</h2>
-          <p className="font-medium text-lg">{t('about-text')}</p>
+
+        <section className="flex-1">
+          <h2 className="text-xl font-medium mb-4">{t('about-title')}</h2>
+          <p className="text-gray-300 font-normal leading-relaxed">{t('about-text')}</p>
         </section>
 
-        <section className="mb-4 md:mb-0 w-max h-max text-sm">
-          <h2 className="text-xl font-semibold mb-2 w-max">{t('pages-title')}</h2>
-          <ul className="inline-flex flex-col gap-1 w-max mb-6">
-            <li className="w-max">
-              <Link href="/" className="hover:text-gray-400 font-medium underline text-lg">
+        <section className="flex-1">
+          <h2 className="text-xl font-medium mb-4">{t('pages-title')}</h2>
+          <ul className="space-y-2">
+            <li>
+              <Link
+                href="/"
+                className="text-gray-300 hover:text-white font-medium underline transition-colors"
+              >
                 {t('home')}
               </Link>
             </li>
-            <li className="w-max">
-              <Link href="/user" className="hover:text-gray-400 font-medium underline text-lg">
+            <li>
+              <Link
+                href="/user"
+                className="text-gray-300 hover:text-white font-medium underline transition-colors"
+              >
                 {t('profile')}
               </Link>
             </li>
-            <li className="w-max">
-              <Link href="/my-cart" className="hover:text-gray-400 font-medium underline text-lg">
+            <li>
+              <Link
+                href="/my-cart"
+                className="text-gray-300 hover:text-white font-medium underline transition-colors"
+              >
                 {t('cart')}
               </Link>
             </li>
-            {/* <li className="w-max">
-              <a
-                href="/offerta.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-gray-400 font-medium underline text-lg"
-              >
-                {t('offerta')}
-              </a>
-            </li> */}
           </ul>
         </section>
-        <section className="mb-10 md:mb-0 text-sm max-w-max h-max space-y-2">
-          <h2 className="text-xl font-semibold mb-2">{t('payment-methods-title')}</h2>
-          <p className="text-lg font-medium">{t('payment-methods-text')}</p>
-          <div className="w-full inline-flex justify-center gap-4">
-            <Image
-              src="/humo_card_transparent.png"
-              alt="mimi logo"
-              quality={60}
-              width={60}
-              height={100}
-              className="object-contain"
-            />
-            <Image
-              src="/uzcard_transparent.png"
-              alt="mimi logo"
-              quality={60}
-              width={60}
-              height={100}
-              className="object-contain"
-            />
-          </div>
+
+        <section className="flex-1">
+          <h2 className="text-xl font-medium mb-4">{t('payment-methods-title')}</h2>
+          <p className="text-gray-300 font-normal">{t('payment-methods-text')}</p>
         </section>
-        <section className="mb-10 md:mb-0 text-sm max-w-max h-max space-y-2">
-          <h2 className="text-xl font-semibold mb-2">{t('contacts')}</h2>
-          {/* <p className="text-lg font-medium">
-            {t('email')}:
-            <a className="underline" href="mailto:mimi-cyberlife@gmail.com">
-              Mimi@email
-            </a>
-          </p> */}
-          <p className="text-lg font-medium">
-            {t('tel')}:
-            <a className="underline" href="tel:+123456789">
-              +998977217600
-            </a>
-          </p>
-          <p className="text-lg font-medium">
-            {t('telegram-bot')}:
-            <a className="underline" href="https://t.me/mimi_uz_bot">
-              Mimi bot
-            </a>
-          </p>
+
+        <section className="flex-1">
+          <h2 className="text-xl font-medium mb-4">{t('contacts')}</h2>
+          <ul className="space-y-2">
+            <li>
+              <p className="text-gray-300 font-normal">
+                {t('tel')}:
+                <a
+                  href="tel:+998977217600"
+                  className="underline hover:text-white transition-colors"
+                >
+                  +998977217600
+                </a>
+              </p>
+            </li>
+            <li>
+              <p className="text-gray-300 font-normal">
+                {t('telegram-bot')}:
+                <a
+                  href="https://t.me/mimi_uz_bot"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-white transition-colors"
+                >
+                  Mimi bot
+                </a>
+              </p>
+            </li>
+          </ul>
         </section>
+      </div>
+
+      <div className="mt-8 border-t border-gray-700 pt-6 text-center">
+        <p className="text-gray-400 text-sm">
+          &copy; {new Date().getFullYear()} Mimi. {t('all-rights-reserved')}
+        </p>
       </div>
     </footer>
   );
