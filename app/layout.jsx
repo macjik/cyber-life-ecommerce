@@ -37,7 +37,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang={locale}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-red-100 via-blue-100 to-indigo-100 min-h-full`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-red-100 via-blue-100 to-indigo-100 min-h-screen`}
       >
         <Locales />
         <NavBar locale={locale} userRole={userRole} isAllowedRoute={isAllowedRoute} />

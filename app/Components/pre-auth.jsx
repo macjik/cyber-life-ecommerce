@@ -18,7 +18,7 @@ function SubmitButton({ children, isPending }) {
     <Button
       type="submit"
       disabled={pending || isPending}
-      className="text-center text-white bg-blue-600 rounded-r-none rounded-l focus:outline-none p-0"
+      className="text-center text-white bg-blue-600 rounded-r-none rounded-l focus:outline-none"
     >
       {pending || isPending ? <Spinner /> : children}
     </Button>

@@ -34,7 +34,7 @@ export function ResetPasswordForm() {
   }
 
   return (
-    <>
+    <main className='min-h-screen'>
       <header className="w-full">
         <h1 className="text-4xl text-center font-semibold">{t('forgot-password')}</h1>
         <h3 className="text-center mt-3 text-lg">{t('reset-password')}</h3>
@@ -43,7 +43,7 @@ export function ResetPasswordForm() {
       {!validPhone.phone ? (
         <form action={validatePhone} className="mt-6 w-full max-w-md mx-auto justify-center">
           <div className="inline-flex mt-6 w-full justify-center">
-            <span className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-12 font-medium text-center p-3 text-sm">
+            <span className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-12 font-medium text-center p-2 text-md mt-2">
               +998
             </span>
             <div className="flex-grow mb-4">
@@ -97,6 +97,6 @@ export function ResetPasswordForm() {
           <SubmitButton>{t('confirm')}</SubmitButton>
         </form>
       )}
-    </>
+    </main>
   );
 }

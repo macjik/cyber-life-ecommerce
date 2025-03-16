@@ -6,10 +6,10 @@ import AuthForm from '../Components/toggle-form';
 export default async function AuthPage() {
   return (
     <main className="bg-gradient-to-br from-gray-900 to-gray-700 w-full flex">
-      <div className="max-w-xl h-full w-full bg-white shadow-lg p-8">
+      <div className="max-w-xl min-h-screen w-full bg-white shadow-lg p-8">
         <AuthForm />
       </div>
-      <div className="w-full relative">
+      <div className="w-full relative hidden md:block">
         <Image
           className="object-contain w-full h-full"
           src="/black-cat.webp"
