@@ -12,69 +12,74 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon,
 
   const t = await getTranslations();
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-16 z-50">
-      <Link
-        href="/user"
-        className="flex flex-col items-center text-black hover:text-gray-500 w-full"
-      >
-        <FaUser size={24} />
-        <span className="text-xs">{t('user')}</span>
-      </Link>
-      <Link href="/" className="flex flex-col items-center text-black hover:text-gray-500 w-full">
-        <Image
-          src={Logo}
-          alt="mimi logo"
-          quality={50}
-          width={50}
-          height={100}
-          className="object-contain"
-        />
-        {/* <FaHome size={24} /> */}
-        <span className="text-xs">{t('home')}</span>
-      </Link>
-      <Link
-        href="/my-cart"
-        className="flex flex-col items-center text-black hover:text-gray-500 w-full"
-      >
-        <FaShoppingCart size={24} />
-        <span className="text-xs">{t('cart')}</span>
-      </Link>
-      {userRole === 'admin' && (
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-17 z-50 shadow-lg">
+      <div className="flex items-center mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl w-full py-2">
         <Link
-          href="/admin"
-          className="flex flex-col items-center text-black hover:text-gray-500 w-full"
+          href="/user"
+          className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
         >
-          <AiFillControl size={24} />
-          <span className="text-xs">Admin</span>
+          <FaUser size={24} />
+          <span className="text-sm font-semibold">{t('user')}</span>
         </Link>
-      )}
-      {userRole === 'owner' && (
         <Link
-          href={`/shop-cms`}
-          className="flex flex-col items-center text-black hover:text-gray-500 w-full"
+          href="/"
+          className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
         >
-          <AiFillControl size={24} />
-          <span className="text-xs">Admin</span>
+          <Image
+            src={Logo}
+            alt="mimi logo"
+            quality={50}
+            width={50}
+            height={100}
+            className="object-contain"
+          />
+          {/* <FaHome size={24} /> */}
+          <span className="text-sm font-semibold">{t('home')}</span>
         </Link>
-      )}
-      {children && (
         <Link
-          href={`/${children.toLowerCase()}`}
-          className="flex flex-col items-center text-black hover:text-gray-500 w-full"
+          href="/my-cart"
+          className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
         >
-          {icon}
-          <span className="text-xs">{children}</span>
+          <FaShoppingCart size={24} />
+          <span className="text-sm font-semibold">{t('cart')}</span>
         </Link>
-      )}
-      {locale === 'zh' && (
-        <Link
-          href={`/life`}
-          className="flex flex-col items-center text-black hover:text-gray-500 w-full"
-        >
-          <FaStarOfLife size={24} />
-          <span className="text-xs">生活</span>
-        </Link>
-      )}
+        {userRole === 'admin' && (
+          <Link
+            href="/admin"
+            className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
+          >
+            <AiFillControl size={24} />
+            <span className="text-sm font-semibold">Admin</span>
+          </Link>
+        )}
+        {userRole === 'owner' && (
+          <Link
+            href={`/shop-cms`}
+            className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
+          >
+            <AiFillControl size={24} />
+            <span className="text-sm font-semibold">Admin</span>
+          </Link>
+        )}
+        {children && (
+          <Link
+            href={`/${children.toLowerCase()}`}
+            className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
+          >
+            {icon}
+            <span className="text-sm font-semibold">{children}</span>
+          </Link>
+        )}
+        {locale === 'zh' && (
+          <Link
+            href={`/life`}
+            className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
+          >
+            <FaStarOfLife size={24} />
+            <span className="text-sm font-semibold">生活</span>
+          </Link>
+        )}
+      </div>
     </nav>
   );
 }

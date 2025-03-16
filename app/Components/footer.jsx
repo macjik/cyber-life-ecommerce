@@ -9,11 +9,9 @@ export default async function Footer() {
   const t = await getTranslations('footer');
 
   return (
-    <footer className="w-full bg-gray-800 text-white py-12">
+    <footer className="w-full flex bg-gray-800 text-white py-12 mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
       <div className="container mx-auto px-4">
-        {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          {/* Logo Section */}
           <div className="flex justify-center lg:justify-start items-center">
             <Image
               src={Logo}
@@ -25,7 +23,6 @@ export default async function Footer() {
             />
           </div>
 
-          {/* Pages Section */}
           <section className="text-center lg:text-left">
             <h2 className="text-xl font-medium mb-4">{t('pages-title')}</h2>
             <ul className="space-y-2">
@@ -56,13 +53,11 @@ export default async function Footer() {
             </ul>
           </section>
 
-          {/* Payment Methods Section */}
           <section className="text-center lg:text-left">
             <h2 className="text-xl font-medium mb-4">{t('payment-methods-title')}</h2>
             <p className="text-gray-300 font-normal">{t('payment-methods-text')}</p>
           </section>
 
-          {/* Contacts Section */}
           <section className="text-center lg:text-left">
             <h2 className="text-xl font-medium mb-4">{t('contacts')}</h2>
             <ul className="space-y-2">
@@ -94,7 +89,6 @@ export default async function Footer() {
           </section>
         </div>
 
-        {/* Copyright Section */}
         <div className="mt-12 border-t border-gray-700 pt-6 text-center">
           <p className="text-gray-400 text-sm">
             &copy; {new Date().getFullYear()} Mimi. {t('all-rights-reserved')}

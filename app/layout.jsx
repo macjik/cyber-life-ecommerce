@@ -33,18 +33,17 @@ export default async function RootLayout({ children }) {
 
   const locale = await getLocale();
   const messages = await getMessages();
-  //<FontAwesomeIcon icon="fa-solid fa-earth-asia" />
   return (
     <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-red-100 via-blue-100 to-indigo-100 min-h-screen`}
-      >
-        <Locales />
-        <NavBar locale={locale} userRole={userRole} isAllowedRoute={isAllowedRoute} />
-        <NextIntlClientProvider messages={messages}>
-          {/* {userRole !== 'guest' && <ShopsNav />} */}
-          {children}
-        </NextIntlClientProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
+        <div className="mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl w-full min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-white to-gray-100">
+          <Locales />
+          <NavBar locale={locale} userRole={userRole} isAllowedRoute={isAllowedRoute} />
+          <NextIntlClientProvider messages={messages}>
+            {/* {userRole !== 'guest' && <ShopsNav />} */}
+            {children}
+          </NextIntlClientProvider>
+        </div>
         <Footer />
       </body>
     </html>
