@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import Logo from '../../public/transparent-mimi-logo.webp';
 
 export default async function Footer() {
   const t = await getTranslations('footer');
@@ -15,7 +16,7 @@ export default async function Footer() {
           {/* Logo Section */}
           <div className="flex justify-center lg:justify-start items-center">
             <Image
-              src="/transparent-mimi-logo.webp"
+              src={Logo}
               alt="Mimi Logo"
               quality={100}
               width={120}

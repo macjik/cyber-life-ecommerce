@@ -5,6 +5,7 @@ import { FaUser, FaShoppingCart, FaHome, FaStarOfLife } from 'react-icons/fa';
 import { AiFillControl } from 'react-icons/ai';
 import { getTranslations } from 'next-intl/server';
 import Image from '@/node_modules/next/image';
+import Logo from '../../public/transparent-mimi-logo.webp';
 
 export default async function NavBar({ userRole, isAllowedRoute, children, icon, locale }) {
   if (!isAllowedRoute) return null;
@@ -21,7 +22,7 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon,
       </Link>
       <Link href="/" className="flex flex-col items-center text-black hover:text-gray-500 w-full">
         <Image
-          src="/transparent-mimi-logo.png"
+          src={Logo}
           alt="mimi logo"
           quality={50}
           width={50}
