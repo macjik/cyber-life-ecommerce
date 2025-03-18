@@ -18,7 +18,7 @@ function SubmitButton({ children, isPending }) {
     <Button
       type="submit"
       disabled={pending || isPending}
-      className="text-center text-white bg-blue-600 rounded-r-none rounded-l focus:outline-none p-0"
+      className="text-center text-white bg-blue-600 rounded-r-none rounded-l focus:outline-none"
     >
       {pending || isPending ? <Spinner /> : children}
     </Button>
@@ -57,12 +57,12 @@ export function PreLoginForm({ children }) {
   return (
     <Form action={loginAction} title={t('login')}>
       <div className="inline-flex w-full">
-        <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm mt-6">
+        <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm mt-2">
           +998
         </div>
         <div className="flex-grow">
           <FormInput
-            className="border-l-0 h-9 w-full flex-grow rounded-l-none mt-6 font-medium text-gray-700"
+            className="border-l-0 h-9 w-full flex-grow rounded-l-none font-medium text-gray-700"
             inputMode="tel"
             id="phone"
             placeholder="(xx) xxx-xx-xx"
@@ -74,9 +74,11 @@ export function PreLoginForm({ children }) {
         </div>
       </div>
       <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
-      <Link href="/reset-password">
-        <p className="text-blue-700 text-sm text-right mt-3 underline">{t('forgot-password')}</p>
-      </Link>
+      <div className="w-full text-right my-2 px-3">
+        <Link href="/reset-password" className="text-end">
+          <span className="text-blue-700 text-sm underline">{t('forgot-password')}</span>
+        </Link>
+      </div>
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
       <div className="inline-flex w-full">
         <SubmitButton isPending={isPending}>{t('login')}</SubmitButton>
@@ -165,15 +167,12 @@ export function PreSigninForm({ children }) {
       ) : (
         <Form action={preSignupAction} title={t('signup')}>
           <div className="inline-flex w-full">
-            <div
-              className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300
-          h-9 font-medium text-center p-1 text-sm mt-6"
-            >
+            <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm mt-2">
               +998
             </div>
             <div className="flex-grow">
               <FormInput
-                className="border-l-0 h-9 w-full flex-grow rounded-l-none mt-6 font-medium text-gray-700"
+                className="border-l-0 h-9 w-full flex-grow rounded-l-none font-medium text-gray-700"
                 inputMode="tel"
                 id="phone"
                 placeholder="(xx) xxx-xx-xx"
@@ -186,7 +185,7 @@ export function PreSigninForm({ children }) {
           </div>{' '}
           <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
           {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
-          <div className="inline-flex w-full">
+          <div className="inline-flex w-full mt-8">
             <SubmitButton>{t('signup')}</SubmitButton>
             {children}
           </div>

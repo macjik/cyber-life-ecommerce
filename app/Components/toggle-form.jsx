@@ -16,7 +16,7 @@ export default function AuthForm() {
   const t = useTranslations('Auth');
 
   return (
-    <div className="p-3 w-full min-h-screen">
+    <div className="w-full mx-auto">
       {!isSignup ? (
         <PreLoginForm>
           <Button

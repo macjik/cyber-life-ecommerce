@@ -1,102 +1,95 @@
 'use server';
 
-import Image from '@/node_modules/next/image';
-import Link from '@/node_modules/next/link';
 import { getTranslations } from 'next-intl/server';
 
 export default async function Footer() {
   const t = await getTranslations('footer');
-  return (
-    <footer className="w-full bg-gray-900 text-white font-bold p-4 pb-20">
-      <div className="mx-auto flex flex-col md:flex-row p-4 gap-10">
-        <div className="mb-4 md:mb-0 w-full h-full flex justify-center items-center mt-10 md:mt-10">
-          <Image
-            src="/transparent-mimi-logo.png"
-            alt="mimi logo"
-            quality={100}
-            width={100}
-            height={100}
-            className="object-contain w-full h-full"
-          />
-        </div>
-        <section className="mb-4 md:mb-0 max-w-max h-max text-sm">
-          <h2 className="text-xl font-semibold mb-2 max-w-max">{t('about-title')}</h2>
-          <p className="font-medium text-lg">{t('about-text')}</p>
-        </section>
 
-        <section className="mb-4 md:mb-0 w-max h-max text-sm">
-          <h2 className="text-xl font-semibold mb-2 w-max">{t('pages-title')}</h2>
-          <ul className="inline-flex flex-col gap-1 w-max mb-6">
-            <li className="w-max">
-              <Link href="/" className="hover:text-gray-400 font-medium underline text-lg">
-                {t('home')}
-              </Link>
-            </li>
-            <li className="w-max">
-              <Link href="/user" className="hover:text-gray-400 font-medium underline text-lg">
-                {t('profile')}
-              </Link>
-            </li>
-            <li className="w-max">
-              <Link href="/my-cart" className="hover:text-gray-400 font-medium underline text-lg">
-                {t('cart')}
-              </Link>
-            </li>
-            {/* <li className="w-max">
-              <a
-                href="/offerta.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-gray-400 font-medium underline text-lg"
-              >
-                {t('offerta')}
-              </a>
-            </li> */}
-          </ul>
-        </section>
-        <section className="mb-10 md:mb-0 text-sm max-w-max h-max space-y-2">
-          <h2 className="text-xl font-semibold mb-2">{t('payment-methods-title')}</h2>
-          <p className="text-lg font-medium">{t('payment-methods-text')}</p>
-          <div className="w-full inline-flex justify-center gap-4">
+  return (
+    <footer className="w-full flex bg-gray-800 text-white p-8 mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mb-16">
+      <div className="w-full mx-auto">
+        <div className="grid grid-cols-1 text-center space-y-4">
+          {/* <div className="flex justify-center lg:justify-start items-center">
             <Image
-              src="/humo_card_transparent.png"
-              alt="mimi logo"
-              quality={60}
-              width={60}
-              height={100}
-              className="object-contain"
+              src={Logo}
+              alt="Mimi Logo"
+              quality={100}
+              width={120}
+              height={120}
+              className="object-contain hover:opacity-90 transition-opacity"
             />
-            <Image
-              src="/uzcard_transparent.png"
-              alt="mimi logo"
-              quality={60}
-              width={60}
-              height={100}
-              className="object-contain"
-            />
-          </div>
-        </section>
-        <section className="mb-10 md:mb-0 text-sm max-w-max h-max space-y-2">
-          <h2 className="text-xl font-semibold mb-2">{t('contacts')}</h2>
-          {/* <p className="text-lg font-medium">
-            {t('email')}:
-            <a className="underline" href="mailto:mimi-cyberlife@gmail.com">
-              Mimi@email
-            </a>
-          </p> */}
-          <p className="text-lg font-medium">
-            {t('tel')}:
-            <a className="underline" href="tel:+123456789">
-              +998977217600
-            </a>
+          </div> */}
+          {/* <section className="text-center lg:text-left">
+            <ul className="space-y-2">
+            <h2 className="text-xl font-medium mb-4">{t('pages-title')}</h2>
+              <li>
+                <Link
+                  href="/"
+                  className="text-gray-300 hover:text-white font-normal underline transition-colors"
+                >
+                  {t('home')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/user"
+                  className="text-gray-300 hover:text-white font-normal underline transition-colors"
+                >
+                  {t('profile')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/my-cart"
+                  className="text-gray-300 hover:text-white font-normal underline transition-colors"
+                >
+                  {t('cart')}
+                </Link>
+              </li>
+            </ul>
+          </section> */}
+
+          <section className="text-center lg:text-left">
+            <h2 className="text-xl font-medium mb-4">{t('payment-methods-title')}</h2>
+            <p className="text-gray-300 font-normal">{t('payment-methods-text')}</p>
+          </section>
+
+          <section className="text-center lg:text-left">
+            <h2 className="text-xl font-medium mb-4">{t('contacts')}</h2>
+            <ul className="space-y-2">
+              <li>
+                <p className="text-gray-300 font-normal">
+                  {t('tel')}:
+                  <a
+                    href="tel:+998977217600"
+                    className="underline hover:text-white transition-colors"
+                  >
+                    {''} +998977217600
+                  </a>
+                </p>
+              </li>
+              <li>
+                <p className="text-gray-300 font-normal">
+                  {t('telegram-bot')}:
+                  <a
+                    href="https://t.me/mimi_uz_bot"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-white transition-colors"
+                  >
+                    Mimi bot
+                  </a>
+                </p>
+              </li>
+            </ul>
+          </section>
+        </div>
+
+        <div className="mt-12 border-t border-gray-700 pt-6 text-center">
+          <p className="text-gray-400 text-sm">
+            &copy; {new Date().getFullYear()} Mimi. {t('all-rights-reserved')}
           </p>
-          <p className="text-lg font-medium">
-            {t('telegram-bot')}:
-            <a className="underline" href="https://t.me/mimi_uz_bot">
-              Mimi bot
-            </a>
-          </p>
-        </section>
+        </div>
       </div>
     </footer>
   );

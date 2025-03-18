@@ -72,7 +72,8 @@
     "contacts": "Contacts",
     "email": "Email",
     "tel": "Tel",
-    "telegram-bot": "Telegram bot"
+    "telegram-bot": "Telegram bot",
+    "all-rights-reserved": "All rights reserved"
   },
   "Shop": {
     "shop-form-title": "Enter your shop details",

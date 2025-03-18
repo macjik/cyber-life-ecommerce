@@ -1,7 +1,7 @@
 'use client';
 
 export default function FormInput({
-  className,
+  className = null,
   id,
   label,
   type,
@@ -10,7 +10,7 @@ export default function FormInput({
   ...props
 }) {
   return (
-    <div>
+    <div className={`my-2 ${className || null}`}>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
