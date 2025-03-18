@@ -1,18 +1,15 @@
 'use server';
 
-import Image from 'next/image';
-import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import Logo from '../../public/transparent-mimi-logo.webp';
 
 export default async function Footer() {
   const t = await getTranslations('footer');
 
   return (
-    <footer className="w-full flex bg-gray-800 text-white py-12 mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          <div className="flex justify-center lg:justify-start items-center">
+    <footer className="w-full flex bg-gray-800 text-white p-8 mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mb-16">
+      <div className="w-full mx-auto">
+        <div className="grid grid-cols-1 text-center space-y-4">
+          {/* <div className="flex justify-center lg:justify-start items-center">
             <Image
               src={Logo}
               alt="Mimi Logo"
@@ -21,11 +18,10 @@ export default async function Footer() {
               height={120}
               className="object-contain hover:opacity-90 transition-opacity"
             />
-          </div>
-
-          <section className="text-center lg:text-left">
-            <h2 className="text-xl font-medium mb-4">{t('pages-title')}</h2>
+          </div> */}
+          {/* <section className="text-center lg:text-left">
             <ul className="space-y-2">
+            <h2 className="text-xl font-medium mb-4">{t('pages-title')}</h2>
               <li>
                 <Link
                   href="/"
@@ -51,7 +47,7 @@ export default async function Footer() {
                 </Link>
               </li>
             </ul>
-          </section>
+          </section> */}
 
           <section className="text-center lg:text-left">
             <h2 className="text-xl font-medium mb-4">{t('payment-methods-title')}</h2>
@@ -68,7 +64,7 @@ export default async function Footer() {
                     href="tel:+998977217600"
                     className="underline hover:text-white transition-colors"
                   >
-                    +998977217600
+                    {''} +998977217600
                   </a>
                 </p>
               </li>
