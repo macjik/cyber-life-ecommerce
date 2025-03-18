@@ -50,8 +50,8 @@ export default async function Home({ searchParams }) {
     const t = await getTranslations('homePage');
     return (
       <Suspense fallback={<Loading />}>
-        <main className="w-full flex flex-col items-center pt-4 pb-20 space-y-6 min-h-screen">
-          <section className="w-full max-w-4xl h-1/3 flex flex-col justify-center items-center text-center space-y-4">
+        <main className="w-full flex flex-col items-center pt-4 pb-20 space-y-6 min-h-screen mt-20">
+          <section className="w-full max-w-4xl h-1/3 flex flex-col justify-center items-center text-center space-y-4 px-10">
             <h1 className="text-5xl font-extrabold text-gray-900">
               {company.name || <>Mimi: {t('title')}</>}
             </h1>
@@ -79,7 +79,9 @@ export default async function Home({ searchParams }) {
                 alt={`${company.name} image`}
               />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 text-center">{company.description}</h3>
+            <h3 className="text-xl font-semibold text-gray-800 text-center">
+              {company.description}
+            </h3>
             {/* <p className="text-xl font-medium text-gray-800">{company.slogan}</p> */}
             <h2 className="text-3xl font-semibold text-gray-800">{t('featured-deals')}</h2>
             <div className="flex justify-center flex-wrap gap-6">
@@ -163,8 +165,8 @@ export default async function Home({ searchParams }) {
   const t = await getTranslations('homePage');
   return (
     <Suspense fallback={<Loading />}>
-      <main className="w-full flex flex-col items-center pt-4 pb-20 space-y-6 min-h-screen">
-        <section className="w-full max-w-4xl h-1/3 flex flex-col justify-center items-center text-center space-y-4">
+      <main className="w-full flex flex-col items-center pt-4 pb-20 space-y-6 min-h-screen mt-20">
+        <section className="w-full max-w-4xl h-1/3 flex flex-col justify-center items-center text-center space-y-4 px-10">
           <h1 className="text-5xl font-extrabold text-gray-900">Mimi: {t('title')}</h1>
           <p className="text-lg text-gray-700">{t('slogan')}</p>
           {/* <div className="mb-4 md:mb-0 w-full h-full flex justify-center items-center mt-10 md:mt-10"> */}
