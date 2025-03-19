@@ -25,15 +25,7 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon,
           href="/"
           className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
         >
-          <Image
-            src={Logo}
-            alt="mimi logo"
-            quality={50}
-            width={50}
-            height={100}
-            className="object-contain"
-          />
-          {/* <FaHome size={24} /> */}
+          <FaHome size={24} />
           <span className="text-sm font-semibold">{t('home')}</span>
         </Link>
         <Link

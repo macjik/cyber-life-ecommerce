@@ -49,7 +49,7 @@ export default async function ShopCMS({ searchParams }) {
     const formattedItems = items.map((item) => item.dataValues);
 
     return (
-      <main className="w-full min-h-screen">
+      <main className="w-full min-h-screen mt-16">
         <Dashboard company={company}>{formattedItems}</Dashboard>
       </main>
     );

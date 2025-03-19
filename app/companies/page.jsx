@@ -22,7 +22,7 @@ export default async function Companies({ searchParams }) {
   companies = companies.map((company) => company.dataValues);
 
   return (
-    <div className="w-full min-h-screen flex flex-col p-6">
+    <div className="w-full min-h-screen flex flex-col p-6 mt-16">
       <header className="mb-8 self-center">
         <h1 className="text-3xl font-bold text-gray-800">Companies Dashboard</h1>
         <p className="text-gray-600">Manage and view all registered companies.</p>

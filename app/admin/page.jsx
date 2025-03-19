@@ -47,7 +47,7 @@ export default async function AdminPanel({ searchParams }) {
   }
 
   return (
-    <main className="w-full min-h-screen">
+    <main className="w-full min-h-screen mt-16">
       <Dashboard>{formattedItems}</Dashboard>
     </main>
   );

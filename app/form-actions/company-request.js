@@ -35,6 +35,7 @@ export async function registerShop(state, formData) {
     }
 
     const { name, description, slogan, user } = value;
+    console.log(value);
 
     const uid = uuidv4();
 
