@@ -12,13 +12,13 @@ import axios from '@/node_modules/axios/index';
 import { useTranslations } from 'next-intl';
 import Link from '@/node_modules/next/link';
 
-function SubmitButton({ children, isPending }) {
+function SubmitButton({ children, isPending, className = '' }) {
   const { pending } = useFormStatus();
   return (
     <Button
       type="submit"
       disabled={pending || isPending}
-      className="text-center text-white bg-blue-600 rounded-r-none rounded-l focus:outline-none"
+      className={`${className} text-center text-white bg-blue-600 focus:outline-none`}
     >
       {pending || isPending ? <Spinner /> : children}
     </Button>
@@ -56,6 +56,10 @@ export function PreLoginForm({ children }) {
   const t = useTranslations('Auth');
   return (
     <Form action={loginAction} title={t('login')}>
+      <div className="inline-flex w-full mb-6">
+        {children}
+        <SubmitButton isPending={isPending} className='rounded-r'>{t('login')}</SubmitButton>
+      </div>
       <div className="inline-flex w-full">
         <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm mt-2">
           +998
@@ -73,17 +77,20 @@ export function PreLoginForm({ children }) {
           />
         </div>
       </div>
-      <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" className='py-1'/>
+      <FormInput
+        id="password"
+        label={`${t('password')}*`}
+        type="password"
+        minLength="6"
+        className="py-1"
+      />
       <div className="w-full text-right my-2 px-3">
         <Link href="/reset-password" className="text-end">
           <span className="text-blue-700 text-sm underline">{t('forgot-password')}</span>
         </Link>
       </div>
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
-      <div className="inline-flex w-full">
-        <SubmitButton isPending={isPending}>{t('login')}</SubmitButton>
-        {children}
-      </div>
+       <SubmitButton isPending={isPending} className='py-1 rounded'>{t('login')}</SubmitButton>
     </Form>
   );
 }
@@ -151,14 +158,15 @@ export function PreSigninForm({ children }) {
               label={`${t('confirm-sms')} +998 ${preSignupState.phone}`}
               maxLength="4"
               minLength="4"
+              className="py-2"
             />
           </div>
           {signUpError && <p className="text-red-700">{signUpError}</p>}
           <div className="inline-flex w-full">
             <Button
               type="submit"
-              className="text-white rounded-lg bg-blue-600 text-xl"
-              disabled={isPending}
+              className="text-white rounded-lg bg-blue-600 text-xl py-2"
+              disabled={isPending} 
             >
               {isPending ? <Spinner /> : t('confirm')}
             </Button>
@@ -166,6 +174,10 @@ export function PreSigninForm({ children }) {
         </Form>
       ) : (
         <Form action={preSignupAction} title={t('signup')}>
+          <div className="inline-flex w-full mb-4">
+            <SubmitButton className='rounded-l'>{t('signup')}</SubmitButton>
+            {children}
+          </div>
           <div className="inline-flex w-full">
             <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm mt-2">
               +998
@@ -183,12 +195,14 @@ export function PreSigninForm({ children }) {
               />
             </div>
           </div>{' '}
-          <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" className='py-1' />
+          <FormInput
+            id="password"
+            label={`${t('password')}*`}
+            type="password"
+            minLength="6"
+            className="py-1"
+          />
           {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
-          <div className="inline-flex w-full mt-8">
-            <SubmitButton>{t('signup')}</SubmitButton>
-            {children}
-          </div>
         </Form>
       )}
     </>

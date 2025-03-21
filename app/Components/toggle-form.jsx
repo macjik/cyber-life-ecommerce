@@ -21,7 +21,7 @@ export default function AuthForm() {
         <PreLoginForm>
           <Button
             onClick={toggleSwitch}
-            className="bg-white text-blue-600 border-2 border-blue-600 rounded-r hover:bg-blue-600 hover:text-white"
+            className="bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-600 hover:text-white py-1 rounded-l"
           >
             {t('register')}
           </Button>
@@ -29,10 +29,10 @@ export default function AuthForm() {
       ) : (
         <PreSigninForm>
           <Button
-            className="bg-white text-blue-600 border-2 border-blue-600 rounded-r hover:bg-blue-600 hover:text-white"
+            className="bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-600 hover:text-white py-1 rounded-r"
             onClick={toggleSwitch}
           >
-            {t('already-registered')}
+            {t('login')}
           </Button>
         </PreSigninForm>
       )}

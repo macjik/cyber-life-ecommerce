@@ -20,7 +20,7 @@
   "Auth": {
     "login": "Log in",
     "password": "Password",
-    "register": "Create an Account",
+    "register": "Register",
     "signup": "Sign up",
     "already-registered": "Already Registered?",
     "confirm-sms": "Confirm sms code",
