@@ -1,11 +1,9 @@
-/* Background Animation */
-.animatedBackground {
+/* .animatedBackground {
   background: linear-gradient(135deg, #6e8efb, #4a6cf7);
   overflow: hidden;
   position: relative;
 }
 
-/* Particle Animation */
 .particleContainer {
   position: absolute;
   top: 0;
@@ -37,7 +35,6 @@
   }
 }
 
-/* Randomize particle positions and sizes */
 .particle:nth-child(1) {
   top: 10%;
   left: 20%;
@@ -100,4 +97,4 @@
   width: 12px;
   height: 12px;
   animation-duration: 7s;
-}
+} */

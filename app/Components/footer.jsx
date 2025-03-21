@@ -6,7 +6,7 @@ export default async function Footer() {
   const t = await getTranslations('footer');
 
   return (
-    <footer className="w-full flex bg-gray-800 text-white p-8 mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mb-16">
+    <footer className="w-full flex bg-gray-800 text-white p-8 mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mb-2 rounded-b-lg">
       <div className="w-full mx-auto">
         <div className="grid grid-cols-1 text-center space-y-4">
           {/* <div className="flex justify-center lg:justify-start items-center">

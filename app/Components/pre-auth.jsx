@@ -73,7 +73,7 @@ export function PreLoginForm({ children }) {
           />
         </div>
       </div>
-      <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
+      <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" className='py-1'/>
       <div className="w-full text-right my-2 px-3">
         <Link href="/reset-password" className="text-end">
           <span className="text-blue-700 text-sm underline">{t('forgot-password')}</span>
@@ -183,7 +183,7 @@ export function PreSigninForm({ children }) {
               />
             </div>
           </div>{' '}
-          <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" />
+          <FormInput id="password" label={`${t('password')}*`} type="password" minLength="6" className='py-1' />
           {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
           <div className="inline-flex w-full mt-8">
             <SubmitButton>{t('signup')}</SubmitButton>

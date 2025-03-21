@@ -1,33 +1,25 @@
 'use server';
 
-import Image from 'next/image';
 import AuthForm from '../Components/toggle-form';
-import blackCat from '../../public/black-cat.webp';
-import styles from './AuthPage.module.css'; 
 
 export default async function AuthPage() {
   return (
-    <main className="bg-gradient-to-br from-gray-900 to-gray-700 w-full flex min-h-screen">
-      <div className="max-w-xl min-h-screen w-full bg-white shadow-lg p-8">
-        <AuthForm />
+    <main className="w-full flex min-h-screen mx-auto px-0 bg-gray-50">
+      <div className="w-full md:w-7/12 lg:w-8/12 min-h-screen bg-white shadow-lg p-8 flex items-center justify-center rounded-t-lg">
+        <div className="w-full max-w-md">
+          <AuthForm />
+        </div>
       </div>
 
-      <div className={`w-full relative hidden md:block ${styles.animatedBackground}`}>
-        <div className={styles.particleContainer}>
-          {[...Array(50)].map((_, i) => (
-            <div key={i} className={styles.particle}></div>
-          ))}
+      <div
+        className={`w-5/12 lg:w-4/12 min-h-screen bg-gradient-to-br from-[#667eea] to-[#764ba2] hidden md:flex items-center justify-center p-8 transition-all duration-500 hover:from-[#764ba2] hover:to-[#667eea] rounded-tr-lg`}
+      >
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">Welcome!</h1>
+          <p className="text-lg text-gray-200">
+            Sign in to access your account and explore amazing features.
+          </p>
         </div>
-        <Image
-          className="object-contain w-auto h-auto absolute inset-0 mx-auto my-auto"
-          src={blackCat}
-          quality={100}
-          width={400}
-          height={400}
-          alt="black cat"
-          loading="lazy"
-          placeholder="blur"
-        />
       </div>
     </main>
   );

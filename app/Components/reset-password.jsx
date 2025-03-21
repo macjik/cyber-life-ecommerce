@@ -14,7 +14,7 @@ function SubmitButton({ children }) {
     <Button
       type="submit"
       disabled={pending}
-      className="text-center text-lg text-white bg-blue-600 rounded focus:outline-none"
+      className="text-center text-lg text-white bg-blue-600 rounded focus:outline-none py-1"
     >
       {pending ? <Spinner /> : children}
     </Button>
@@ -34,7 +34,7 @@ export function ResetPasswordForm() {
   }
 
   return (
-    <main className='min-h-screen'>
+    <main className="min-h-screen">
       <header className="w-full">
         <h1 className="text-4xl text-center font-semibold">{t('forgot-password')}</h1>
         <h3 className="text-center mt-3 text-lg">{t('reset-password')}</h3>
@@ -42,13 +42,13 @@ export function ResetPasswordForm() {
 
       {!validPhone.phone ? (
         <form action={validatePhone} className="mt-6 w-full max-w-md mx-auto justify-center">
-          <div className="inline-flex mt-6 w-full justify-center">
+          <div className="inline-flex w-full justify-center">
             <span className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-12 font-medium text-center p-2 text-md mt-2">
               +998
             </span>
             <div className="flex-grow mb-4">
               <FormInput
-                className="h-12 rounded-l-none font-medium text-gray-700 m-0"
+                className="h-12 text-lg rounded-l-none font-medium text-gray-700 m-0"
                 inputMode="tel"
                 id="phone"
                 placeholder="(xx) xxx-xx-xx"
@@ -62,11 +62,11 @@ export function ResetPasswordForm() {
         </form>
       ) : !validSms.phone ? (
         <form action={validateSms} className="mt-6 w-full max-w-md mx-auto justify-center">
-          <div className="inline-flex mt-6 w-full justify-center">
+          <div className="inline-flex w-full justify-center">
             <div className="flex-grow mb-4">
               <input type="hidden" name="phone" value={validPhone.phone} />
               <FormInput
-                className="h-12 font-medium text-gray-700 mt-0"
+                className="h-10 text-lg font-medium text-gray-700 mt-0"
                 inputMode="number"
                 id="sms-code"
                 label={t('confirm-sms')}
@@ -80,12 +80,12 @@ export function ResetPasswordForm() {
           <SubmitButton>{t('verify-code')}</SubmitButton>
         </form>
       ) : (
-        <form action={createNewPassword} className="mt-6 w-full max-w-md mx-auto justify-center">
-          <div className="inline-flex mt-6 w-full justify-center">
+        <form action={createNewPassword} className="w-full max-w-md mx-auto justify-center">
+          <div className="inline-flex w-full justify-center">
             <div className="flex-grow mb-4">
               <FormInput
                 label={t('create-new-password')}
-                className="h-12 font-medium text-gray-700 mt-0"
+                className="h-12 text-lg font-medium text-gray-700 mt-0"
                 id="password"
                 type="password"
                 minLength="6"

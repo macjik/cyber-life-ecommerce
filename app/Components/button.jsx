@@ -12,7 +12,7 @@ export default function Button({
     <button
       disabled={disabled}
       className={`${className} 
-        w-full px-0 md:px-4 py-0 md:py-2 font-semibold text-base shadow-sm`}
+        w-full px-2 md:px-4 font-semibold text-base shadow-sm transition-all duration-200`}
       onClick={onClick}
       type={type}
       {...props}
