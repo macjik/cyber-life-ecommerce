@@ -34,7 +34,9 @@
     "reset-password": "Parolni tiklash uchun tasdiqlash kodini oling",
     "send-code": "Tasdiqlash kodini yuborish",
     "verify-code": "Kodni tekshirish",
-    "create-new-password": "Yangi parol yaratish"
+    "create-new-password": "Yangi parol yaratish",
+    "welcome-title": "Mimi ga xush kelibsiz!",
+    "welcome": "Birga sotib olish va birga tejash uchun kiring – ko'proq zavq, ko'proq tejash!"
   },
   "homePage": {
     "title": "Birga Xarid Qiling, Ko'proq Tejang",

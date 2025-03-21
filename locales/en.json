@@ -34,7 +34,9 @@
     "reset-password": "Reset password by getting verification code",
     "send-code": "Send verification code",
     "verify-code": "Verify code",
-    "create-new-password": "Create a new password"
+    "create-new-password": "Create a new password",
+    "welcome-title": "Welcome to Mimi!",
+    "welcome": "Sign in to Buy Together, Save Together – More Fun, More Savings!"
   },
   "homePage": {
     "title": "Buy Together, Save More",

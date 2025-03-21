@@ -8,7 +8,7 @@ const languages = [
   { code: 'uz', name: "O'zbek tili", flag: '/flags/uz-flag.png' },
   { code: 'en', name: 'English', flag: '/flags/en-flag.png' },
   { code: 'ru', name: 'Русский', flag: '/flags/ru-flag.png' },
-  { code: 'zh', name: '中文', flag: '/flags/zh-flag.png' },
+  // { code: 'zh', name: '中文', flag: '/flags/zh-flag.png' },
 ];
 
 const translations = {
