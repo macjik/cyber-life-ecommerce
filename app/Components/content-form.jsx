@@ -124,7 +124,7 @@ export function ContentForm({ company = null }) {
           </Button>
         </div>
 
-        <FormInput label={t('description')}id="description" type="text" className="mt-4 text-sm" />
+        <FormInput label={t('description')} id="description" type="text" className="mt-4 text-sm" />
         <SubmitButton>{t('confirm')}</SubmitButton>
 
         {contentState?.error && <p className="text-red-700 text-sm mt-2">{contentState.error}</p>}

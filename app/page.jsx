@@ -55,7 +55,9 @@ export default async function Home({ searchParams }) {
             <h1 className="lg:text-5xl text-3xl font-extrabold text-gray-900">
               {company.name || <>Mimi: {t('title')}</>}
             </h1>
-            <p className="lg:text-lg text-md text-gray-700">{company.slogan || <>{t('slogan')}</>}</p>
+            <p className="lg:text-lg text-md text-gray-700">
+              {company.slogan || <>{t('slogan')}</>}
+            </p>
             {/* <div className="mb-4 md:mb-0 w-full h-full flex justify-center items-center mt-10 md:mt-10"> */}
             {/* <img
                 src="/transparent-mimi-logo.png"

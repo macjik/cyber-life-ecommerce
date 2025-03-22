@@ -25,7 +25,10 @@ export default async function MyProduct({
 
   const t = await getTranslations();
   return (
-    <div key={key} className="flex flex-col md:flex-row items-center justify-between py-4 px-4 sm:px-6 bg-white rounded-lg shadow-md w-full mb-6 hover:shadow-lg transition-shadow">
+    <div
+      key={key}
+      className="flex flex-col md:flex-row items-center justify-between py-4 px-4 sm:px-6 bg-white rounded-lg shadow-md w-full mb-6 hover:shadow-lg transition-shadow"
+    >
       <div className="relative w-28 h-28 sm:w-36 sm:h-36 mb-4 md:mb-0 md:mr-6">
         <Image
           src={itemSrc || '/turtle.jpg'}

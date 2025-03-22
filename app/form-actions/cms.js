@@ -377,7 +377,7 @@ export async function setRate(state, formData) {
     const schema = Joi.object({ rate: Joi.string().max(5).required() });
     const { value, error } = schema.validate({ rate: formData.get('exchange-rate').toString() });
 
-    if (error) { 
+    if (error) {
       console.error(error);
       return { error: `${error}` };
     }

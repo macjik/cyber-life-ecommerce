@@ -60,7 +60,7 @@ export async function invoiceReq(state, formData) {
       out_trade_no: out_trade_no,
       // sign_type: 'HMAC-SHA256', // Signature Type
       spbill_create_ip: '45.9.230.164', // Terminal IP Address
-      total_fee: 100,//parseInt(exchangedCurrency, 10), //Math.round(exchangedCurrency), // Amount in Fen
+      total_fee: 100, //parseInt(exchangedCurrency, 10), //Math.round(exchangedCurrency), // Amount in Fen
       fee_type: 'CNY',
       trade_type: 'MWEB', // Payment Type for H5
     };

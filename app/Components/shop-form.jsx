@@ -36,7 +36,7 @@ export default function ShopForm({ user }) {
       <FormInput label={t('shop-description')} id="description" type="text" />
       <FormInput label={t('shop-slogan')} id="slogan" />
       <input value={user} type="hidden" name="user" />
-      {<p className='text-red-600'>{shopState.error}</p>}
+      {<p className="text-red-600">{shopState.error}</p>}
       <SubmitButton>{t('submit')}</SubmitButton>
     </Form>
   );
