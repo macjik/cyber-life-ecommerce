@@ -86,15 +86,15 @@ export function PreLoginForm({ children }) {
         minLength="6"
         className="py-1"
       />
+      {loginState.error && <p className="text-red-700">{loginState.error}</p>}
+      <SubmitButton isPending={isPending} className="py-1 rounded">
+        {t('login')}
+      </SubmitButton>
       <div className="w-full text-right my-2 px-3">
         <Link href="/reset-password" className="text-end">
           <span className="text-blue-700 text-sm underline">{t('forgot-password')}</span>
         </Link>
       </div>
-      {loginState.error && <p className="text-red-700">{loginState.error}</p>}
-      <SubmitButton isPending={isPending} className="py-1 rounded">
-        {t('login')}
-      </SubmitButton>
     </Form>
   );
 }
@@ -212,6 +212,9 @@ export function PreSigninForm({ children }) {
             className="py-1"
           />
           {preSignupState.error && <p className="text-red-700">{preSignupState.error}</p>}
+          <SubmitButton isPending={isPending} className="py-1 rounded bg-cyan-400">
+            {t('register')}
+          </SubmitButton>
         </Form>
       )}
     </>
