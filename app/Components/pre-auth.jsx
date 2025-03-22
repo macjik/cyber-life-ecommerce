@@ -87,10 +87,10 @@ export function PreLoginForm({ children }) {
         className="py-1"
       />
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
-      <SubmitButton isPending={isPending} className="py-1 rounded">
+      <SubmitButton isPending={isPending} className="py-1 rounded mb-2">
         {t('login')}
       </SubmitButton>
-      <div className="w-full text-right my-2 px-3">
+      <div className="w-full text-right px-3">
         <Link href="/reset-password" className="text-end">
           <span className="text-blue-700 text-sm underline">{t('forgot-password')}</span>
         </Link>
