@@ -206,3 +206,12 @@ export async function preSignup(state, formData) {
     return { error: 'Internal server error' };
   }
 }
+
+export const logout = async () => {
+  await cookies().set('token', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 0,
+    sameSite: 'lax',
+  });
+};
