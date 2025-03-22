@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { FaUser, FaShoppingCart, FaHome, FaStarOfLife } from 'react-icons/fa';
 import { AiFillControl } from 'react-icons/ai';
 import { getTranslations } from 'next-intl/server';
-import Image from '@/node_modules/next/image';
-import Logo from '../../public/transparent-mimi-logo.webp';
 
-export default async function NavBar({ userRole, isAllowedRoute, children, icon, locale }) {
+export default async function NavBar({ userRole, currentPath, locale }) {
+  const isAllowedRoute = !currentPath.startsWith('/auth') && !/\/item(\/|$)/.test(currentPath);
+
   if (!isAllowedRoute) return null;
 
   const t = await getTranslations();
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-17 z-50 shadow-lg">
       <div className="flex items-center mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl w-full py-2">
@@ -46,31 +47,22 @@ export default async function NavBar({ userRole, isAllowedRoute, children, icon,
         )}
         {userRole === 'owner' && (
           <Link
-            href={`/shop-cms`}
+            href="/shop-cms"
             className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
           >
             <AiFillControl size={24} />
             <span className="text-sm font-semibold">Admin</span>
           </Link>
         )}
-        {children && (
+        {/* {locale === 'zh' && (
           <Link
-            href={`/${children.toLowerCase()}`}
-            className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
-          >
-            {icon}
-            <span className="text-sm font-semibold">{children}</span>
-          </Link>
-        )}
-        {locale === 'zh' && (
-          <Link
-            href={`/life`}
+            href="/life"
             className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
           >
             <FaStarOfLife size={24} />
             <span className="text-sm font-semibold">生活</span>
           </Link>
-        )}
+        )} */}
       </div>
     </nav>
   );

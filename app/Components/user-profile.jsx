@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Button from './button';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import Logout from './logout';
 
 export default async function UserProfile({
   userId,
@@ -38,9 +39,12 @@ export default async function UserProfile({
           </p>
           {/* <p className="mt-4 text-gray-600 text-base">Address: {address}</p> */}
         </div>
-        <div className="mt-6 text-center lg:text-left">
+        <div className="mt-6 text-center lg:text-left space-x-2">
+          <Logout />
           <Link href="/profile">
-            <Button className="rounded-lg max-w-max bg-indigo-600 text-white">{t('edit')}</Button>
+            <Button className="rounded-lg max-w-max bg-indigo-600 text-white p-1">
+              {t('edit')}
+            </Button>
           </Link>
         </div>
       </div>

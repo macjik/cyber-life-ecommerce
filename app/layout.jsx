@@ -38,7 +38,7 @@ export default async function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
         <div className="mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl w-full min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-white to-gray-100 pt-2">
           <Locales />
-          <NavBar locale={locale} userRole={userRole} isAllowedRoute={isAllowedRoute} />
+          <NavBar locale={locale} userRole={userRole} currentPath={currentPath} />
           <NextIntlClientProvider messages={messages}>
             {/* {userRole !== 'guest' && <ShopsNav />} */}
             {children}
