@@ -58,10 +58,12 @@ export function PreLoginForm({ children }) {
     <Form action={loginAction} title={t('login')}>
       <div className="inline-flex w-full mb-6">
         {children}
-        <SubmitButton isPending={isPending} className='rounded-r'>{t('login')}</SubmitButton>
+        <Button type="button" className="bg-blue-600 text-white hover:bg-blue-600 py-1 rounded-r">
+          {t('login')}
+        </Button>
       </div>
       <div className="inline-flex w-full">
-        <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm mt-2">
+        <div className="bg-slate-100 border-2 rounded-l border-gray-100 h-9 font-normal text-center p-1 text-md mt-2">
           +998
         </div>
         <div className="flex-grow">
@@ -90,7 +92,9 @@ export function PreLoginForm({ children }) {
         </Link>
       </div>
       {loginState.error && <p className="text-red-700">{loginState.error}</p>}
-       <SubmitButton isPending={isPending} className='py-1 rounded'>{t('login')}</SubmitButton>
+      <SubmitButton isPending={isPending} className="py-1 rounded">
+        {t('login')}
+      </SubmitButton>
     </Form>
   );
 }
@@ -166,7 +170,7 @@ export function PreSigninForm({ children }) {
             <Button
               type="submit"
               className="text-white rounded-lg bg-blue-600 text-xl py-2"
-              disabled={isPending} 
+              disabled={isPending}
             >
               {isPending ? <Spinner /> : t('confirm')}
             </Button>
@@ -175,11 +179,16 @@ export function PreSigninForm({ children }) {
       ) : (
         <Form action={preSignupAction} title={t('signup')}>
           <div className="inline-flex w-full mb-4">
-            <SubmitButton className='rounded-l'>{t('signup')}</SubmitButton>
+            <Button
+              type="button"
+              className="bg-blue-600 text-white hover:bg-blue-600 py-1 rounded-l"
+            >
+              {t('register')}
+            </Button>
             {children}
           </div>
           <div className="inline-flex w-full">
-            <div className="bg-slate-300 text-gray-600 border-2 rounded-l border-gray-300 h-9 font-medium text-center p-1 text-sm mt-2">
+            <div className="bg-slate-100 border-2 rounded-l border-gray-100 h-9 font-normal text-center p-1 text-md mt-2">
               +998
             </div>
             <div className="flex-grow">
