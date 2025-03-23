@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { GB, RU, UZ } from 'country-flag-icons/react/1x1';
 import { useRouter } from 'next/navigation';
 
 const languages = [
-  { code: 'uz', name: "O'zbek tili", flag: '/flags/uz-flag.png' },
-  { code: 'en', name: 'English', flag: '/flags/en-flag.png' },
-  { code: 'ru', name: 'Русский', flag: '/flags/ru-flag.png' },
+  { code: 'uz', name: "O'zbek tili", flag: <UZ title="" className="h-6 w-8" /> },
+  { code: 'en', name: 'English', flag: <GB title="" className="h-6 w-8" /> },
+  { code: 'ru', name: 'Русский', flag: <RU title="" className="h-6 w-8" /> },
   // { code: 'zh', name: '中文', flag: '/flags/zh-flag.png' },
 ];
 
@@ -50,13 +50,14 @@ export default function Locales() {
         onClick={toggleDropdown}
         className="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 hover:bg-gray-300 transition-all duration-300"
       >
-        <Image
+        {languages.find((lang) => lang.code === language)?.flag}
+        {/* <Image
           src={languages.find((lang) => lang.code === language)?.flag}
           alt="Selected Language Flag"
           width={24}
           height={24}
           className="rounded-full"
-        />
+        /> */}
         <span>{languages.find((lang) => lang.code === language)?.name}</span>
       </button>
 
@@ -70,13 +71,14 @@ export default function Locales() {
                 ${language === code ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-300'}
               `}
             >
-              <Image
+              {flag}
+              {/* <Image
                 src={flag}
                 alt={`${name} flag`}
                 width={24}
                 height={24}
                 className="rounded-full"
-              />
+              /> */}
               <span>{name}</span>
             </button>
           ))}
