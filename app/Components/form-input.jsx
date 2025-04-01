@@ -3,6 +3,7 @@
 export default function FormInput({
   className = null,
   id,
+  name = null,
   label,
   type,
   onChange = null,
@@ -16,7 +17,7 @@ export default function FormInput({
       </label>
       <input
         id={id}
-        name={id}
+        name={name || id}
         type={type}
         onChange={onChange}
         required

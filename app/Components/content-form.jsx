@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { Spinner } from './spinner';
 import Link from '@/node_modules/next/link';
 import { useTranslations } from 'next-intl';
+import { v4 as uuidv4 } from 'uuid';
 
 function SubmitButton({ children, className = '' }) {
   const { pending } = useFormStatus();
@@ -45,9 +46,12 @@ export function ContentForm({ company = null }) {
     }
   }
 
+  const handleRemoveImages = (imageId) =>
+    setImages((prevImage) => prevImage.filter((image) => image.id !== imageId));
+
   function handleAddImages(event) {
     event.preventDefault();
-    setImages((prevImages) => [...prevImages, { name: '' }]);
+    setImages((prevImage) => [...prevImage, { id: uuidv4() }]);
   }
 
   function handleAddAttribute(event) {
@@ -82,13 +86,21 @@ export function ContentForm({ company = null }) {
           <div className="w-full">
             {images.length > 0 &&
               images.map((image, index) => (
-                <FormInput
-                  key={index}
-                  label={`Image ${index + 1}`}
-                  id={`image`}
-                  type="file"
-                  className="text-sm w-full"
-                />
+                <div key={index}>
+                  <FormInput
+                    label={`Image ${index + 1}`}
+                    id={image.id}
+                    name="image"
+                    type="file"
+                    className="text-sm w-full"
+                  />
+                  <Button
+                    onClick={() => handleRemoveImages(image.id)}
+                    className="bg-gray-300 p-3 mt-4 rounded-md"
+                  >
+                    Remove -
+                  </Button>
+                </div>
               ))}
             <Button className="bg-gray-300 p-3 mt-4 rounded-md" onClick={handleAddImages}>
               Add images +
