@@ -34,6 +34,7 @@ export function ContentForm({ company = null }) {
   const [contentState, addContentAction] = useFormState(addContent, '');
   const router = useRouter();
   const [attributes, setAttributes] = useState([{ name: '', value: '' }]);
+  const [images, setImages] = useState([]);
   const t = useTranslations('Admin');
 
   if (contentState?.status === 200) {
@@ -42,6 +43,11 @@ export function ContentForm({ company = null }) {
     } else {
       window.location.href = '/admin';
     }
+  }
+
+  function handleAddImages(event) {
+    event.preventDefault();
+    setImages((prevImages) => [...prevImages, { name: '' }]);
   }
 
   function handleAddAttribute(event) {
@@ -72,6 +78,22 @@ export function ContentForm({ company = null }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <FormInput label={t('category')} id="category" type="text" className="text-sm" />
           <FormInput label={t('image')} id="image" type="file" className="text-sm" />
+          <div className="w-full"></div>
+          <div className="w-full">
+            {images.length > 0 &&
+              images.map((image, index) => (
+                <FormInput
+                  key={index}
+                  label={`Image ${index + 1}`}
+                  id={`image`}
+                  type="file"
+                  className="text-sm w-full"
+                />
+              ))}
+            <Button className="bg-gray-300 p-3 mt-4 rounded-md" onClick={handleAddImages}>
+              Add images +
+            </Button>
+          </div>
           <FormInput
             label="IKPU"
             id="category-ikpu"
@@ -124,7 +146,7 @@ export function ContentForm({ company = null }) {
           </Button>
         </div>
 
-        <FormInput label={t('description')}id="description" type="text" className="mt-4 text-sm" />
+        <FormInput label={t('description')} id="description" type="text" className="mt-4 text-sm" />
         <SubmitButton>{t('confirm')}</SubmitButton>
 
         {contentState?.error && <p className="text-red-700 text-sm mt-2">{contentState.error}</p>}

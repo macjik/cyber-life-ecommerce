@@ -18,7 +18,7 @@ export default async function Dashboard({ children, company = null }) {
           <Button className="text-white bg-blue-600 rounded">¥ = {currentExRate || 0}</Button>
         </Link> */}
         <Link href={company ? `/admin/cms?company=${company}` : '/admin/cms'}>
-          <Button className="bg-indigo-600 text-white rounded-lg">{t('add')} +</Button>
+          <Button className="bg-indigo-600 text-white rounded-lg p-1">{t('add')} +</Button>
         </Link>
         {!company && (
           <Link href="/companies">
