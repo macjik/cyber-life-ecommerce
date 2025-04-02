@@ -1,8 +1,8 @@
 'use server';
 
-import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import ProductOptions from './product-options';
+import ImageSwiper from './swiper';
 
 export default async function Product({
   itemName,
@@ -21,20 +21,12 @@ export default async function Product({
   children = null,
 }) {
   const t = await getTranslations('');
+  console.log(itemSrc);
   return (
     <div className="flex items-center justify-center min-h-screen p-4">
       <div className="max-w-lg w-full bg-white shadow-xl rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gray-50 mb-6">
         <div className="relative h-56 w-full group">
-          <Image
-            src={itemSrc || '/turtle.jpg'}
-            alt={itemName}
-            fill
-            priority
-            quality={100}
-            sizes="80vw"
-            style={{ objectFit: 'cover' }}
-            className="object-cover rounded-t-lg transition-transform duration-500 group-hover:scale-110"
-          />
+          <ImageSwiper images={itemSrc || '/turtle.jpg'} />
           {itemDiscount && (
             <span className="absolute top-2 right-2 bg-red-600 text-white text-sm font-bold px-2 py-1 rounded-full shadow-lg">
               {itemDiscount}% {t('discount')}

@@ -45,6 +45,7 @@
     "sequelize-cli": "^6.6.2",
     "server-only": "^0.0.1",
     "swiper": "^11.2.6",
+    "swiper-react": "^1.0.0",
     "time-constants": "^1.0.3",
     "uuid": "^11.1.0",
     "vercel": "^37.8.0"

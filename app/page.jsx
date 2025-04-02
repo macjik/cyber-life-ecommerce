@@ -48,6 +48,7 @@ export default async function Home({ searchParams }) {
     }));
 
     const t = await getTranslations('homePage');
+    console.log(items);
     return (
       <Suspense fallback={<Loading />}>
         <main className="w-full flex flex-col items-center pt-4 pb-20 space-y-6 min-h-screen mt-20">
@@ -99,7 +100,7 @@ export default async function Home({ searchParams }) {
                           width={256}
                           height={256}
                           className="object-cover w-full h-full"
-                          src={item.image}
+                          src={item.image[0]}
                           alt={`${item.name} image`}
                         />
                       </div>
@@ -198,7 +199,7 @@ export default async function Home({ searchParams }) {
                         width={256}
                         height={256}
                         className="object-cover w-full h-full"
-                        src={item.image}
+                        src={item.image[0]}
                         alt={`${item.name} image`}
                       />
                     </div>
