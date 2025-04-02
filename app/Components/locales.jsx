@@ -45,7 +45,7 @@ export default function Locales() {
   };
 
   return (
-    <div className="absolute top-5 left-1/2 transform -translate-x-1/2 mb-20">
+    <div className="absolute top-5 left-1/2 transform -translate-x-1/2 mb-20 z-50">
       <button
         onClick={toggleDropdown}
         className="flex items-center space-x-2 px-2 py-2 rounded-md text-xs font-medium bg-white text-gray-700 hover:bg-gray-300 transition-all duration-300"
