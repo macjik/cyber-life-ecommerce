@@ -5,7 +5,7 @@ import { GB, RU, UZ } from 'country-flag-icons/react/1x1';
 import { useRouter } from 'next/navigation';
 
 const languages = [
-  { code: 'uz', name: "O'zbek tili", flag: <UZ title="" className="h-6 w-8" /> },
+  { code: 'uz', name: "O'zbekcha", flag: <UZ title="" className="h-6 w-8" /> },
   { code: 'en', name: 'English', flag: <GB title="" className="h-6 w-8" /> },
   { code: 'ru', name: 'Русский', flag: <RU title="" className="h-6 w-8" /> },
   // { code: 'zh', name: '中文', flag: '/flags/zh-flag.png' },
@@ -45,10 +45,10 @@ export default function Locales() {
   };
 
   return (
-    <div className="absolute top-5 left-1/2 transform -translate-x-1/2">
+    <div className="absolute top-5 left-1/2 transform -translate-x-1/2 mb-20">
       <button
         onClick={toggleDropdown}
-        className="flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium bg-white text-gray-700 hover:bg-gray-300 transition-all duration-300"
+        className="flex items-center space-x-2 px-2 py-2 rounded-md text-xs font-medium bg-white text-gray-700 hover:bg-gray-300 transition-all duration-300"
       >
         {languages.find((lang) => lang.code === language)?.flag}
         {/* <Image
@@ -62,12 +62,12 @@ export default function Locales() {
       </button>
 
       {isDropdownOpen && (
-        <div className="absolute top-10 z-50 space-y-2 bg-white border border-gray-300 rounded-lg shadow-lg py-2 px-4 w-48">
+        <div className="absolute top-10 left-0 z-50 space-y-2 bg-white border border-gray-300 rounded-lg shadow-lg py-2 px-2 max-w-max">
           {languages.map(({ code, name, flag }) => (
             <button
               key={code}
               onClick={() => handleLanguageChange(code)}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 w-full
+              className={`flex items-center space-x-1 px-2 py-2 rounded-lg text-xs font-medium transition-all duration-300 w-full
                 ${language === code ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-300'}
               `}
             >
