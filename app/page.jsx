@@ -162,6 +162,7 @@ export default async function Home({ searchParams }) {
     name: item.name.replace(/-/g, ' '),
   }));
 
+  console.log(items);
   const t = await getTranslations('homePage');
   return (
     <Suspense fallback={<Loading />}>

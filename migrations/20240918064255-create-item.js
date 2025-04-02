@@ -26,7 +26,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DECIMAL(10, 2),
       },
-      image: { type: Sequelize.ARRAY(Sequelize.STRING), defaultValue: [] },
+      image: Sequelize.ARRAY(Sequelize.STRING),
       sku: {
         type: Sequelize.STRING,
         allowNull: true,

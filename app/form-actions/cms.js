@@ -90,17 +90,22 @@ export async function addContent(state, formData) {
         }),
       );
 
+      console.log(imageUrls);
+
       let [newCategory, created] = await Category.findOrCreate({
         where: { name: category },
         defaults: { name: category },
       });
+
+      console.log(Array.isArray(imageUrls));
+      console.log(typeof imageUrls[0]);
 
       let item = await Item.create({
         name,
         description,
         quantity,
         price,
-        images: imageUrls,
+        image: imageUrls.map((image) => String(image)),
         categoryId: newCategory.id,
         sku: uid,
         discount,
@@ -127,6 +132,7 @@ export async function addContent(state, formData) {
       return { error: 'No image file found' };
     }
   } catch (err) {
+    console.error(err);
     return { error: `${err.message}` };
   }
 }

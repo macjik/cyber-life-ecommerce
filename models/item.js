@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
       },
-      image: DataTypes.STRING,
+      image: DataTypes.ARRAY(DataTypes.STRING),
       sku: {
         type: DataTypes.STRING,
         allowNull: true,
