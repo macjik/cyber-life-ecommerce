@@ -43,22 +43,25 @@ export default async function MyCart({ searchParams }) {
     return (
       <div className="w-full p-4 min-h-screen">
         {cart.map(
-          ({
-            itemName,
-            itemDescription,
-            itemSrc,
-            categoryName,
-            itemPrice,
-            totalAmount,
-            itemStatus,
-            itemQuantity,
-            itemDiscount,
-            orderId,
-            userId,
-          }) =>
+          (
+            {
+              key,
+              itemName,
+              itemDescription,
+              itemSrc,
+              categoryName,
+              itemPrice,
+              totalAmount,
+              itemStatus,
+              itemQuantity,
+              itemDiscount,
+              orderId,
+              userId,
+            },
+          ) =>
             itemName ? (
               <MyProduct
-                key={itemName}
+                key={key}
                 originalPrice={itemPrice}
                 itemName={itemName}
                 itemDescription={itemDescription}
@@ -70,7 +73,7 @@ export default async function MyCart({ searchParams }) {
                 itemDiscount={itemDiscount}
               >
                 <PayButton
-                  className="bg-orange-600 text-white rounded-sm shadow-md hover:bg-blue-700 text-base font-bold w-20"
+                  className="bg-orange-600 text-white rounded-sm sm:rounded-lg shadow-md hover:bg-blue-700 text-base font-bold w-20"
                   orderId={orderId}
                 >
                   {t('buy')} {itemName}
@@ -79,7 +82,7 @@ export default async function MyCart({ searchParams }) {
                   category={categoryName}
                   product={itemName.replace(/\s+/g, '-')}
                   inviterId={userId}
-                  className="bg-blue-500 text-white rounded-sm shadow-md hover:bg-green-600 text-base font-bold w-20"
+                  className="bg-blue-500 text-white rounded-sm sm:rounded-lg shadow-md hover:bg-green-600 text-base font-bold w-20"
                 >
                   {t('invite')}
                 </InviteLinkGenerator>
