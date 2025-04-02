@@ -12,13 +12,16 @@ const { item: Item, Category, Item_Attribute, Company } = db;
 export async function addContent(state, formData) {
   try {
     const company = formData.get('company');
-    const imageFile = formData.get('image');
-    const imageMimeType = imageFile ? imageFile.type : null;
-
+    const imageFile = formData.getAll('image');
+    const imageMimeType = imageFile.map((file) => file.type);
+    console.log(imageMimeType);
     const schema = Joi.object({
       name: Joi.string().min(3).required(),
       description: Joi.string().min(5).required(),
-      image: Joi.string().valid('image/jpg', 'image/jpeg', 'image/png').required(),
+      image: Joi.array()
+        .items(Joi.string().valid('image/jpeg', 'image/png', 'image/webp').required())
+        .min(1)
+        .required(),
       price: Joi.number().required(),
       category: Joi.string().required(),
       discount: Joi.number().max(100).required(),
@@ -70,18 +73,23 @@ export async function addContent(state, formData) {
 
     const uid = uuidv4();
 
-    if (imageFile) {
-      const imageArrayBuffer = await imageFile.arrayBuffer();
-      const imageBuffer = Buffer.from(imageArrayBuffer);
+    if (imageFile.length > 0) {
+      const imageUrls = await Promise.all(
+        imageFile.map(async (file, index) => {
+          const imageArrayBuffer = await file.arrayBuffer();
+          const imageBuffer = Buffer.from(imageArrayBuffer);
+          const extension = file.type.split('/')[1];
+          const imageFileName = `${uid}-${index}.${extension}`;
 
-      const imageFileName = `${uid}.${imageMimeType.split('/')[1]}`;
+          const blob = await put(imageFileName, imageBuffer, {
+            contentType: file.type,
+            access: 'public',
+          });
 
-      const blob = await put(imageFileName, imageBuffer, {
-        contentType: imageMimeType,
-        access: 'public',
-      });
+          return blob.url;
+        }),
+      );
 
-      const imageUrl = blob.url;
       let [newCategory, created] = await Category.findOrCreate({
         where: { name: category },
         defaults: { name: category },
@@ -92,7 +100,7 @@ export async function addContent(state, formData) {
         description,
         quantity,
         price,
-        image: imageUrl,
+        images: imageUrls,
         categoryId: newCategory.id,
         sku: uid,
         discount,
@@ -377,7 +385,7 @@ export async function setRate(state, formData) {
     const schema = Joi.object({ rate: Joi.string().max(5).required() });
     const { value, error } = schema.validate({ rate: formData.get('exchange-rate').toString() });
 
-    if (error) { 
+    if (error) {
       console.error(error);
       return { error: `${error}` };
     }
