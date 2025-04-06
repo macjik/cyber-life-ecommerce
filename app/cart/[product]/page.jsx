@@ -38,7 +38,7 @@ export default async function CartPage({ params, searchParams }) {
     if (!currentUser || !existingProduct) {
       await transaction.rollback();
       return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
+        <div className="max-h-max w-full flex items-center justify-center bg-gray-50">
           <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
             <p className="text-lg text-gray-700">{!currentUser ? t('user') : t('product')}</p>
           </div>
@@ -109,7 +109,7 @@ export default async function CartPage({ params, searchParams }) {
     await transaction.commit();
 
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-h-max bg-gray-50 pt-8 mt-4">
         <Suspense fallback={<Loading />}>
           <div className="max-w-4xl mx-auto px-4">
             <Product
@@ -178,7 +178,7 @@ async function renderOrderView(
   const { totalAmount, totalBuyers } = currentOrder;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="max-h-max bg-gray-50 pt-8 mt-4">
       <Suspense fallback={<Loading />}>
         <div className="max-w-4xl mx-auto px-4">
           <Product
@@ -241,7 +241,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     (existingInvite.status === 'expired' && existingInvite.Invitee?.id !== currentUser.id)
   ) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="max-h-max flex items-center justify-center bg-gray-50">
         <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
           <h1 className="text-xl font-medium text-gray-800">{t('error.link')}</h1>
         </div>
@@ -285,7 +285,7 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
   await updateRelatedOrders(allRelatedOrders, allRelatedOrders.length, discountAmount, transaction);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="max-h-max bg-gray-50 pt-8 mt-4">
       <Suspense fallback={<Loading />}>
         <div className="max-w-4xl mx-auto px-4">
           <Product

@@ -20,11 +20,11 @@ export default async function Product({
   maxQuantity = 100,
   children = null,
 }) {
-  const t = await getTranslations('');
+  const t = await getTranslations('');  
   console.log(itemSrc);
   return (
-    <div className="flex items-center justify-center min-h-screen p-4 mt-8">
-      <div className="max-w-lg w-full bg-white shadow-xl rounded-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gray-50 mb-6">
+    <div className="flex justify-center p-4 mt-8">
+      <div className="max-w-lg max-h-max w-full rounded-lg overflow-hidden">
         <div className="relative h-56 w-full group">
           <ImageSwiper images={itemSrc || '/turtle.jpg'} />
           {itemDiscount && (
@@ -33,7 +33,7 @@ export default async function Product({
             </span>
           )}
         </div>
-        <div className="p-6">
+        <div className="p-3">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">{itemName || 'Product Name'}</h2>
           <p className="text-gray-600 mb-4">
             {itemDescription ||
