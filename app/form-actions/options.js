@@ -6,7 +6,7 @@ const { Order, Item_Attribute } = db;
 
 export async function selectOption(state, formData) {
   try {
-    const option = formData.get('option');
+    // const option = formData.get('option');
     const id = formData.get('id');
     const value = formData.get('value');
 

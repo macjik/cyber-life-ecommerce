@@ -6,7 +6,7 @@ import { login, preSignup } from '../auth/actions';
 import FormInput from './form-input';
 import Form from './form';
 import Button from './button';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Spinner } from './spinner';
 import axios from '@/node_modules/axios/index';
 import { useTranslations } from 'next-intl';
@@ -104,7 +104,6 @@ export function PreSigninForm({ children }) {
   const [signUpError, setSignUpError] = useState('');
   const [isPending, setIsPending] = useState(false);
   const [phone, setPhone] = useState('');
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
 

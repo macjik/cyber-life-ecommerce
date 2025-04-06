@@ -85,7 +85,7 @@ export default async function CartPage({ params, searchParams }) {
       return result;
     }
 
-    const { name, description, image, category, price, status, quantity } = existingProduct;
+    const { name, description, image, price, status, quantity } = existingProduct;
     let createInvite = await Invite.create({
       inviter: currentUser.id,
       invitee: currentUser.id,
@@ -174,8 +174,8 @@ async function renderOrderView(
     trackInvites = await handleInviteProcessing(invite, currentUser, transaction);
   }
 
-  const { name, description, image, category, price, status, quantity } = existingProduct;
-  const { discount, totalAmount, totalBuyers } = currentOrder;
+  const { name, description, image, price, status, quantity } = existingProduct;
+  const { totalAmount, totalBuyers } = currentOrder;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

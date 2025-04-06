@@ -8,14 +8,7 @@ const languages = [
   { code: 'uz', name: "O'zbekcha", flag: <UZ title="" className="h-6 w-8" /> },
   { code: 'en', name: 'English', flag: <GB title="" className="h-6 w-8" /> },
   { code: 'ru', name: 'Русский', flag: <RU title="" className="h-6 w-8" /> },
-  // { code: 'zh', name: '中文', flag: '/flags/zh-flag.png' },
 ];
-
-const translations = {
-  uz: { welcome: 'Xush kelibsiz' },
-  en: { welcome: 'Welcome' },
-  ru: { welcome: 'Добро пожаловать' },
-};
 
 export default function Locales() {
   const [language, setLanguage] = useState('ru');

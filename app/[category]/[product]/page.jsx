@@ -1,6 +1,5 @@
 import Button from '@/app/Components/button';
 import Loading from '@/app/Components/loading';
-import Product from '@/app/Components/product';
 import db from '@/models/index';
 import Link from '@/node_modules/next/link';
 import { Suspense } from 'react';

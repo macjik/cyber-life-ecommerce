@@ -8,7 +8,7 @@ export default async function Product({
   itemName,
   itemDescription,
   itemSrc,
-  itemCategory,
+  // itemCategory,
   itemPrice,
   itemStatus,
   itemQuantity,

@@ -7,11 +7,11 @@ import { getTranslations } from 'next-intl/server';
 import Logout from './logout';
 
 export default async function UserProfile({
-  userId,
+  // userId,
   name = '',
   phone,
-  avatarUrl = null,
-  address,
+  // avatarUrl = null,
+  // address,
   image,
 }) {
   const t = await getTranslations('profile');

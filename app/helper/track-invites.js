@@ -1,6 +1,6 @@
 const db = require('../../models/index');
 
-const { User, Invite, Order } = db;
+const { Invite } = db;
 
 async function trackInviteChain(rootInviteId) {
   const invites = [];
