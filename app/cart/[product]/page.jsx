@@ -4,7 +4,7 @@ import calculateDiscount from '@/app/helper/calculate-discount';
 import InviteLinkGenerator from '@/app/Components/generate-invite';
 import trackInviteChain from '@/app/helper/track-invites';
 import PayButton from '@/app/Components/pay-button';
-import { FaMoneyBill, FaPercent } from 'react-icons/fa';
+import { FaMoneyBill, FaShareAlt } from 'react-icons/fa';
 import { Suspense } from 'react';
 import Loading from '@/app/Components/loading';
 import { getTranslations } from 'next-intl/server';
@@ -38,8 +38,10 @@ export default async function CartPage({ params, searchParams }) {
     if (!currentUser || !existingProduct) {
       await transaction.rollback();
       return (
-        <div className="min-h-screen w-full">
-          <p>{!currentUser ? t('user') : t('product')}</p>
+        <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
+          <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+            <p className="text-lg text-gray-700">{!currentUser ? t('user') : t('product')}</p>
+          </div>
         </div>
       );
     }
@@ -107,43 +109,47 @@ export default async function CartPage({ params, searchParams }) {
     await transaction.commit();
 
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gray-50 py-8">
         <Suspense fallback={<Loading />}>
-          <Product
-            itemName={name}
-            itemDescription={description}
-            itemSrc={image}
-            itemCategory={existingProduct.itemCategory.name}
-            itemPrice={price}
-            itemStatus={status}
-            itemQuantity={quantity - 1}
-            itemAttributes={
-              existingProduct.itemAttributes &&
-              existingProduct.itemAttributes.map((attr) => attr.value)
-            }
-            itemAttributeName={
-              existingProduct.itemAttributes &&
-              existingProduct.itemAttributes.map((attr) => attr.name)
-            }
-            orderId={order.id}
-          >
-            <div className="inline-flex w-full">
-              <PayButton
-                className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
-                orderId={order.id}
-              >
-                {/* {t('pay')} <FaMoneyBill size={22} /> */}
-              </PayButton>
-              <InviteLinkGenerator
-                category={existingProduct.itemCategory.name}
-                product={product.replace(/\s+/g, '-')}
-                inviterId={currentUser.id}
-                className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
-              >
-                {t('link')}
-              </InviteLinkGenerator>
-            </div>
-          </Product>
+          <div className="max-w-4xl mx-auto px-4">
+            <Product
+              itemName={name}
+              itemDescription={description}
+              itemSrc={image}
+              itemCategory={existingProduct.itemCategory.name}
+              itemPrice={price}
+              itemStatus={status}
+              itemQuantity={quantity - 1}
+              itemAttributes={
+                existingProduct.itemAttributes &&
+                existingProduct.itemAttributes.map((attr) => attr.value)
+              }
+              itemAttributeName={
+                existingProduct.itemAttributes &&
+                existingProduct.itemAttributes.map((attr) => attr.name)
+              }
+              orderId={order.id}
+            >
+              <div className="flex flex-col sm:flex-row gap-4 mt-6">
+                <PayButton
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-medium py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 items-center justify-center gap-3 inline-flex"
+                  orderId={order.id}
+                >
+                  <span className="w-full inline-flex justify-center gap-2">
+                    {t('pay')} <FaMoneyBill className="text-white m-1" />
+                  </span>
+                </PayButton>
+                <InviteLinkGenerator
+                  category={existingProduct.itemCategory.name}
+                  product={product.replace(/\s+/g, '-')}
+                  inviterId={currentUser.id}
+                  className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-3"
+                >
+                  {t('link')} <FaShareAlt className="text-orange-500" />
+                </InviteLinkGenerator>
+              </div>
+            </Product>
+          </div>
         </Suspense>
       </div>
     );
@@ -172,45 +178,48 @@ async function renderOrderView(
   const { discount, totalAmount, totalBuyers } = currentOrder;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50 py-8">
       <Suspense fallback={<Loading />}>
-        <Product
-          itemName={name}
-          itemDescription={description}
-          itemSrc={image}
-          itemCategory={existingProduct.itemCategory.name}
-          itemPrice={totalAmount}
-          originalPrice={price}
-          itemStatus={status}
-          itemQuantity={quantity - totalBuyers}
-          itemAttributes={
-            existingProduct.itemAttributes &&
-            existingProduct.itemAttributes.map((attr) => attr.value)
-          }
-          itemAttributeName={
-            existingProduct.itemAttributes &&
-            existingProduct.itemAttributes.map((attr) => attr.name)[0]
-          }
-          orderId={currentOrder.id}
-        >
-          <div className="inline-flex w-full">
-            <PayButton
-              className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
-              orderId={currentOrder.id}
-            >
-              {t('pay')}
-              {/* <FaMoneyBill size={22} /> */}
-            </PayButton>
-            <InviteLinkGenerator
-              category={existingProduct.itemCategory.name}
-              product={product.replace(/\s+/g, '-')}
-              inviterId={currentUser.id}
-              className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
-            >
-              {t('link')}
-            </InviteLinkGenerator>
-          </div>
-        </Product>
+        <div className="max-w-4xl mx-auto px-4">
+          <Product
+            itemName={name}
+            itemDescription={description}
+            itemSrc={image}
+            itemCategory={existingProduct.itemCategory.name}
+            itemPrice={totalAmount}
+            originalPrice={price}
+            itemStatus={status}
+            itemQuantity={quantity - totalBuyers}
+            itemAttributes={
+              existingProduct.itemAttributes &&
+              existingProduct.itemAttributes.map((attr) => attr.value)
+            }
+            itemAttributeName={
+              existingProduct.itemAttributes &&
+              existingProduct.itemAttributes.map((attr) => attr.name)[0]
+            }
+            orderId={currentOrder.id}
+          >
+            <div className="flex flex-col sm:flex-row gap-4 mt-6">
+              <PayButton
+                className="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-medium py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-3"
+                orderId={currentOrder.id}
+              >
+                <span className="w-full inline-flex justify-center gap-2">
+                  {t('pay')} <FaMoneyBill className="text-white m-1" />
+                </span>
+              </PayButton>
+              <InviteLinkGenerator
+                category={existingProduct.itemCategory.name}
+                product={product.replace(/\s+/g, '-')}
+                inviterId={currentUser.id}
+                className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-3"
+              >
+                {t('link')} <FaShareAlt className="text-orange-500" />
+              </InviteLinkGenerator>
+            </div>
+          </Product>
+        </div>
       </Suspense>
     </div>
   );
@@ -232,10 +241,10 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
     (existingInvite.status === 'expired' && existingInvite.Invitee?.id !== currentUser.id)
   ) {
     return (
-      <div className="min-h-screen">
-        <main className="flex w-full h-full justify-center">
-          <h1>{t('error.link')}</h1>
-        </main>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+          <h1 className="text-xl font-medium text-gray-800">{t('error.link')}</h1>
+        </div>
       </div>
     );
   }
@@ -276,45 +285,48 @@ async function handleInviteProcess(invite, existingProduct, currentUser, product
   await updateRelatedOrders(allRelatedOrders, allRelatedOrders.length, discountAmount, transaction);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50 py-8">
       <Suspense fallback={<Loading />}>
-        <Product
-          itemName={existingProduct.name}
-          itemDescription={existingProduct.description}
-          itemSrc={existingProduct.image}
-          itemCategory={existingProduct.itemCategory.name}
-          itemPrice={currentOrder.totalAmount || existingProduct.price}
-          originalPrice={existingProduct.price}
-          itemStatus={existingProduct.status}
-          itemQuantity={existingProduct.quantity - currentOrder.totalBuyers}
-          itemAttributes={
-            existingProduct.itemAttributes &&
-            existingProduct.itemAttributes.map((attr) => attr.value)
-          }
-          itemAttributeName={
-            existingProduct.itemAttributes &&
-            existingProduct.itemAttributes.map((attr) => attr.name)[0]
-          }
-          orderId={currentOrder.id}
-        >
-          <div className="inline-flex w-full">
-            <PayButton
-              className="inline-flex justify-center text-center gap-4 max-h-max rounded-l"
-              orderId={currentOrder.id}
-            >
-              {t('pay')}
-              {/* <FaMoneyBill size={22} /> */}
-            </PayButton>
-            <InviteLinkGenerator
-              category={existingProduct.category}
-              product={existingProduct.name.replace(/\s+/g, '-')}
-              inviterId={currentUser.id}
-              className="gap-3 text-center border-2 rounded-r border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white p-0"
-            >
-              {t('link')}
-            </InviteLinkGenerator>
-          </div>
-        </Product>
+        <div className="max-w-4xl mx-auto px-4">
+          <Product
+            itemName={existingProduct.name}
+            itemDescription={existingProduct.description}
+            itemSrc={existingProduct.image}
+            itemCategory={existingProduct.itemCategory.name}
+            itemPrice={currentOrder.totalAmount || existingProduct.price}
+            originalPrice={existingProduct.price}
+            itemStatus={existingProduct.status}
+            itemQuantity={existingProduct.quantity - currentOrder.totalBuyers}
+            itemAttributes={
+              existingProduct.itemAttributes &&
+              existingProduct.itemAttributes.map((attr) => attr.value)
+            }
+            itemAttributeName={
+              existingProduct.itemAttributes &&
+              existingProduct.itemAttributes.map((attr) => attr.name)[0]
+            }
+            orderId={currentOrder.id}
+          >
+            <div className="flex flex-col sm:flex-row gap-4 mt-6">
+              <PayButton
+                className="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-medium py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-3"
+                orderId={currentOrder.id}
+              >
+                <span className="w-full inline-flex justify-center gap-2">
+                  {t('pay')} <FaMoneyBill className="text-white m-1" />
+                </span>
+              </PayButton>
+              <InviteLinkGenerator
+                category={existingProduct.category}
+                product={existingProduct.name.replace(/\s+/g, '-')}
+                inviterId={currentUser.id}
+                className="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-medium py-3 px-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-3"
+              >
+                {t('link')} <FaShareAlt className="text-orange-500" />
+              </InviteLinkGenerator>
+            </div>
+          </Product>
+        </div>
       </Suspense>
     </div>
   );

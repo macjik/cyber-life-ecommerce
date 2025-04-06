@@ -9,7 +9,7 @@ import 'swiper/css/pagination';
 
 export default function ImageSwiper({images}) {
   return (
-    <div className="w-full h-64 relative pt-2">
+    <div className="w-full h-full relative pt-2">
       <Swiper
         modules={[Navigation, Pagination]}
         spaceBetween={0}
@@ -23,7 +23,7 @@ export default function ImageSwiper({images}) {
             <Image
               fill
               quality={100}
-              sizes="80vw"
+              sizes="100vw"
               style={{ objectFit: 'contain' }}
               className="rounded-t-lg transition-transform duration-500 group-hover:scale-110"
               src={imgUrl}
