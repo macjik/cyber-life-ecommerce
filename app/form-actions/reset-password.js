@@ -2,7 +2,6 @@
 
 import db from '@/models/index';
 import Joi from 'joi';
-import jwt from 'jsonwebtoken';
 import FormData from 'form-data';
 import axios from 'axios';
 import client from '../services/redis';
@@ -56,7 +55,7 @@ export async function checkPhone(state, formData) {
     form.append('message', message);
     form.append('from', '4546');
 
-    const smsResponse = await axios({
+    await axios({
       method: 'post',
       url: `${process.env.ESKIZ_API}/message/sms/send`,
       headers: {

@@ -1,11 +1,11 @@
 'use server';
 
 import Link from 'next/link';
-import { FaUser, FaShoppingCart, FaHome, FaStarOfLife } from 'react-icons/fa';
+import { FaUser, FaShoppingCart, FaHome } from 'react-icons/fa';
 import { AiFillControl } from 'react-icons/ai';
 import { getTranslations } from 'next-intl/server';
 
-export default async function NavBar({ userRole, currentPath, locale }) {
+export default async function NavBar({ userRole, currentPath }) {
   const isAllowedRoute = !currentPath.startsWith('/auth') && !/\/item(\/|$)/.test(currentPath);
 
   if (!isAllowedRoute) return null;

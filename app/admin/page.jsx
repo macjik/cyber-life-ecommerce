@@ -39,7 +39,7 @@ export default async function AdminPanel({ searchParams }) {
     };
   });
 
-  const { id, exchange_rate } = searchParams;
+  const { exchange_rate } = searchParams;
   const currentRate = await client.get('exchange-rate');
 
   if (exchange_rate) {

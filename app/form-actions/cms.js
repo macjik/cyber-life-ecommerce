@@ -63,7 +63,7 @@ export async function addContent(state, formData) {
       attributeName,
       ikpu,
       packageCode,
-      shop,
+      // shop,
     } = value;
 
     let existingItem = await Item.findOne({ where: { name } });
@@ -348,7 +348,7 @@ export async function editCompany(state, formData) {
       return { status: 400, error: `Validation Error: ${error.message}` };
     }
 
-    const { id, name, description, slogan, logo } = value;
+    const { id, name, description, slogan } = value;
 
     let company = await Company.findOne({ where: { id } });
 

@@ -6,7 +6,6 @@ import { getLocale, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import Footer from './Components/footer';
 import Locales from './Components/locales';
-import ShopsNav from './Components/shops-nav';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -28,8 +27,6 @@ export default async function RootLayout({ children }) {
   const headersList = headers();
   const currentPath = headersList.get('x-current-path');
   const userRole = headersList.get('x-user-role') || 'guest';
-
-  const isAllowedRoute = !currentPath.startsWith('/auth') && !/\/item(\/|$)/.test(currentPath);
 
   const locale = await getLocale();
   const messages = await getMessages();

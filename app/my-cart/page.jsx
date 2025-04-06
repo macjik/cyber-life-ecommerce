@@ -43,22 +43,20 @@ export default async function MyCart({ searchParams }) {
     return (
       <div className="w-full p-4 min-h-screen mt-12">
         {cart.map(
-          (
-            {
-              key,
-              itemName,
-              itemDescription,
-              itemSrc,
-              categoryName,
-              itemPrice,
-              totalAmount,
-              itemStatus,
-              itemQuantity,
-              itemDiscount,
-              orderId,
-              userId,
-            },
-          ) =>
+          ({
+            key,
+            itemName,
+            itemDescription,
+            itemSrc,
+            categoryName,
+            itemPrice,
+            totalAmount,
+            itemStatus,
+            itemQuantity,
+            itemDiscount,
+            orderId,
+            userId,
+          }) =>
             itemName ? (
               <MyProduct
                 key={key}

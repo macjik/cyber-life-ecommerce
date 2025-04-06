@@ -7,7 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-export default function ImageSwiper({images}) {
+export default function ImageSwiper({ images }) {
   return (
     <div className="w-full h-full relative pt-2">
       <Swiper

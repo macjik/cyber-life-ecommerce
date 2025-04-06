@@ -21,7 +21,7 @@ function SubmitButton({ children }) {
   );
 }
 
-export default function EditProfile({ id, name, image }) {
+export default function EditProfile({ id, name }) {
   const [editProfileState, editProfileAction] = useFormState(editProfile, '');
   const router = useRouter();
 

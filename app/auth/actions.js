@@ -4,14 +4,11 @@ import 'dotenv';
 import Joi from 'joi';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-import { serialize } from 'cookie';
 import db from '@/models/index';
-import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import client from '../services/redis';
 import axios from 'axios';
 import FormData from 'form-data';
-import { MINUTE, DAY } from 'time-constants';
 import { getTranslations } from 'next-intl/server';
 
 const User = db.User;
@@ -184,7 +181,7 @@ export async function preSignup(state, formData) {
       form.append('message', message);
       form.append('from', '4546');
 
-      const smsResponse = await axios({
+      await axios({
         method: 'post',
         url: `${process.env.ESKIZ_API}/message/sms/send`,
         headers: {

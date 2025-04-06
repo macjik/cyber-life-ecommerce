@@ -88,7 +88,7 @@ export async function registerShop(state, formData) {
           return { status: 500 };
         }
       } else {
-        return {error: 'Error'};
+        return { error: 'Error' };
       }
     }
   } catch (err) {

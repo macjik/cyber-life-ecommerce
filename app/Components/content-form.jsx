@@ -12,7 +12,6 @@ import {
   editContent,
 } from '../form-actions/cms';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Spinner } from './spinner';
 import Link from '@/node_modules/next/link';
 import { useTranslations } from 'next-intl';
@@ -33,7 +32,6 @@ function SubmitButton({ children, className = '' }) {
 
 export function ContentForm({ company = null }) {
   const [contentState, addContentAction] = useFormState(addContent, '');
-  const router = useRouter();
   const [attributes, setAttributes] = useState([{ name: '', value: '' }]);
   const [images, setImages] = useState([]);
   const t = useTranslations('Admin');
@@ -184,7 +182,7 @@ export function ContentEdit({
   price,
   quantity,
   discount,
-  image,
+  // image,
   description,
   category,
   attributeName,
@@ -194,7 +192,6 @@ export function ContentEdit({
 }) {
   const [editItemState, editItemAction] = useFormState(editContent, '');
   const [isEdit, setIsEdit] = useState(false);
-  const router = useRouter();
   const [attributeList, setAttributeList] = useState(
     attributes
       ? attributes.map((value) => ({ name: attributeName, value }))
@@ -357,7 +354,7 @@ export function DeleteCompany({ id }) {
   );
 }
 
-export function EditCompany({ id, name, description, slogan, logo }) {
+export function EditCompany({ id, name, description, slogan }) {
   const [isEdit, setIsEdit] = useState(false);
   const [companyState, editCompanyAction] = useFormState(editCompany, '');
 
