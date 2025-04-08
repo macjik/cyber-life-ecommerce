@@ -1,21 +1,20 @@
-'use server';
-
 import Link from 'next/link';
 import { FaUser, FaShoppingCart, FaHome } from 'react-icons/fa';
 import { AiFillControl } from 'react-icons/ai';
-import { getTranslations } from 'next-intl/server';
+import { useTranslations } from 'next-intl';
 
-export default async function NavBar({ userRole, currentPath }) {
+export default function NavBar({ userRole, currentPath }) {
+  const t = useTranslations();
+
   const isAllowedRoute = !currentPath.startsWith('/auth') && !/\/item(\/|$)/.test(currentPath);
 
   if (!isAllowedRoute) return null;
-
-  const t = await getTranslations();
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 h-17 z-50 shadow-lg">
       <div className="flex items-center mx-auto max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl w-full py-2">
         <Link
+          prefetch={true}
           href="/user"
           className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
         >
@@ -23,6 +22,7 @@ export default async function NavBar({ userRole, currentPath }) {
           <span className="text-sm font-semibold">{t('user')}</span>
         </Link>
         <Link
+          prefetch={true}
           href="/"
           className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
         >
@@ -30,6 +30,7 @@ export default async function NavBar({ userRole, currentPath }) {
           <span className="text-sm font-semibold">{t('home')}</span>
         </Link>
         <Link
+          prefetch={true}
           href="/my-cart"
           className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
         >
@@ -38,6 +39,7 @@ export default async function NavBar({ userRole, currentPath }) {
         </Link>
         {userRole === 'admin' && (
           <Link
+            prefetch={true}
             href="/admin"
             className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
           >
@@ -47,6 +49,7 @@ export default async function NavBar({ userRole, currentPath }) {
         )}
         {userRole === 'owner' && (
           <Link
+            prefetch={true}
             href="/shop-cms"
             className="flex flex-col items-center text-gray-600 hover:text-cyan-600 w-full"
           >

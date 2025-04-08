@@ -30,7 +30,7 @@ export function ResetPasswordForm() {
   const t = useTranslations('Auth');
 
   if (newPassword.status === 200) {
-    window.location.href = redirect;
+    window.location.replace(redirect);
   }
 
   return (

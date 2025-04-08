@@ -38,9 +38,9 @@ export function ContentForm({ company = null }) {
 
   if (contentState?.status === 200) {
     if (company !== null) {
-      window.location.href = '/shop-cms';
+      window.location.replace('/shop-cms');
     } else {
-      window.location.href = '/admin';
+      window.location.replace('/admin');
     }
   }
 

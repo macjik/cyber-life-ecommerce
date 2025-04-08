@@ -8,7 +8,7 @@ export default function Logout() {
   const handleLogout = async () => {
     try {
       await logout();
-      window.location.href = '/';
+      window.location.replace('/');
     } catch (err) {
       console.error('Error during logout', err);
       return { error: 'Internal server error' };

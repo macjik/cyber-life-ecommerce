@@ -26,7 +26,7 @@ export default function ShopForm({ user }) {
   const t = useTranslations('Shop');
 
   if (shopState.status === 200) {
-    window.location.href = '/';
+    window.location.replace('/');
   }
 
   return (

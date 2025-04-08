@@ -35,7 +35,7 @@ export function PreLoginForm({ children }) {
   useEffect(() => {
     if (loginState.status === 200 && !isPending) {
       setIsPending(true);
-      window.location.href = redirect;
+      window.location.replace(redirect);
     }
   }, [loginState.status, isPending, redirect]);
 
@@ -138,7 +138,7 @@ export function PreSigninForm({ children }) {
     res = res.data;
 
     if (res.status === 200) {
-      window.location.href = redirect;
+      window.location.replace(redirect);
     }
     if (res.error) {
       setSignUpError(res.error);
