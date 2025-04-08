@@ -20,6 +20,7 @@
   "dependencies": {
     "@sentry/node": "^8.34.0",
     "@vercel/blob": "^0.25.1",
+    "awesome-image-viewer": "^1.0.60",
     "axios": "^1.7.7",
     "axios-retry": "^4.5.0",
     "bcrypt": "^5.1.1",

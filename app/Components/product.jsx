@@ -1,14 +1,15 @@
 'use server';
 
 import { getTranslations } from 'next-intl/server';
-import ProductOptions from './product-options';
 import ImageSwiper from './swiper';
+import Loading from './loading';
+import { Suspense } from 'react';
 
 export default async function Product({
   itemName,
   itemDescription,
   itemSrc,
-  // itemCategory,
+  itemCategory,
   itemPrice,
   itemStatus,
   itemQuantity,
@@ -20,75 +21,50 @@ export default async function Product({
   maxQuantity = 100,
   children = null,
 }) {
-  const t = await getTranslations('');  
+  const t = await getTranslations('');
   console.log(itemSrc);
   return (
-    <div className="flex justify-center p-4 mt-8">
-      <div className="max-w-lg max-h-max w-full rounded-lg overflow-hidden">
-        <div className="relative h-56 w-full group">
-          <ImageSwiper images={itemSrc || '/turtle.jpg'} />
-          {itemDiscount && (
-            <span className="absolute top-2 right-2 bg-red-600 text-white text-sm font-bold px-2 py-1 rounded-full shadow-lg">
-              {itemDiscount}% {t('discount')}
-            </span>
-          )}
-        </div>
-        <div className="p-3">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">{itemName || 'Product Name'}</h2>
-          <p className="text-gray-600 mb-4">
-            {itemDescription ||
-              'Product description goes here. It provides details about the product.'}
-          </p>
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <span className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
-                {itemPrice}UZS
+    <div className="min-h-screen w-full mx-auto">
+      <Suspense fallback={<Loading />}>
+        <div className="w-full flex flex-col gap-6 md:gap-8 mt-10">
+          <div className="w-full flex justify-center">
+            <div className="relative w-full aspect-square">
+              <ImageSwiper images={itemSrc} />
+            </div>
+          </div>
+          <div className="w-full flex flex-col max-w-7xl p-4 md:p-6">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{itemName}</h1>
+            {itemCategory && <p className="text-gray-600 mb-4">{itemCategory}</p>}
+            <div className="flex items-center gap-4 mb-4">
+              <span
+                className={`text-2xl font-bold ${itemDiscount ? 'text-red-600' : 'text-gray-900'}`}
+              >
+                {itemDiscount || itemPrice} UZS
               </span>
-              {originalPrice && (
-                <span className="text-gray-500 line-through text-lg ml-2">{originalPrice}</span>
+              {itemDiscount && (
+                <span className="text-lg text-gray-500 line-through">{itemPrice} UZS</span>
+              )}
+              {itemDiscount > 0 && !itemDiscount && (
+                <span className="bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded">
+                  {t('discount')}
+                </span>
               )}
             </div>
-          </div>
-          <div className="mb-4">
-            {/* <p className="text-gray-500 text-sm mb-2">{t('category')}: {itemCategory || 'Category'}</p> */}
-            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-              <div
-                className="bg-blue-500 h-2.5 rounded-full"
-                style={{ width: `${(itemQuantity / maxQuantity) * 100}%` }}
-              ></div>
+            <div className="mb-6">
+              <p className="text-gray-700 mb-4">{itemDescription}</p>
+              <p className="text-sm text-gray-500">
+                {t('Admin.quantity')}: {itemQuantity}
+              </p>
+              <p
+                className={`text-sm font-medium ${itemStatus === 'available' ? 'text-green-600' : 'text-red-600'}`}
+              >
+                {t(itemStatus)}
+              </p>
             </div>
-            <p className="text-gray-500 text-sm">
-              {t('available')}: {itemQuantity}/{maxQuantity}
-            </p>
+            {children}
           </div>
-          <div className="mb-4">
-            <span
-              className={`inline-block px-4 py-2 rounded-full text-white ${
-                itemStatus === 'available' ? 'bg-green-500' : 'bg-red-500'
-              }`}
-            >
-              {(itemStatus = t('available') || 'Status')}
-            </span>
-            <div className="my-5">
-              {itemAttributeName && (
-                <p className="inline-block px-4 py-2 bg-teal-500 text-white rounded-full font-bold">
-                  {itemAttributeName}
-                </p>
-              )}
-              {itemAttributes &&
-                itemAttributes.map(
-                  (attr, index) =>
-                    attr && (
-                      <ProductOptions key={index} orderId={orderId}>
-                        {attr}
-                      </ProductOptions>
-                    ),
-                )}
-            </div>
-          </div>
-          {children}
         </div>
-      </div>
+      </Suspense>
     </div>
   );
 }
